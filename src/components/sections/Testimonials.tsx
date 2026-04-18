@@ -20,24 +20,29 @@ export const Testimonials = ({ content }: { content?: SiteContent }) => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {data.testimonials.items.map((item : any, i : number) => (
+          {data.testimonials.items.map((item, i) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="glass p-8 rounded-[2rem] border-slate-100 flex flex-col h-full"
+              transition={{ 
+                duration: 0.8, 
+                delay: i * 0.1,
+                ease: [0.21, 0.47, 0.32, 0.98]
+              }}
+              whileHover={{ y: -8 }}
+              className="group glass p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg hover:shadow-2xl hover:shadow-primary-ocean/5 transition-all duration-500"
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(item.rating)].map((_, starI) => (
-                  <Star key={starI} size={16} className="fill-yellow-400 text-yellow-400" />
+                  <Star key={starI} size={14} className="fill-yellow-400 text-yellow-400 group-hover:scale-110 transition-transform" style={{ transitionDelay: `${starI * 50}ms` }} />
                 ))}
               </div>
               
               <div className="relative">
-                <Quote size={40} className="absolute -top-4 -left-2 text-primary-ocean/5 -z-10" />
-                <p className="text-slate-700 leading-relaxed mb-8 italic">&quot;{item.comment}&quot;</p>
+                <Quote size={40} className="absolute -top-4 -left-2 text-primary-ocean/5 -z-10 group-hover:text-primary-ocean/10 transition-colors" />
+                <p className="text-slate-700 leading-relaxed mb-8 italic font-medium">&quot;{item.comment}&quot;</p>
               </div>
 
               <div className="mt-auto flex items-center gap-4">

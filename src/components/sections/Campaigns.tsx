@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Tag, Check, ArrowRight } from "lucide-react";
+import { Tag, CheckCircle2, ArrowRight } from "lucide-react";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
 
@@ -29,42 +29,50 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {data.campaigns.items.map((campaign : any, index : number) => (
+          {data.campaigns.items.map((campaign, i) => (
             <motion.div
               key={campaign.id}
-              initial={{ opacity: 0, x: index === 0 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative group p-1 rounded-[2.5rem] bg-gradient-to-br from-white to-slate-100 border border-slate-200 shadow-lg hover:shadow-2xl transition-all"
+              transition={{ 
+                duration: 0.8, 
+                delay: i * 0.2,
+                ease: [0.21, 0.47, 0.32, 0.98]
+              }}
+              whileHover={{ y: -10 }}
+              className="group relative glass p-10 rounded-[3rem] border-white shadow-xl hover:shadow-2xl hover:shadow-primary-ocean/5 transition-all duration-500 overflow-hidden"
             >
-              <div className="absolute -top-4 -right-4 bg-primary-ocean text-white px-4 py-2 rounded-2xl font-bold text-sm shadow-xl z-10 rotate-12">
+              {/* Decoration */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-ocean/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary-ocean/10 transition-colors" />
+
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-ocean/10 text-primary-ocean text-[10px] font-black uppercase tracking-widest mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary-ocean" />
                 {campaign.badge}
               </div>
+              <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tighter">{campaign.title}</h3>
+              <p className="text-slate-500 mb-8 leading-relaxed font-medium">
+                {campaign.description}
+              </p>
+              
+              <ul className="space-y-4 mb-10">
+                {campaign.features.map((feature: string, fIndex: number) => (
+                  <li key={fIndex} className="flex items-center gap-3 text-sm font-bold text-slate-700">
+                    <div className="w-6 h-6 rounded-lg bg-green-50 text-green-600 flex items-center justify-center shrink-0">
+                      <CheckCircle2 size={14} />
+                    </div>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
 
-              <div className="p-10">
-                <h3 className="text-3xl font-bold text-slate-900 mb-4 tracking-tight">{campaign.title}</h3>
-                <p className="text-slate-500 mb-8 leading-relaxed">{campaign.description}</p>
-                
-                <div className="bg-primary-ocean/5 p-6 rounded-3xl mb-8">
-                  <p className="text-primary-ocean text-2xl font-black mb-6">{campaign.priceNote}</p>
-                  <ul className="space-y-4">
-                    {campaign.features.map((feature : string, i : number) => (
-                      <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
-                        <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm">
-                          <Check size={14} className="text-turquoise" />
-                        </div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
+              <div className="flex items-center justify-between pt-8 border-t border-slate-100">
+                <span className="text-lg font-black text-primary-ocean tracking-tight">{campaign.priceNote}</span>
                 <a
-                  href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(campaign.title + " kampanyası hakkında bilgi almak istiyorum.")}`}
-                  className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-colors"
+                  href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(campaign.title + " kampanyası için bilgi almak istiyorum.")}`}
+                  className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:bg-primary-ocean transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary-ocean/20"
                 >
                   {campaign.ctaLabel}
-                  <ArrowRight size={18} />
                 </a>
               </div>
             </motion.div>

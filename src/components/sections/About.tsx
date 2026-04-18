@@ -51,6 +51,15 @@ export const About = ({ content }: { content?: SiteContent }) => {
                 );
               })}
             </div>
+
+            <div className="mt-12 flex flex-col sm:flex-row gap-4">
+              <a
+                href={`https://wa.me/${data.contact.whatsapp}?text=Hizmetleriniz hakkında görüşmek istiyorum.`}
+                className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:bg-primary-ocean transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary-ocean/20 flex items-center justify-center gap-2"
+              >
+                Hemen İletişime Geçin
+              </a>
+            </div>
           </motion.div>
 
           {/* Visual Element */}

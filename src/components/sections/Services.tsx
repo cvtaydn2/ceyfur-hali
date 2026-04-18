@@ -51,56 +51,90 @@ export const Services = ({ content }: { content?: SiteContent }) => {
           </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 auto-rows-fr">
           {data.services.items.map((service, index) => {
             const Icon = iconMap[service.icon] || Brush;
             
+            // Dynamic span logic: 
+            // First item spans 2 columns on large screens
+            // Second item spans 2 columns on large screens
+            // Others are normal
+            // This creates a nice bento rhythm regardless of item count
+            const spanClass = index === 0 
+              ? "lg:col-span-2 lg:row-span-2 h-[500px] lg:h-auto" 
+              : index === 1 
+                ? "lg:col-span-2 lg:row-span-1" 
+                : "col-span-1";
+
             return (
               <motion.div
                 key={service.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group relative flex flex-col h-full rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-500"
+                transition={{ 
+                  duration: 0.8, 
+                  delay: index * 0.1,
+                  ease: [0.21, 0.47, 0.32, 0.98] 
+                }}
+                className={cn(
+                  "group relative flex flex-col rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500",
+                  spanClass
+                )}
               >
                 {/* Image Header */}
-                <div className="h-48 relative overflow-hidden">
+                <div className={cn(
+                  "relative overflow-hidden",
+                  index === 0 ? "flex-grow" : "h-48"
+                )}>
                   <img 
                     src={service.image} 
                     alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = `https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=400&auto=format&fit=crop&sig=${index}`;
+                      (e.target as HTMLImageElement).src = `https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=600&auto=format&fit=crop&sig=${index}`;
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
-                  <div className="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary-ocean shadow-lg">
-                    <Icon size={24} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                  
+                  {/* Floating Icon */}
+                  <div className="absolute top-6 left-6 w-14 h-14 rounded-2xl bg-white/95 backdrop-blur-md flex items-center justify-center text-primary-ocean shadow-xl transform group-hover:rotate-6 transition-transform">
+                    <Icon size={28} />
                   </div>
                 </div>
 
-                <div className="p-8 flex flex-col flex-grow">
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight group-hover:text-primary-ocean transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-slate-500 mb-6 text-sm leading-relaxed line-clamp-3">
+                <div className="p-8 flex flex-col justify-end relative z-10 bg-white">
+                  <div className="flex justify-between items-start mb-4">
+                    <h3 className={cn(
+                      "font-bold text-slate-900 tracking-tight group-hover:text-primary-ocean transition-colors",
+                      index === 0 ? "text-3xl" : "text-2xl"
+                    )}>
+                      {service.title}
+                    </h3>
+                    <div className="p-2 rounded-full bg-slate-50 text-slate-300 group-hover:bg-primary-ocean/10 group-hover:text-primary-ocean transition-all">
+                      <ArrowUpRight size={20} />
+                    </div>
+                  </div>
+                  
+                  <p className="text-slate-500 mb-6 text-sm leading-relaxed line-clamp-2 md:line-clamp-none">
                     {service.description}
                   </p>
 
-                  <div className="mt-auto space-y-3">
-                    {service.features.slice(0, 3).map((feature: string, fIndex: number) => (
-                      <div key={fIndex} className="flex items-center gap-2 text-xs font-semibold text-slate-600">
-                        <CheckCircle2 size={14} className="text-primary-ocean" />
-                        {feature}
-                      </div>
-                    ))}
+                  <div className="space-y-3">
+                    <div className="flex flex-wrap gap-2">
+                       {service.features.slice(0, 3).map((feature: string, fIndex: number) => (
+                        <div key={fIndex} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-bold text-slate-500 uppercase tracking-tight">
+                          <CheckCircle2 size={12} className="text-primary-ocean" />
+                          {feature}
+                        </div>
+                      ))}
+                    </div>
                     
                     <a
                       href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(service.title + " hakkında bilgi almak istiyorum.")}`}
-                      className="inline-flex items-center gap-2 text-primary-ocean font-bold text-sm pt-4 hover:gap-3 transition-all"
+                      className="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-primary-ocean transition-all shadow-lg shadow-slate-900/10 hover:shadow-primary-ocean/20"
                     >
-                      Hemen Teklif Al <ArrowUpRight size={16} />
+                      Hemen Teklif Al
                     </a>
                   </div>
                 </div>

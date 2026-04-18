@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
-import { cn } from "@/lib/utils";
 
 export const Navbar = ({ content }: { content?: SiteContent }) => {
-  const data = content || fallbackContent;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const data = content || fallbackContent;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,107 +22,115 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
   }, []);
 
   return (
-    <nav
+    <nav 
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 py-4",
-        isScrolled ? "pt-2" : "pt-6"
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+        isScrolled 
+          ? "py-4 px-4 md:px-8" 
+          : "py-6 px-4 md:px-12"
       )}
     >
-      <div
+      <div 
         className={cn(
-          "max-w-7xl mx-auto rounded-full transition-all duration-300 flex items-center justify-between px-6 py-3",
-          isScrolled ? "glass shadow-lg" : "bg-transparent"
+          "max-w-7xl mx-auto rounded-[2rem] transition-all duration-500 border border-transparent",
+          isScrolled 
+            ? "bg-white/80 backdrop-blur-xl shadow-2xl shadow-primary-ocean/5 border-white/20 py-3 px-6 md:px-8 lg:w-[95%]" 
+            : "bg-transparent py-4 px-0"
         )}
       >
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-primary-ocean rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-primary-ocean/10">
-            {data.brand.name.charAt(0)}
-          </div>
-          <span className={cn(
-            "font-bold text-xl tracking-tight hidden sm:block",
-            isScrolled ? "text-slate-900" : "text-slate-900"
-          )}>
-            {data.brand.name.split(' ')[0]}
-            <span className="text-primary-ocean ml-1">{data.brand.name.split(' ').slice(1).join(' ')}</span>
-          </span>
-        </div>
+        <div className="flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-10 h-10 bg-primary-ocean rounded-2xl flex items-center justify-center text-white font-black shadow-lg shadow-primary-ocean/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+              {data.brand.name.charAt(0)}
+            </div>
+            <div className="flex flex-col">
+              <span className={cn(
+                "font-black text-xl tracking-tighter leading-none transition-colors",
+                isScrolled ? "text-slate-900" : "text-slate-900"
+              )}>
+                {data.brand.name.split(' ')[0]}
+                <span className="text-primary-ocean ml-1">{data.brand.name.split(' ')[1]}</span>
+              </span>
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">
+                {data.brand.slogan.split(' ')[0]} {data.brand.slogan.split(' ')[1]}
+              </span>
+            </div>
+          </Link>
 
-        {/* Desktop Menu */}
-        <ul className="hidden md:flex items-center gap-8">
-          {data.navigation.map((item : any) => (
-            <li key={item.label}>
-              <a
+          {/* Desktop Links */}
+          <div className="hidden lg:flex items-center gap-10">
+            {data.navigation.map((item: any) => (
+              <Link
+                key={item.label}
                 href={item.href}
-                className="text-sm font-medium text-slate-600 hover:text-primary-ocean transition-colors"
+                className={cn(
+                  "text-sm font-bold tracking-tight hover:text-primary-ocean transition-all relative group",
+                  isScrolled ? "text-slate-600" : "text-slate-800"
+                )}
               >
                 {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-ocean transition-all group-hover:w-full" />
+              </Link>
+            ))}
+          </div>
 
-        {/* CTA */}
-        <div className="flex items-center gap-4">
-          <a
-            href={`tel:${data.contact.phone.replace(/\s/g, "")}`}
-            className="hidden lg:flex items-center gap-2 text-primary-ocean font-semibold"
-            aria-label="Bizi arayın"
-          >
-            <Phone size={18} />
-            <span className="text-sm">{data.contact.phone}</span>
-          </a>
-          <a
-            href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent("Merhaba, halı yıkama hizmetiniz için teklif almak istiyorum.")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-primary-ocean text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary-ocean/20 hover:scale-105 transition-transform active:scale-95"
-          >
-            Teklif Al
-          </a>
-          
-          <button 
-            className="md:hidden text-slate-900 p-1"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label={isMobileMenuOpen ? "Menüyü Kapat" : "Menüyü Aç"}
-            aria-expanded={isMobileMenuOpen}
-          >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-4">
+             <div className="hidden md:flex flex-col items-end mr-4 text-right">
+               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Müşteri Destek</span>
+               <a href={`tel:${data.contact.phone}`} className="text-sm font-black text-slate-900 hover:text-primary-ocean transition-colors">{data.contact.phone}</a>
+             </div>
+             
+             <a
+              href={`https://wa.me/${data.contact.whatsapp}?text=Bilgi almak istiyorum.`}
+              className={cn(
+                "px-6 py-3 rounded-2xl font-black text-sm transition-all shadow-xl hover:-translate-y-1 active:scale-95",
+                isScrolled 
+                  ? "bg-primary-ocean text-white shadow-primary-ocean/20 hover:bg-slate-900" 
+                  : "bg-slate-900 text-white shadow-slate-900/10 hover:bg-primary-ocean"
+              )}
+            >
+              Teklif Al
+            </a>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 text-slate-900"
+            >
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-24 left-4 right-4 glass rounded-3xl p-6 shadow-2xl md:hidden"
-          >
-            <div className="flex flex-col gap-4">
-              {data.navigation.map((item : any) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-semibold text-slate-800 hover:text-primary-ocean"
-                >
-                  {item.label}
-                </a>
-              ))}
-              <hr className="border-slate-200" />
-              <div className="flex flex-col gap-2">
-                 <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Bizi Arayın</p>
-                 <a href={`tel:${data.contact.phone.replace(/\s/g, "")}`} className="text-xl font-bold text-primary-ocean">
-                   {data.contact.phone}
-                 </a>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {isMobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="lg:hidden absolute top-full left-4 right-4 mt-4 glass p-8 rounded-[2.5rem] shadow-2xl border-white"
+        >
+          <div className="flex flex-col gap-6">
+            {data.navigation.map((item: any) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-bold text-slate-900 hover:text-primary-ocean transition-colors"
+              >
+                {item.label}
+              </Link>
+            ))}
+            <hr className="border-slate-100" />
+            <a
+              href={`tel:${data.contact.phone}`}
+              className="flex items-center gap-3 text-slate-900 font-bold"
+            >
+              <Phone size={20} className="text-primary-ocean" />
+              {data.contact.phone}
+            </a>
+          </div>
+        </motion.div>
+      )}
     </nav>
   );
 };

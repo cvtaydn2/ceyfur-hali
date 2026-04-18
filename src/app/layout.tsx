@@ -10,6 +10,8 @@ const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
+  const baseUrl = "https://ceyfurhaliyikama.com";
+  
   return {
     title: content.seo.title,
     description: content.seo.description,
@@ -19,15 +21,25 @@ export async function generateMetadata(): Promise<Metadata> {
       description: content.seo.description,
       type: "website",
       locale: "tr_TR",
-      url: "https://ceyfurhaliyikama.com",
+      url: baseUrl,
       siteName: content.brand.name,
+      images: [
+        {
+          url: `${baseUrl}/images/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: content.brand.name,
+        }
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: content.seo.title,
       description: content.seo.description,
+      images: [`${baseUrl}/images/og-image.png`],
     },
     robots: "index, follow",
+    metadataBase: new URL(baseUrl),
   };
 }
 
@@ -37,14 +49,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const content = await getSiteContent();
+  const baseUrl = "https://ceyfurhaliyikama.com";
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": content.brand.name,
     "description": content.seo.description,
-    "url": "https://ceyfurhaliyikama.com",
+    "url": baseUrl,
     "telephone": content.contact.phone,
+    "email": content.contact.email,
     "address": {
       "@type": "PostalAddress",
       "streetAddress": content.contact.address,
@@ -60,7 +74,11 @@ export default async function RootLayout({
         "closes": "19:00"
       }
     ],
-    "image": "https://ceyfurhaliyikama.com/og-image.jpg"
+    "image": `${baseUrl}/images/og-image.png`,
+    "sameAs": [
+      content.contact.instagram,
+      content.contact.facebook,
+    ].filter(Boolean)
   };
 
   return (

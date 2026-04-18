@@ -1,6 +1,7 @@
 import { supabase } from "./supabase";
 import { SiteContent } from "@/types";
 import fallbackContent from "@/data/siteContent.json";
+import { SiteContentSchema } from "./content-schema";
 
 export async function getSiteContent(): Promise<SiteContent> {
   const { data, error } = await supabase
@@ -11,10 +12,18 @@ export async function getSiteContent(): Promise<SiteContent> {
 
   if (error || !data) {
     console.error("Error fetching site content, using fallback:", error);
-    return fallbackContent as SiteContent;
+    return fallbackContent as any;
   }
 
-  return data.content as SiteContent;
+  // Runtime validation with Zod
+  const result = SiteContentSchema.safeParse(data.content);
+  
+  if (!result.success) {
+    console.error("Content validation failed, using fallback. Errors:", result.error.format());
+    return fallbackContent as any;
+  }
+
+  return result.data as SiteContent;
 }
 
 export async function updateSiteContent(content: SiteContent) {
