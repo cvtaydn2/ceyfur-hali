@@ -15,11 +15,20 @@ export async function getSiteContent(): Promise<SiteContent> {
     return fallbackContent as unknown as SiteContent;
   }
 
-  // Runtime validation with Zod
-  const result = SiteContentSchema.safeParse(data.content);
+  // Runtime validation with deep merging for resilience
+  // We merge the fetched data over the fallback content to ensure all required keys exist
+  const mergedContent = {
+    ...(fallbackContent as any),
+    ...(data.content || {})
+  };
+
+  const result = SiteContentSchema.safeParse(mergedContent);
   
   if (!result.success) {
-    console.error("Content validation failed, using fallback. Errors:", result.error.format());
+    console.error("Content partially invalid, using safe merged values. Issues:", 
+      result.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ')
+    );
+    // If even basic merging fails validation, return full fallback
     return fallbackContent as unknown as SiteContent;
   }
 

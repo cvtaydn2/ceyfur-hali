@@ -65,41 +65,12 @@ export async function getArchive() {
 export async function updateLeadStatus(id: string, newStatus: string) {
   // If moving to archive statuses
   if (ArchiveStatusSchema.safeParse(newStatus).success) {
-    // 1. Get current lead data
-    const { data: lead, error: fetchError } = await supabaseAdmin
-      .from("leads")
-      .select("*")
-      .eq("id", id)
-      .single();
+    const { error } = await supabaseAdmin.rpc("archive_lead", {
+      p_lead_id: id,
+      p_final_status: newStatus
+    });
 
-    if (fetchError || !lead) throw new Error("Lead not found for archiving");
-
-    // 2. Insert into archive
-    const { error: archiveError } = await supabaseAdmin
-      .from("leads_archive")
-      .insert({
-        original_lead_id: lead.id,
-        full_name: lead.full_name,
-        phone: lead.phone,
-        service_id: lead.service_id,
-        district: lead.district,
-        preferred_date: lead.preferred_date,
-        notes: lead.notes,
-        final_status: newStatus,
-        created_at: lead.created_at,
-        completed_at: new Date().toISOString()
-      });
-
-    if (archiveError) throw new Error(`Failed to archive lead: ${archiveError.message}`);
-
-    // 3. Delete from active leads
-    const { error: deleteError } = await supabaseAdmin
-      .from("leads")
-      .delete()
-      .eq("id", id);
-
-    if (deleteError) throw new Error(`Failed to delete lead after archiving: ${deleteError.message}`);
-    
+    if (error) throw new Error(`Failed to archive lead: ${error.message}`);
     return true;
   }
 

@@ -144,3 +144,5 @@ export const Toast = ({ message, type = "success", isVisible, onClose }: ToastPr
     </AnimatePresence>
   );
 };
+
+export * from "./OptimizedImage";

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { OptimizedImage } from "@/components/ui";
 import { motion } from "framer-motion";
 import { CheckCircle2, ShieldCheck, Clock, Award } from "lucide-react";
 import { SiteContent } from "@/types";
@@ -71,7 +71,7 @@ export const About = ({ content }: { content?: SiteContent }) => {
             className="relative"
           >
             <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white aspect-[4/5] lg:aspect-auto min-h-[500px]">
-              <Image
+              <OptimizedImage
                 src={aboutData.image || "/images/about-image.png"}
                 alt="Ceyfur Halı Yıkama Tesisleri"
                 fill

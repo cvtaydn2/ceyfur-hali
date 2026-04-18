@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { OptimizedImage } from "@/components/ui";
 import { motion } from "framer-motion";
 import { ArrowRight, Star, Clock } from "lucide-react";
 import { SiteContent } from "@/types";
@@ -80,7 +80,7 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
             >
               <div className="absolute -inset-4 bg-gradient-to-tr from-primary-ocean/20 to-turquoise/20 blur-2xl rounded-[3rem] -z-10 opacity-50 transition-opacity" />
               <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
-                <Image
+                <OptimizedImage
                   src={data.hero.image}
                   alt="Premium Halı Yıkama"
                   fill

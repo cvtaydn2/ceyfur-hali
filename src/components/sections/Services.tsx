@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { OptimizedImage } from "@/components/ui";
 import { motion } from "framer-motion";
 import { Brush, Armchair, Waves, Bed, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -93,7 +93,7 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                   "relative overflow-hidden",
                   index === 0 ? "flex-grow min-h-[300px]" : "h-48"
                 )}>
-                  <Image 
+                  <OptimizedImage 
                     src={service.image} 
                     alt={service.title}
                     fill
