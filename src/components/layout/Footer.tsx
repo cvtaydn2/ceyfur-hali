@@ -18,10 +18,10 @@ export const Footer = () => {
             {siteContent.footer.about}
           </p>
           <div className="flex gap-4">
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all">
+            <a href="#" aria-label="Instagram sayfamız" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all">
               <Earth size={20} />
             </a>
-            <a href="#" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all">
+            <a href="#" aria-label="Facebook sayfamız" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all">
               <Share2 size={20} />
             </a>
           </div>
@@ -29,7 +29,7 @@ export const Footer = () => {
 
         {/* Quick Links */}
         <div>
-          <h4 className="text-white font-bold mb-6">Hızlı Menü</h4>
+          <h3 className="text-white font-bold mb-6">Hızlı Menü</h3>
           <ul className="space-y-4">
             {siteContent.navigation.map((item) => (
               <li key={item.label}>
@@ -43,26 +43,28 @@ export const Footer = () => {
 
         {/* Contact Info */}
         <div>
-          <h4 className="text-white font-bold mb-6">İletişim</h4>
-          <ul className="space-y-4">
-            <li className="flex items-start gap-3 text-sm">
-              <MapPin size={18} className="text-primary-ocean shrink-0" />
-              <span>{siteContent.contact.address}, {siteContent.contact.district}/{siteContent.contact.city}</span>
-            </li>
-            <li className="flex items-center gap-3 text-sm">
-              <Phone size={18} className="text-primary-ocean shrink-0" />
-              <span>{siteContent.contact.phone}</span>
-            </li>
-            <li className="flex items-center gap-3 text-sm">
-              <Mail size={18} className="text-primary-ocean shrink-0" />
-              <span>{siteContent.contact.email}</span>
-            </li>
-          </ul>
+          <h3 className="text-white font-bold mb-6">İletişim</h3>
+          <address className="not-italic">
+            <ul className="space-y-4">
+              <li className="flex items-start gap-3 text-sm">
+                <MapPin size={18} className="text-primary-ocean shrink-0" />
+                <span>{siteContent.contact.address}, {siteContent.contact.district}/{siteContent.contact.city}</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <Phone size={18} className="text-primary-ocean shrink-0" />
+                <span>{siteContent.contact.phone}</span>
+              </li>
+              <li className="flex items-center gap-3 text-sm">
+                <Mail size={18} className="text-primary-ocean shrink-0" />
+                <span>{siteContent.contact.email}</span>
+              </li>
+            </ul>
+          </address>
         </div>
 
         {/* Map Placeholder or Working Hours */}
         <div>
-          <h4 className="text-white font-bold mb-6">Çalışma Saatleri</h4>
+          <h3 className="text-white font-bold mb-6">Çalışma Saatleri</h3>
           <p className="text-sm italic mb-4">Pazar günü kapalıyız.</p>
           <div className="bg-slate-800 p-4 rounded-xl border border-white/5">
             <p className="text-white font-medium text-sm mb-1">Mesai Saatleri:</p>

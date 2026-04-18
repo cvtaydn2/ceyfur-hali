@@ -46,23 +46,25 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-8">
           {siteContent.navigation.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="text-sm font-medium text-slate-600 hover:text-primary-ocean transition-colors"
-            >
-              {item.label}
-            </a>
+            <li key={item.label}>
+              <a
+                href={item.href}
+                className="text-sm font-medium text-slate-600 hover:text-primary-ocean transition-colors"
+              >
+                {item.label}
+              </a>
+            </li>
           ))}
-        </div>
+        </ul>
 
         {/* CTA */}
         <div className="flex items-center gap-4">
           <a
             href={`tel:${siteContent.contact.phone.replace(/\s/g, "")}`}
             className="hidden lg:flex items-center gap-2 text-primary-ocean font-semibold"
+            aria-label="Bizi arayın"
           >
             <Phone size={18} />
             <span className="text-sm">{siteContent.contact.phone}</span>
@@ -74,6 +76,8 @@ export const Navbar = () => {
           <button 
             className="md:hidden text-slate-900 p-1"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Menüyü Kapat" : "Menüyü Aç"}
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>

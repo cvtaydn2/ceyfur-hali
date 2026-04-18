@@ -81,6 +81,7 @@ export const Hero = () => {
                  src={siteContent.hero.image} 
                  alt="Premium Halı Yıkama" 
                  fill 
+                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
                  className="object-cover"
                  priority
                />
