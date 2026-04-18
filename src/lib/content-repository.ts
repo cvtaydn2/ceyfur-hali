@@ -12,7 +12,7 @@ export async function getSiteContent(): Promise<SiteContent> {
 
   if (error || !data) {
     console.error("Error fetching site content, using fallback:", error);
-    return fallbackContent as any;
+    return fallbackContent as unknown as SiteContent;
   }
 
   // Runtime validation with Zod
@@ -20,10 +20,10 @@ export async function getSiteContent(): Promise<SiteContent> {
   
   if (!result.success) {
     console.error("Content validation failed, using fallback. Errors:", result.error.format());
-    return fallbackContent as any;
+    return fallbackContent as unknown as SiteContent;
   }
 
-  return result.data as SiteContent;
+  return result.data;
 }
 
 export async function updateSiteContent(content: SiteContent) {

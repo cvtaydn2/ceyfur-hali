@@ -60,7 +60,11 @@ export function useSiteContent() {
   };
 
   useEffect(() => {
-    fetchContent();
+    let isMounted = true;
+    if (isMounted) {
+      fetchContent();
+    }
+    return () => { isMounted = false; };
   }, [fetchContent]);
 
   return {

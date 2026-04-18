@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSiteContent } from "@/lib/content-repository";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const content = await getSiteContent();
