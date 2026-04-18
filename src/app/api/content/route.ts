@@ -12,7 +12,16 @@ export async function POST(request: Request) {
     // 1. Validation with Zod
     const validatedData = SiteContentSchema.parse(body);
     
-    // 2. Repository Update (Supabase)
+    // 2. Check for Service Role Key (Safety first)
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json({ 
+        success: false, 
+        code: "ENV_ERROR",
+        message: "Kritik Hata: SUPABASE_SERVICE_ROLE_KEY bulunamadı. Lütfen .env.local dosyanızı kontrol edin." 
+      }, { status: 500 });
+    }
+
+    // 3. Repository Update (Supabase)
     await updateSiteContent(validatedData as any);
     
     return NextResponse.json({ 
