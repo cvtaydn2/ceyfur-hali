@@ -45,17 +45,17 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
-                href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(data.hero.primaryCta + " için bilgi almak istiyorum.")}`}
+                href="#teklif-al"
                 className="px-10 py-5 bg-slate-900 text-white rounded-3xl font-black text-lg hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 hover:-translate-y-1 hover:shadow-slate-900/30 flex items-center justify-center gap-2 group"
               >
                 {data.hero.primaryCta}
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <a
-                href="#services"
+                href="#teklif-al"
                 className="px-10 py-5 bg-white border border-slate-100 text-slate-900 rounded-3xl font-black text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
               >
-                {data.hero.secondaryCta}
+                Hemen Randevu Al
               </a>
             </div>
           </motion.div>

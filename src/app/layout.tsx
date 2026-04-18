@@ -5,6 +5,7 @@ import { getSiteContent } from "@/lib/content-repository";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
 
@@ -101,6 +102,7 @@ export default async function RootLayout({
         {children}
         <Footer content={content} />
         <WhatsAppButton content={content} />
+        <Toaster position="bottom-right" />
       </body>
     </html>
   );

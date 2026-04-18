@@ -5,8 +5,11 @@ import {
   Save, LayoutDashboard, Settings, FileText, LogOut, Info, Share2, 
   Tag, Briefcase, ChevronRight, AlertCircle, CheckCircle2, 
   Plus, Trash2, PhoneCall, TrendingUp, Users, ShoppingBag, DollarSign,
-  Clock as ClockIcon, Activity
+  Clock as ClockIcon, Activity, Inbox, Archive, Search, Filter, 
+  MoreVertical, Clock, Phone, User, MapPin, Calendar
 } from "lucide-react";
+import { Lead, LeadArchive } from "@/lib/leads-schema";
+import { toast as hotToast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -19,24 +22,27 @@ import { useSiteContent } from "@/hooks/use-site-content";
 export default function AdminPage() {
   const { content, setContent, isLoading, isSaving, save, error: fetchError } = useSiteContent();
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  const [toast, setToast] = useState<{ show: boolean, message: string, type?: "success" | "error" }>({ 
-    show: false, message: "" 
-  });
-  const [activeTab, setActiveTab] = useState<"dashboard" | "general" | "services" | "campaigns" | "about" | "contact" | "raw">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "general" | "services" | "campaigns" | "about" | "contact" | "raw" | "leads" | "archive">("dashboard");
+  const [leads, setLeads] = useState<Lead[]>([]);
+  const [archive, setArchive] = useState<LeadArchive[]>([]);
+  const [isLoadingLeads, setIsLoadingLeads] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const router = useRouter();
 
-  const showToast = (message: string, type: "success" | "error" = "success") => {
-    setToast({ show: true, message, type });
-  };
-
   const handleSave = async () => {
-    const result: any = await save(content!);
+    if (!content) return;
+    setStatus("idle");
+    const result: any = await save(content);
     if (result.success) {
-      showToast("Tüm değişiklikler başarıyla buluta işlendi.");
+      setStatus("success");
+      hotToast.success("Tüm değişiklikler başarıyla buluta işlendi.");
     } else {
-      showToast(result.message || "Bir hata oluştu.", "error");
+      setStatus("error");
+      hotToast.error(result.message || "Bir hata oluştu.");
     }
   };
+
 
   const handleLogout = async () => {
     try {
@@ -47,6 +53,67 @@ export default function AdminPage() {
       router.push("/auth/login");
     }
   };
+
+  const fetchLeads = async () => {
+    setIsLoadingLeads(true);
+    try {
+      const res = await fetch("/api/admin/leads?type=active");
+      const data = await res.json();
+      if (data.success) setLeads(data.data);
+    } catch (error) {
+      hotToast.error("Talepler yüklenemedi.");
+    } finally {
+      setIsLoadingLeads(false);
+    }
+  };
+
+  const fetchArchive = async () => {
+    try {
+      const res = await fetch("/api/admin/leads?type=archive");
+      const data = await res.json();
+      if (data.success) setArchive(data.data);
+    } catch (error) {
+      console.error("Archive fetch error");
+    }
+  };
+
+  const handleUpdateStatus = async (leadId: string, newStatus: string) => {
+    try {
+      const res = await fetch(`/api/admin/leads/${leadId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus })
+      });
+      const data = await res.json();
+      if (data.success) {
+        hotToast.success("Durum güncellendi.");
+        fetchLeads();
+        fetchArchive();
+      }
+    } catch (error) {
+      hotToast.error("Güncelleme başarısız.");
+    }
+  };
+
+  React.useEffect(() => {
+    if (activeTab === "leads") fetchLeads();
+    if (activeTab === "archive") fetchArchive();
+    if (activeTab === "dashboard") {
+      fetchLeads();
+      fetchArchive();
+    }
+  }, [activeTab]);
+
+  if (isLoading || !content) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+        <div className="space-y-4 text-center">
+          <div className="w-16 h-16 border-4 border-primary-ocean border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-slate-400 font-bold italic animate-pulse">Panel Yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
 
   // List Management Helpers
   const addCampaign = () => {
@@ -78,16 +145,6 @@ export default function AdminPage() {
     });
   };
 
-  if (isLoading) return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <div className="text-center">
-        <div className="w-12 h-12 border-4 border-primary-ocean border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-slate-500 font-bold tracking-tight">Sistem Yükleniyor...</p>
-      </div>
-    </div>
-  );
-
-  if (!content) return <div>Hata oluştu: {fetchError}</div>;
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] pt-32 pb-24 px-4 overflow-x-hidden">
@@ -107,31 +164,38 @@ export default function AdminPage() {
             </div>
             
             <nav className="space-y-2">
-              {[
-                { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-                { id: "general", label: "Genel Ayarlar", icon: Settings },
-                { id: "services", label: "Hizmetler", icon: Briefcase },
-                { id: "campaigns", label: "Kampanyalar", icon: Tag },
-                { id: "about", label: "Hakkımızda", icon: Info },
-                { id: "contact", label: "İletişim & Sosyal", icon: Share2 },
-                { id: "raw", label: "Gelişmiş JSON", icon: FileText },
-              ].map((tab) => (
-                <button 
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-black transition-all duration-300 ${
-                    activeTab === tab.id 
-                    ? "bg-slate-900 text-white shadow-xl shadow-slate-200" 
-                    : "bg-white text-slate-500 hover:bg-slate-50 border border-slate-100"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <tab.icon size={18} />
-                    {tab.label}
-                  </div>
-                  {activeTab === tab.id && <ChevronRight size={16} />}
-                </button>
-              ))}
+                {[
+                  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+                  { id: "leads", label: "Talepler", icon: Inbox, count: leads.length },
+                  { id: "archive", label: "İş Arşivi", icon: Archive },
+                  { id: "general", label: "Genel Ayarlar", icon: Settings },
+                  { id: "services", label: "Hizmetler", icon: Briefcase },
+                  { id: "campaigns", label: "Kampanyalar", icon: Tag },
+                  { id: "about", label: "Hakkımızda", icon: Info },
+                  { id: "contact", label: "İletişim & Sosyal", icon: Share2 },
+                  { id: "raw", label: "Gelişmiş JSON", icon: FileText },
+                ].map((tab) => (
+                  <button 
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl font-black transition-all duration-300 ${
+                      activeTab === tab.id 
+                      ? "bg-slate-900 text-white shadow-xl shadow-slate-200" 
+                      : "bg-white text-slate-500 hover:bg-slate-50 border border-slate-100"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <tab.icon size={18} />
+                      {tab.label}
+                      {tab.count !== undefined && tab.count > 0 && (
+                        <span className="ml-2 bg-emerald-500 text-white text-[10px] px-2 py-0.5 rounded-full ring-4 ring-white">
+                          {tab.count}
+                        </span>
+                      )}
+                    </div>
+                    {activeTab === tab.id && <ChevronRight size={16} />}
+                  </button>
+                ))}
             </nav>
 
             <div className="pt-6 mt-6 border-t border-slate-200">
@@ -170,7 +234,7 @@ export default function AdminPage() {
                 )}
                 {status === "error" && (
                   <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="p-5 bg-rose-50 text-rose-700 rounded-3xl font-bold mb-8 border border-rose-100 flex items-center gap-3">
-                    <AlertCircle size={20} /> {toast.message}
+                    <AlertCircle size={20} /> Bir hata oluştu, lütfen formu kontrol edin.
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -182,9 +246,9 @@ export default function AdminPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                       {[
                         { label: "Aktif Hizmetler", value: content.services.items.length, icon: Briefcase, color: "text-primary-ocean" },
-                        { label: "Aktif Kampanyalar", value: content.campaigns.items.length, icon: Tag, color: "text-emerald-500" },
+                        { label: "Bekleyen Talepler", value: leads.length, icon: Inbox, color: "text-emerald-500" },
                         { label: "Müşteri Yorumları", value: content.testimonials.items.length, icon: Users, color: "text-turquoise" },
-                        { label: "İletişim Kanalları", value: content.contact.phone.length + 1, icon: PhoneCall, color: "text-amber-500" },
+                        { label: "Tamamlanan İşler", value: archive.length, icon: Archive, color: "text-amber-500" },
                       ].map((stat, i) => (
                         <motion.div 
                           key={i}
@@ -203,12 +267,203 @@ export default function AdminPage() {
                     </div>
 
                     {/* Quick System Info */}
-                    <div className="p-10 rounded-[3rem] bg-slate-900 text-white relative overflow-hidden group">
-                      <div className="relative z-10">
-                        <h3 className="text-2xl font-black mb-2 italic">Hoş Geldiniz, Yönetici</h3>
-                        <p className="text-slate-400 font-medium max-w-md italic">Ceyfur Halı Yıkama içerik yönetim sistemindesiniz. Tüm değişiklikler anında yayına alınır.</p>
+                    <div className="grid md:grid-cols-2 gap-8">
+                      <div className="p-10 rounded-[3rem] bg-slate-900 text-white relative overflow-hidden group">
+                        <div className="relative z-10">
+                          <h3 className="text-2xl font-black mb-2 italic">Hoş Geldiniz, Yönetici</h3>
+                          <p className="text-slate-400 font-medium max-w-md italic">Ceyfur Halı Yıkama içerik yönetim sistemindesiniz. Tüm değişiklikler anında yayına alınır.</p>
+                        </div>
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-ocean/20 blur-[100px] -mr-32 -mt-32 group-hover:bg-primary-ocean/30 transition-all duration-1000" />
                       </div>
-                      <div className="absolute top-0 right-0 w-64 h-64 bg-primary-ocean/20 blur-[100px] -mr-32 -mt-32 group-hover:bg-primary-ocean/30 transition-all duration-1000" />
+
+                      <div className="p-10 rounded-[3rem] bg-emerald-500 text-white relative overflow-hidden group cursor-pointer" onClick={() => setActiveTab("leads")}>
+                        <div className="relative z-10">
+                          <h3 className="text-2xl font-black mb-2 italic">Yeni Talepleriniz Var</h3>
+                          <p className="text-emerald-100 font-medium max-w-md italic">{leads.filter(l => l.status === 'new').length} adet yeni müşteri talebi ilgi bekliyor.</p>
+                        </div>
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/20 blur-[100px] -mr-32 -mt-32 group-hover:bg-white/30 transition-all duration-1000" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "leads" && (
+                  <div className="space-y-8">
+                    {/* Header & Filters */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50 p-8 rounded-[3rem] border border-slate-100/50">
+                      <div>
+                        <h2 className="text-2xl font-black text-slate-900 italic">Aktif Talepler</h2>
+                        <p className="text-slate-400 font-medium italic text-xs">Müşteri randevu ve teklif isteklerini buradan yönetin.</p>
+                      </div>
+                      
+                      <div className="flex items-center gap-4">
+                        <div className="relative group">
+                          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary-ocean transition-colors" size={16} />
+                          <input 
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Müşteri veya ilçe ara..."
+                            className="pl-12 pr-6 py-3 rounded-2xl bg-white border border-slate-200 outline-none text-xs font-bold w-64"
+                          />
+                        </div>
+                        <select 
+                          value={statusFilter}
+                          onChange={(e) => setStatusFilter(e.target.value)}
+                          className="px-6 py-3 rounded-2xl bg-white border border-slate-200 outline-none text-xs font-bold appearance-none cursor-pointer"
+                        >
+                          <option value="all">Tüm Durumlar</option>
+                          <option value="new">Yeni</option>
+                          <option value="called">Arandı</option>
+                          <option value="quoted">Teklif Verildi</option>
+                          <option value="booked">Randevu Alındı</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* Leads Table */}
+                    <div className="space-y-4">
+                      {leads
+                        .filter(l => (statusFilter === 'all' || l.status === statusFilter) && 
+                                    (l.fullName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                     l.district.toLowerCase().includes(searchQuery.toLowerCase())))
+                        .map((lead, i) => (
+                        <motion.div 
+                          key={lead.id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="group p-8 rounded-[2.5rem] bg-white border border-slate-100 hover:border-primary-ocean/20 transition-all shadow-sm hover:shadow-xl relative overflow-hidden"
+                        >
+                          <div className={cn("absolute top-0 left-0 w-1.5 h-full transition-colors", 
+                            lead.status === 'new' ? "bg-emerald-500" : 
+                            lead.status === 'called' ? "bg-blue-500" :
+                            lead.status === 'quoted' ? "bg-amber-500" : "bg-primary-ocean"
+                          )} />
+                          
+                          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                            <div className="space-y-4 flex-1">
+                              <div className="flex items-center gap-4">
+                                <h3 className="text-xl font-black text-slate-900 italic tracking-tight">{lead.fullName}</h3>
+                                <span className={cn("text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full",
+                                  lead.status === 'new' ? "bg-emerald-50 text-emerald-500" : 
+                                  lead.status === 'called' ? "bg-blue-50 text-blue-500" :
+                                  lead.status === 'quoted' ? "bg-amber-50 text-amber-500" : "bg-primary-ocean/5 text-primary-ocean"
+                                )}>
+                                  {lead.status === 'new' ? "Yeni Talep" : 
+                                   lead.status === 'called' ? "Arandı" :
+                                   lead.status === 'quoted' ? "Teklif Verildi" : "Randevu Alındı"}
+                                </span>
+                              </div>
+                              
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div className="flex items-center gap-3 text-slate-500 font-bold text-xs italic">
+                                  <Phone size={14} className="text-slate-300" /> {lead.phone}
+                                </div>
+                                <div className="flex items-center gap-3 text-slate-500 font-bold text-xs italic">
+                                  <Briefcase size={14} className="text-slate-300" /> {lead.serviceId}
+                                </div>
+                                <div className="flex items-center gap-3 text-slate-500 font-bold text-xs italic">
+                                  <MapPin size={14} className="text-slate-300" /> {lead.district}
+                                </div>
+                                <div className="flex items-center gap-3 text-slate-500 font-bold text-xs italic">
+                                  <Calendar size={14} className="text-slate-300" /> {lead.preferredDate ? new Date(lead.preferredDate).toLocaleDateString('tr-TR') : 'Belirtilmedi'}
+                                </div>
+                              </div>
+                              
+                              {lead.notes && (
+                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100/50 text-slate-400 text-xs font-medium italic">
+                                  &ldquo;{lead.notes}&rdquo;
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-3 shrink-0">
+                               <select 
+                                onChange={(e) => handleUpdateStatus(lead.id, e.target.value)}
+                                value={lead.status}
+                                className="px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 outline-none text-xs font-black uppercase tracking-widest hover:bg-white hover:border-primary-ocean transition-all cursor-pointer appearance-none text-center"
+                              >
+                                <option value="new">Durum: Yeni</option>
+                                <option value="called">Durum: Arandı</option>
+                                <option value="quoted">Durum: Teklif Verildi</option>
+                                <option value="booked">Durum: Randevu Alındı</option>
+                                <option disabled>──────────</option>
+                                <option value="completed" className="text-emerald-500">✓ TAMAMLA (ARŞİVLE)</option>
+                                <option value="cancelled" className="text-rose-500">✕ İPTAL ET (ARŞİVLE)</option>
+                              </select>
+                              
+                              <Button 
+                                onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\s+/g, '')}`, '_blank')}
+                                size="sm" 
+                                variant="outline"
+                                className="rounded-2xl h-[52px]"
+                              >
+                                WhatsApp
+                              </Button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                      
+                      {leads.length === 0 && (
+                        <div className="p-20 text-center space-y-4 bg-slate-50 rounded-[3rem] border border-dashed border-slate-200">
+                           <Inbox size={48} className="mx-auto text-slate-200" />
+                           <p className="text-slate-400 font-bold italic">Henüz aktif bir talep bulunmuyor.</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === "archive" && (
+                  <div className="space-y-8">
+                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50 p-8 rounded-[3rem] border border-slate-100/50">
+                      <div>
+                        <h2 className="text-2xl font-black text-slate-900 italic">İş Arşivi</h2>
+                        <p className="text-slate-400 font-medium italic text-xs">Tamamlanan veya iptal edilen geçmiş kayıtlar.</p>
+                      </div>
+                    </div>
+
+                    <div className="overflow-hidden rounded-[3rem] border border-slate-100 shadow-sm">
+                      <table className="w-full text-left bg-white">
+                        <thead className="bg-slate-50 border-b border-slate-100">
+                          <tr>
+                            <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Müşteri</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Hizmet / Bölge</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Durum</th>
+                            <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Tamamlama Tarihi</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                          {archive.map((job) => (
+                            <tr key={job.id} className="hover:bg-slate-50/50 transition-colors group">
+                              <td className="px-8 py-6">
+                                <div className="font-bold text-slate-900 italic">{job.fullName}</div>
+                                <div className="text-[10px] text-slate-400 font-medium">{job.phone}</div>
+                              </td>
+                              <td className="px-8 py-6">
+                                <div className="text-xs font-bold text-slate-600 tracking-tight">{job.serviceId}</div>
+                                <div className="text-[10px] text-primary-ocean font-black uppercase italic">{job.district}</div>
+                              </td>
+                              <td className="px-8 py-6">
+                                <span className={cn("text-[9px] font-black uppercase tracking-tighter px-3 py-1 rounded-full",
+                                  job.finalStatus === 'completed' ? "bg-emerald-50 text-emerald-500" : "bg-slate-100 text-slate-400"
+                                )}>
+                                  {job.finalStatus === 'completed' ? "Tamamlandı" : "İptal Edildi"}
+                                </span>
+                              </td>
+                              <td className="px-8 py-6 text-[11px] font-bold text-slate-400 italic">
+                                {new Date(job.completedAt).toLocaleDateString('tr-TR')}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      {archive.length === 0 && (
+                        <div className="p-20 text-center bg-white">
+                          <p className="text-slate-300 font-bold italic">Arşiv henüz boş.</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -591,12 +846,6 @@ export default function AdminPage() {
           </main>
         </div>
       </div>
-      <Toast 
-        isVisible={toast.show} 
-        message={toast.message} 
-        type={toast.type} 
-        onClose={() => setToast(prev => ({ ...prev, show: false }))} 
-      />
     </div>
   );
 }
