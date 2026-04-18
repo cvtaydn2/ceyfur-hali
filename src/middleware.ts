@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import crypto from "crypto";
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Protect /admin and /api/content
-  if (pathname.startsWith("/admin") || pathname.startsWith("/api/content")) {
+  // Protect /admin, /api/admin, and /api/content
+  if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin") || pathname.startsWith("/api/content")) {
     const adminSecret = process.env.ADMIN_SECRET || "ceyfur_premium_secret_2024";
     const sessionCookie = request.cookies.get("admin_session")?.value;
     const authHeader = request.headers.get("authorization");
@@ -33,8 +33,7 @@ export function proxy(request: NextRequest) {
     }
 
     // For /admin page, redirect to a simple login page (or just return 401)
-    // We'll create a simple /login page if not authorized
-    if (pathname === "/admin") {
+    if (pathname === "/admin" || pathname.startsWith("/admin/")) {
       const url = request.nextUrl.clone();
       url.pathname = "/auth/login";
       return NextResponse.redirect(url);
@@ -45,5 +44,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/content/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*", "/api/content/:path*"],
 };
