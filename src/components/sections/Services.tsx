@@ -69,16 +69,22 @@ export const Services = ({ content }: { content?: SiteContent }) => {
             return (
               <motion.div
                 key={service.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-100px" }}
                 transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.1,
-                  ease: [0.21, 0.47, 0.32, 0.98] 
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                  delay: index * 0.1 
+                }}
+                whileHover={{ 
+                  y: -6,
+                  scale: 1.02,
+                  boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
                 }}
                 className={cn(
-                  "group relative flex flex-col rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500",
+                  "group relative flex flex-col rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-xl transition-shadow duration-500",
                   spanClass
                 )}
               >

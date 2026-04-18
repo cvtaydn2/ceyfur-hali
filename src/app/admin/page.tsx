@@ -38,9 +38,14 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogout = () => {
-    document.cookie = "admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-    router.push("/auth/login");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/auth/login");
+      router.refresh();
+    } catch (err) {
+      router.push("/auth/login");
+    }
   };
 
   // List Management Helpers

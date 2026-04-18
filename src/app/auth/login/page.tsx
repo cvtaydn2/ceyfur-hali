@@ -6,19 +6,36 @@ import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function LoginPage() {
-  const [secret, setSecret] = useState("");
-  const [error, setError] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In this simple setup, we set a cookie that the middleware checks.
-    // In a real app, this would be an API call to verify and set a secure HttpOnly cookie.
-    document.cookie = `admin_auth=${secret}; path=/; max-age=86400; SameSite=Lax`;
-    
-    // Check if it worked by trying to go to admin
-    router.push("/admin");
-    router.refresh();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        router.push("/admin");
+        router.refresh();
+      } else {
+        setError(data.message || "Giriş başarısız.");
+      }
+    } catch (err) {
+      setError("Bağlantı hatası oluştu.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -39,24 +56,32 @@ export default function LoginPage() {
           <input
             type="password"
             placeholder="Yönetici Parolası"
-            value={secret}
-            onChange={(e) => setSecret(e.target.value)}
-            className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-primary-ocean outline-none transition-all text-center tracking-widest"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            disabled={isLoading}
+            className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-primary-ocean outline-none transition-all text-center tracking-widest disabled:opacity-50"
           />
           
           <button
             type="submit"
-            className="w-full flex items-center justify-center gap-2 py-4 bg-primary-ocean text-white rounded-2xl font-bold hover:bg-primary-ocean/90 transition-all group"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 py-4 bg-primary-ocean text-white rounded-2xl font-bold hover:bg-primary-ocean/90 transition-all group disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Giriş Yap
-            <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <>
+                Giriş Yap
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </>
+            )}
           </button>
         </form>
 
         {error && (
-          <div className="mt-6 flex items-center gap-2 text-rose-400 text-xs font-medium justify-center">
+          <div className="mt-6 flex items-center gap-2 text-rose-400 text-xs font-medium justify-center bg-rose-400/10 py-3 rounded-xl border border-rose-400/20">
             <ShieldAlert size={14} />
-            Hatalı parola, tekrar deneyiniz.
+            {error}
           </div>
         )}
       </motion.div>

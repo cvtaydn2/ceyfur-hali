@@ -32,16 +32,21 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
           {data.campaigns.items.map((campaign, i) => (
             <motion.div
               key={campaign.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-100px" }}
               transition={{ 
-                duration: 0.8, 
-                delay: i * 0.2,
-                ease: [0.21, 0.47, 0.32, 0.98]
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: i * 0.1 
               }}
-              whileHover={{ y: -10 }}
-              className="group relative glass p-10 rounded-[3rem] border-white shadow-xl hover:shadow-2xl hover:shadow-primary-ocean/5 transition-all duration-500 overflow-hidden"
+              whileHover={{ 
+                y: -6,
+                scale: 1.02,
+                boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
+              }}
+              className="group relative glass p-10 rounded-[3rem] border-white shadow-xl transition-all duration-500 overflow-hidden"
             >
               {/* Decoration */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-ocean/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary-ocean/10 transition-colors" />

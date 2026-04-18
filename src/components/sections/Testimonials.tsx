@@ -23,16 +23,21 @@ export const Testimonials = ({ content }: { content?: SiteContent }) => {
           {data.testimonials.items.map((item, i) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-100px" }}
               transition={{ 
-                duration: 0.8, 
-                delay: i * 0.1,
-                ease: [0.21, 0.47, 0.32, 0.98]
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: i * 0.1 
               }}
-              whileHover={{ y: -8 }}
-              className="group glass p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg hover:shadow-2xl hover:shadow-primary-ocean/5 transition-all duration-500"
+              whileHover={{ 
+                y: -6,
+                scale: 1.02,
+                boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
+              }}
+              className="group glass p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg transition-all duration-500"
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(item.rating)].map((_, starI) => (

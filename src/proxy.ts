@@ -1,17 +1,26 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import crypto from "crypto";
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /admin and /api/content
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/content")) {
-    const adminSecret = process.env.ADMIN_SECRET;
-    const authCookie = request.cookies.get("admin_auth")?.value;
+    const adminSecret = process.env.ADMIN_SECRET || "ceyfur_premium_secret_2024";
+    const sessionCookie = request.cookies.get("admin_session")?.value;
     const authHeader = request.headers.get("authorization");
 
-    // Check for authorization (either cookie for page or header for API)
-    if (authCookie === adminSecret || authHeader === `Bearer ${adminSecret}`) {
+    // Recalculate the expected token to verify authenticity
+    const expectedToken = crypto
+      .createHmac("sha256", adminSecret)
+      .update("ceyfur_admin_session_v1")
+      .digest("hex");
+
+    const isValidSession = sessionCookie === expectedToken;
+    const isValidHeader = authHeader === `Bearer ${adminSecret}`;
+
+    if (isValidSession || isValidHeader) {
       return NextResponse.next();
     }
 

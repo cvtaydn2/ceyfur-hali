@@ -11,6 +11,9 @@ const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
   const baseUrl = "https://ceyfurhaliyikama.com";
+  const ogImageUrl = content.seo.ogImage?.startsWith('http') 
+    ? content.seo.ogImage 
+    : `${baseUrl}${content.seo.ogImage || '/images/og-image.png'}`;
   
   return {
     title: content.seo.title,
@@ -25,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: content.brand.name,
       images: [
         {
-          url: `${baseUrl}/images/og-image.png`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: content.brand.name,
@@ -36,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: content.seo.title,
       description: content.seo.description,
-      images: [`${baseUrl}/images/og-image.png`],
+      images: [ogImageUrl],
     },
     robots: "index, follow",
     metadataBase: new URL(baseUrl),
@@ -51,13 +54,19 @@ export default async function RootLayout({
   const content = await getSiteContent();
   const baseUrl = "https://ceyfurhaliyikama.com";
 
+  // Parse working hours string to JSON-LD format
+  // Example: "Pazartesi - Cumartesi: 09:00 - 19:00"
+  const timeMatch = content.contact.workingHours.match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
+  const opens = timeMatch ? timeMatch[1] : "09:00";
+  const closes = timeMatch ? timeMatch[2] : "19:00";
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": content.brand.name,
     "description": content.seo.description,
     "url": baseUrl,
-    "telephone": content.contact.phone,
+    "telephone": content.contact.phone[0] || "",
     "email": content.contact.email,
     "address": {
       "@type": "PostalAddress",
@@ -70,11 +79,11 @@ export default async function RootLayout({
       {
         "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        "opens": "09:00",
-        "closes": "19:00"
+        "opens": opens,
+        "closes": closes
       }
     ],
-    "image": `${baseUrl}/images/og-image.png`,
+    "image": content.seo.ogImage?.startsWith('http') ? content.seo.ogImage : `${baseUrl}${content.seo.ogImage || '/images/og-image.png'}`,
     "sameAs": [
       content.contact.instagram,
       content.contact.facebook,

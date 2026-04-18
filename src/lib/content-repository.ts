@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { supabase, supabaseAdmin } from "./supabase";
 import { SiteContent } from "@/types";
 import fallbackContent from "@/data/siteContent.json";
 import { SiteContentSchema } from "./content-schema";
@@ -27,7 +27,7 @@ export async function getSiteContent(): Promise<SiteContent> {
 }
 
 export async function updateSiteContent(content: SiteContent) {
-  const { error } = await supabase
+  const { error } = await supabaseAdmin
     .from("site_configs")
     .upsert({ id: "main", content, updated_at: new Date().toISOString() });
 

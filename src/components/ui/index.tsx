@@ -33,16 +33,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <button
-        ref={ref}
+      <motion.button
+        ref={ref as any}
+        whileHover={{ 
+          y: -6, 
+          scale: 1.02,
+          boxShadow: "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)" 
+        }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 400, damping: 10 }}
         disabled={isLoading || props.disabled}
         className={cn(
-          "inline-flex items-center justify-center gap-2 font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none",
+          "inline-flex items-center justify-center gap-2 font-bold transition-colors disabled:opacity-50 disabled:pointer-events-none",
           variants[variant],
           sizes[size],
           className
         )}
-        {...props}
+        {...props as any}
       >
         {isLoading ? (
           <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
@@ -51,7 +58,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {children}
         {!isLoading && rightIcon}
-      </button>
+      </motion.button>
     );
   }
 );

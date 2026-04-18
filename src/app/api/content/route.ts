@@ -18,20 +18,31 @@ export async function POST(request: Request) {
       message: "Content updated successfully" 
     });
 
-  } catch (error) {
+  } catch (error: any) {
     if (error instanceof ZodError) {
       return NextResponse.json({ 
         success: false, 
-        message: "Validation failed", 
-        errors: error.issues 
+        code: "VALIDATION_ERROR",
+        message: "İçerik doğrulama hatası. Lütfen alanları kontrol edin.", 
+        details: error.format()
       }, { status: 400 });
+    }
+
+    if (error.message?.includes("Failed to update content")) {
+      return NextResponse.json({ 
+        success: false, 
+        code: "DATABASE_ERROR",
+        message: "Veritabanına kayıt yapılamadı.",
+        details: process.env.NODE_ENV === "development" ? error.message : undefined
+      }, { status: 500 });
     }
 
     console.error("Content API Error:", error);
     return NextResponse.json({ 
       success: false, 
-      message: "An internal server error occurred",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
+      message: "Sunucu tarafında beklenmedik bir hata oluştu.",
+      details: process.env.NODE_ENV === "development" ? error.message : undefined
     }, { status: 500 });
   }
 }
