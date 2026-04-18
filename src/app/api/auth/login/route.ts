@@ -14,9 +14,19 @@ export async function POST(request: Request) {
     }
 
     const adminSecret = process.env.ADMIN_SECRET;
+    
+    // Debug: Log which env vars are available (without exposing values)
+    console.log("ENV check:", { 
+      hasAdminSecret: !!adminSecret, 
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      nodeEnv: process.env.NODE_ENV 
+    });
+    
     if (!adminSecret) {
-      console.error("ADMIN_SECRET environment variable not set");
-      return NextResponse.json({ success: false, message: "Sunucu yapılandırma hatası" }, { status: 500 });
+      return NextResponse.json({ 
+        success: false, 
+        message: "Sunucu yapılandırma hatası: ADMIN_SECRET environment variable Netlify'de ayarlanmadı" 
+      }, { status: 500 });
     }
 
     if (password !== adminSecret) {
