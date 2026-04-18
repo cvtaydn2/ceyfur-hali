@@ -26,6 +26,8 @@ export interface ContactInfo {
   city: string;
   workingHours: string;
   googleMapsUrl: string;
+  instagram?: string;
+  facebook?: string;
 }
 
 export interface StatItem {
@@ -66,6 +68,13 @@ export interface SiteContent {
     primaryCta: string;
     secondaryCta: string;
     image: string;
+  };
+  about: {
+    title: string;
+    subtitle: string;
+    content: string;
+    features: string[];
+    image?: string;
   };
   services: {
     title: string;

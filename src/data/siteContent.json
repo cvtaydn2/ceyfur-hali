@@ -1,20 +1,34 @@
 {
   "brand": {
     "name": "Ceyfur Halı Yıkama",
-    "slogan": "Halılarınızda Bahar Temizliği, Yuvanızda Hijyen Ferahlığı"
+    "slogan": "Halılarınızda Bahar Temizliği, Yuvanızda Hijyen Ferahlığı",
+    "logo": ""
   },
   "seo": {
     "title": "Ceyfur Halı Yıkama | Profesyonel Halı ve Koltuk Yıkama Hizmetleri",
     "description": "Ceyfur Halı Yıkama ile halılarınız, koltuklarınız ve perdeleriniz uzman ellerde tertemiz olsun. Modern tesislerimizde hijyenik ve garantili temizlik hizmeti sunuyoruz.",
-    "keywords": ["halı yıkama", "koltuk yıkama", "perde yıkama", "hijyenik halı yıkama", "profesyonel temizlik", "ceyfur halı yıkama"]
+    "keywords": ["halı yıkama", "koltuk yıkama", "perde yıkama", "hijyenik halı yıkama", "profesyonel temizlik", "ceyfur halı yıkama"],
+    "ogImage": ""
   },
   "hero": {
     "title": "Yaşam Alanlarınıza Üstün",
     "highlight": "Hijyen Dokunuşu",
     "description": "En son teknoloji ekipmanlarımız ve doğa dostu temizlik ürünlerimizle halılarınızı ilk günkü parlaklığına ve temizliğine kavuşturuyoruz.",
-    "primaryCta": "WhatsApp'tan Hemen Yaz",
+    "primaryCta": "Hemen Randevu Al",
     "secondaryCta": "Hizmetlerimizi İnceleyin",
     "image": "/images/hero-carpet.png"
+  },
+  "about": {
+    "title": "Hijyen ve Güvenle",
+    "subtitle": "12 Yıllık Tecrübe ile Halılarınıza Uzman Bakışı",
+    "content": "Ceyfur Halı Yıkama olarak, 2012 yılından bu yana İstanbul'un dört bir yanındaki binlerce mutlu yuvaya hijyen taşıyoruz. Modern tesislerimizde, halılarınızın dokusuna zarar vermeyen özel şampuanlar ve tam otomatik makinelerle profesyonel temizlik hizmeti sunuyoruz. Sadece temizlik değil, sağlığınızı da önemsiyoruz.",
+    "features": [
+      "100% Organik Şampuanlar",
+      "Ücretsiz Kapıdan Kapıya Servis",
+      "Tam Otomatik Yıkama Hattı",
+      "Leke Çıkarma Garantisi"
+    ],
+    "image": "/images/about-image.png"
   },
   "services": {
     "title": "Profesyonel Hizmetlerimiz",
@@ -74,7 +88,7 @@
         "badge": "Yeni Müşteri",
         "priceNote": "Sabit %10 İndirim",
         "features": ["İlk Siparişe Özel", "Hızlı Teslimat", "Öncelikli Randevu"],
-        "ctaLabel": "Kullanmaya Başla"
+        "ctaLabel": "Fırsatı Kullan"
       }
     ]
   },
@@ -93,7 +107,7 @@
         "name": "Ayşe Yılmaz",
         "comment": "Halılarım geldiğinde inanamadım, resmen ilk aldığım günkü gibi parlıyorlar. Teşekkürler Ceyfur!",
         "rating": 5,
-        "date": "20.03.2024"
+        "date": "20.04.2024"
       },
       {
         "id": "t2",
@@ -119,7 +133,9 @@
     "district": "Beylikdüzü",
     "city": "İstanbul",
     "workingHours": "Pazartesi - Cumartesi: 09:00 - 19:00",
-    "googleMapsUrl": "https://goo.gl/maps/example"
+    "googleMapsUrl": "https://goo.gl/maps/example",
+    "instagram": "https://instagram.com/ceyfurhali",
+    "facebook": "https://facebook.com/ceyfurhali"
   },
   "navigation": [
     { "label": "Ana Sayfa", "href": "#" },

@@ -71,9 +71,14 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
             <Phone size={18} />
             <span className="text-sm">{data.contact.phone}</span>
           </a>
-          <button className="bg-primary-ocean text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary-ocean/20 hover:scale-105 transition-transform active:scale-95">
+          <a
+            href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent("Merhaba, halı yıkama hizmetiniz için teklif almak istiyorum.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-primary-ocean text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary-ocean/20 hover:scale-105 transition-transform active:scale-95"
+          >
             Teklif Al
-          </button>
+          </a>
           
           <button 
             className="md:hidden text-slate-900 p-1"

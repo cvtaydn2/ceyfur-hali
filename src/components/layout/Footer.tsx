@@ -1,5 +1,5 @@
 import React from "react";
-import { Earth, Share2, Phone, Mail, MapPin } from "lucide-react";
+import { Globe, Share2, Phone, Mail, MapPin } from "lucide-react";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
 
@@ -21,12 +21,28 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
             {data.footer.about}
           </p>
           <div className="flex gap-4">
-            <a href="#" aria-label="Instagram sayfamız" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all">
-              <Earth size={20} />
-            </a>
-            <a href="#" aria-label="Facebook sayfamız" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all">
-              <Share2 size={20} />
-            </a>
+            {data.contact.instagram && (
+              <a 
+                href={data.contact.instagram} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="Instagram sayfamız" 
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all"
+              >
+                <Globe size={20} />
+              </a>
+            )}
+            {data.contact.facebook && (
+              <a 
+                href={data.contact.facebook} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                aria-label="Facebook sayfamız" 
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all"
+              >
+                <Share2 size={20} />
+              </a>
+            )}
           </div>
         </div>
 
@@ -55,17 +71,21 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Phone size={18} className="text-primary-ocean shrink-0" />
-                <span>{data.contact.phone}</span>
+                <a href={`tel:${data.contact.phone.replace(/\s/g, "")}`} className="hover:text-primary-ocean transition-colors">
+                  {data.contact.phone}
+                </a>
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Mail size={18} className="text-primary-ocean shrink-0" />
-                <span>{data.contact.email}</span>
+                <a href={`mailto:${data.contact.email}`} className="hover:text-primary-ocean transition-colors">
+                  {data.contact.email}
+                </a>
               </li>
             </ul>
           </address>
         </div>
 
-        {/* Map Placeholder or Working Hours */}
+        {/* Working Hours */}
         <div>
           <h3 className="text-white font-bold mb-6">Çalışma Saatleri</h3>
           <p className="text-sm italic mb-4">Pazar günü kapalıyız.</p>
@@ -73,6 +93,16 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
             <p className="text-white font-medium text-sm mb-1">Mesai Saatleri:</p>
             <p className="text-xs">{data.contact.workingHours}</p>
           </div>
+          {data.contact.googleMapsUrl && (
+            <a 
+              href={data.contact.googleMapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="mt-6 inline-block text-xs text-primary-ocean font-bold hover:underline"
+            >
+              Haritada Görüntüle →
+            </a>
+          )}
         </div>
       </div>
 
@@ -80,7 +110,7 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
         <p className="text-xs">{data.footer.copyright}</p>
         <div className="flex gap-6">
           {data.footer.links.map((link : any) => (
-            <a key={link.label} href={link.href} className="text-xs hover:text-white">
+            <a key={link.label} href={link.href} className="text-xs hover:text-white transition-colors">
               {link.label}
             </a>
           ))}

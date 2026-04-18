@@ -9,6 +9,8 @@ import { siteContent as fallbackContent } from "@/data/siteContent";
 export const Testimonials = ({ content }: { content?: SiteContent }) => {
   const data = content || fallbackContent;
 
+  if (!data?.testimonials) return null;
+
   return (
     <section className="py-24 px-4 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">

@@ -17,6 +17,8 @@ const iconMap: Record<string, React.ElementType> = {
 export const Services = ({ content }: { content?: SiteContent }) => {
   const data = content || fallbackContent;
 
+  if (!data?.services) return null;
+
   return (
     <section id="services" className="py-24 px-4 bg-white/50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -27,7 +29,7 @@ export const Services = ({ content }: { content?: SiteContent }) => {
             viewport={{ once: true }}
             className="inline-block px-4 py-1.5 rounded-full bg-primary-ocean/5 text-primary-ocean text-sm font-bold mb-4"
           >
-            Hizmetlerimiz
+            Neler Yapıyoruz?
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -49,20 +51,10 @@ export const Services = ({ content }: { content?: SiteContent }) => {
           </motion.p>
         </div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 h-auto md:h-[600px]">
-          {data.services.items.map((service : any, index : number) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {data.services.items.map((service, index) => {
             const Icon = iconMap[service.icon] || Brush;
             
-            // Bento logic: 1st and 4th are larger
-            const gridClass = index === 0 
-              ? "md:col-span-4 md:row-span-1" 
-              : index === 1 
-                ? "md:col-span-2 md:row-span-1" 
-                : index === 2 
-                  ? "md:col-span-3 md:row-span-1" 
-                  : "md:col-span-3 md:row-span-1";
-
             return (
               <motion.div
                 key={service.id}
@@ -70,37 +62,46 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className={cn(
-                  "group relative rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 p-8 shadow-sm hover:shadow-2xl hover:shadow-primary-ocean/5 transition-all",
-                  gridClass
-                )}
+                className="group relative flex flex-col h-full rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-500"
               >
-                <div className="absolute top-0 right-0 -z-0 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                  <Icon size={200} />
+                {/* Image Header */}
+                <div className="h-48 relative overflow-hidden">
+                  <img 
+                    src={service.image} 
+                    alt={service.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = `https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=400&auto=format&fit=crop&sig=${index}`;
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
+                  <div className="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-white/90 backdrop-blur-sm flex items-center justify-center text-primary-ocean shadow-lg">
+                    <Icon size={24} />
+                  </div>
                 </div>
 
-                <div className="relative z-10 h-full flex flex-col">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-14 h-14 rounded-2xl bg-primary-ocean/5 flex items-center justify-center text-primary-ocean group-hover:bg-primary-ocean group-hover:text-white transition-colors duration-300">
-                      <Icon size={28} />
-                    </div>
-                    <button className="p-3 rounded-full bg-slate-50 text-slate-400 group-hover:bg-primary-ocean group-hover:text-white transition-all transform group-hover:rotate-45">
-                      <ArrowUpRight size={20} />
-                    </button>
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">{service.title}</h3>
-                  <p className="text-slate-500 mb-6 max-w-sm line-clamp-2 md:line-clamp-none">
+                <div className="p-8 flex flex-col flex-grow">
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3 tracking-tight group-hover:text-primary-ocean transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="text-slate-500 mb-6 text-sm leading-relaxed line-clamp-3">
                     {service.description}
                   </p>
 
-                  <div className="mt-auto flex flex-wrap gap-3">
-                    {service.features.map((feature : string, fIndex : number) => (
-                      <div key={fIndex} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-600">
-                        <CheckCircle2 size={12} className="text-turquoise" />
+                  <div className="mt-auto space-y-3">
+                    {service.features.slice(0, 3).map((feature: string, fIndex: number) => (
+                      <div key={fIndex} className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                        <CheckCircle2 size={14} className="text-primary-ocean" />
                         {feature}
                       </div>
                     ))}
+                    
+                    <a
+                      href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(service.title + " hakkında bilgi almak istiyorum.")}`}
+                      className="inline-flex items-center gap-2 text-primary-ocean font-bold text-sm pt-4 hover:gap-3 transition-all"
+                    >
+                      Hemen Teklif Al <ArrowUpRight size={16} />
+                    </a>
                   </div>
                 </div>
               </motion.div>
