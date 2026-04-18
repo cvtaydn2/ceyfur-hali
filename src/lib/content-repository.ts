@@ -10,25 +10,18 @@ export async function getSiteContent(): Promise<SiteContent> {
     .eq("id", "main")
     .single();
 
-  if (error || !data) {
+  if (error || !data?.content) {
     console.error("Error fetching site content, using fallback:", error);
     return fallbackContent as unknown as SiteContent;
   }
 
-  // Runtime validation with deep merging for resilience
-  // We merge the fetched data over the fallback content to ensure all required keys exist
-  const mergedContent = {
-    ...(fallbackContent as any),
-    ...(data.content || {})
-  };
-
-  const result = SiteContentSchema.safeParse(mergedContent);
-  
+  // Validate on read - if validation fails, the data in DB is corrupted
+  // This ensures we always return valid content
+  const result = SiteContentSchema.safeParse(data.content);
   if (!result.success) {
-    console.error("Content partially invalid, using safe merged values. Issues:", 
+    console.error("Invalid content in DB, using fallback. Issues:", 
       result.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ')
     );
-    // If even basic merging fails validation, return full fallback
     return fallbackContent as unknown as SiteContent;
   }
 

@@ -73,22 +73,27 @@ export function useSiteContent() {
     }
   }, []);
 
-  const saveContent = async (newContent: SiteContent) => {
-    setIsSaving(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newContent),
-      });
-      const data = await res.json();
-      
-      if (res.ok && data.success) {
-        setContent(newContent);
-        setToCache(newContent);
-        return { success: true };
-      } else {
+const saveContent = async (newContent: SiteContent) => {
+  setIsSaving(true);
+  setError(null);
+  // Clear cache before saving to ensure fresh fetch
+  if (typeof window !== "undefined") {
+    localStorage.removeItem(CACHE_KEY);
+  }
+  try {
+    const res = await fetch("/api/content", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newContent),
+    });
+    const data = await res.json();
+    
+    if (res.ok && data.success) {
+      // Directly set without waiting for fetch
+      setContent(newContent);
+      localStorage.removeItem(CACHE_KEY);
+      return { success: true };
+    } else {
         return { 
           success: false, 
           message: data.message || "Güncelleme başarısız.",
