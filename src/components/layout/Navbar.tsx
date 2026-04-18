@@ -85,8 +85,10 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
              </div>
              
 <a
+               target="_blank"
+               rel="noopener noreferrer"
                href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, '')}?text=Bilgi almak istiyorum.`}
-              className={cn(
+               className={cn(
                 "px-4 py-2 md:px-6 md:py-3 rounded-2xl font-black text-xs md:text-sm transition-all shadow-xl hover:-translate-y-1 active:scale-95",
                 isScrolled 
                   ? "bg-primary-ocean text-white shadow-primary-ocean/20 hover:bg-slate-900" 

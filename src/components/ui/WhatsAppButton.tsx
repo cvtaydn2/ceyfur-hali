@@ -11,7 +11,7 @@ export const WhatsAppButton = ({ content }: { content?: SiteContent }) => {
 
   return (
     <motion.a
-      href={`https://wa.me/${data.contact.whatsapp}`}
+      href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, '')}`}
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0, opacity: 0 }}

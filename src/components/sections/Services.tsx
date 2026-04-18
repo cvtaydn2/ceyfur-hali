@@ -97,6 +97,7 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                     src={service.image} 
                     alt={service.title}
                     fill
+                    priority={index === 0}
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 300px"
                     className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                   />
@@ -136,7 +137,9 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                     </div>
                     
                     <a
-                      href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(service.title + " hakkında bilgi almak istiyorum.")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, '')}?text=${encodeURIComponent(service.title + " hakkında bilgi almak istiyorum.")}`}
                       className="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-primary-ocean transition-all shadow-lg shadow-slate-900/10 hover:shadow-primary-ocean/20"
                     >
                       Hemen Teklif Al

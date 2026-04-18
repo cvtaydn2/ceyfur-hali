@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface OptimizedImageProps extends Omit<ImageProps, "onLoad" | "onError"> {
+  priority?: boolean;
   fallbackSrc?: string;
   containerClassName?: string;
 }
@@ -16,6 +17,7 @@ export const OptimizedImage = ({
   className,
   containerClassName,
   fallbackSrc = "/images/placeholder.png",
+  priority = false,
   fill,
   ...props
 }: OptimizedImageProps) => {
@@ -42,6 +44,7 @@ export const OptimizedImage = ({
       <Image
         {...props}
         fill={fill}
+        priority={priority}
         src={imgSrc}
         alt={alt}
         className={cn(

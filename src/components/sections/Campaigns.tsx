@@ -74,7 +74,9 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
               <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-0 pt-6 sm:pt-8 border-t border-slate-100">
                 <span className="text-lg font-black text-primary-ocean tracking-tight">{campaign.priceNote}</span>
                 <a
-                  href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(campaign.title + " kampanyası için bilgi almak istiyorum.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, '')}?text=${encodeURIComponent(campaign.title + " kampanyası için bilgi almak istiyorum.")}`}
                   className="w-full sm:w-auto flex items-center justify-center px-6 py-3 md:px-8 md:py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:bg-primary-ocean transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary-ocean/20"
                 >
                   {campaign.ctaLabel}
