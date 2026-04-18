@@ -50,7 +50,7 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
         <div>
           <h3 className="text-white font-bold mb-6">Hızlı Menü</h3>
           <ul className="space-y-4">
-            {data.navigation.map((item : any) => (
+            {data.navigation.map((item) => (
               <li key={item.label}>
                 <a href={item.href} className="text-sm hover:text-primary-ocean transition-colors">
                   {item.label}
@@ -113,7 +113,7 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
         <p className="text-xs">{data.footer.copyright}</p>
         <div className="flex gap-6">
-          {data.footer.links.map((link : any) => (
+          {data.footer.links.map((link) => (
             <a key={link.label} href={link.href} className="text-xs hover:text-white transition-colors">
               {link.label}
             </a>

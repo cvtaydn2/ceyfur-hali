@@ -20,7 +20,7 @@ export async function POST(request: Request) {
       message: "Talebiniz başarıyla alındı. En kısa sürede size dönüş yapacağız." 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof ZodError) {
       return NextResponse.json({ 
         success: false, 

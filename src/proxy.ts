@@ -1,8 +1,27 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import crypto from "crypto";
 
-export function middleware(request: NextRequest) {
+// Polyfill/Helper for Edge Runtime HMAC generation using Web Crypto
+async function generateExpectedToken(secret: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
+  const msgData = encoder.encode("ceyfur_admin_session_v1");
+  const key = await crypto.subtle.importKey(
+    "raw",
+    keyData,
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  
+  const signature = await crypto.subtle.sign("HMAC", key, msgData);
+  // Convert ArrayBuffer to Hex string
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Protect /admin, /api/admin, and /api/content
@@ -11,11 +30,8 @@ export function middleware(request: NextRequest) {
     const sessionCookie = request.cookies.get("admin_session")?.value;
     const authHeader = request.headers.get("authorization");
 
-    // Recalculate the expected token to verify authenticity
-    const expectedToken = crypto
-      .createHmac("sha256", adminSecret)
-      .update("ceyfur_admin_session_v1")
-      .digest("hex");
+    // Recalculate using Web Crypto API
+    const expectedToken = await generateExpectedToken(adminSecret);
 
     const isValidSession = sessionCookie === expectedToken;
     const isValidHeader = authHeader === `Bearer ${adminSecret}`;

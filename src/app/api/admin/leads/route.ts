@@ -16,7 +16,7 @@ export async function GET(request: Request) {
     const leads = await getLeads();
     return NextResponse.json({ success: true, data: leads });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Admin Lead API Error:", error);
     return NextResponse.json({ 
       success: false, 

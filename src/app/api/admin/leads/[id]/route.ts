@@ -22,7 +22,7 @@ export async function PATCH(
       message: "Talep durumu güncellendi." 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Admin Lead Update Error:", error);
     return NextResponse.json({ 
       success: false, 

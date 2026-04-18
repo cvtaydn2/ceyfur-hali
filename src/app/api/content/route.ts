@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       message: "Content updated successfully" 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof ZodError) {
       return NextResponse.json({ 
         success: false, 
@@ -39,12 +39,12 @@ export async function POST(request: Request) {
       }, { status: 400 });
     }
 
-    if (error.message?.includes("Failed to update content")) {
+    if (error instanceof Error && error.message?.includes("Failed to update content")) {
       return NextResponse.json({ 
         success: false, 
         code: "DATABASE_ERROR",
         message: "Veritabanına kayıt yapılamadı.",
-        details: process.env.NODE_ENV === "development" ? error.message : undefined
+        details: process.env.NODE_ENV === "development" && error instanceof Error ? error.message : undefined
       }, { status: 500 });
     }
 
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       success: false, 
       code: "INTERNAL_ERROR",
       message: "Sunucu tarafında beklenmedik bir hata oluştu.",
-      details: process.env.NODE_ENV === "development" ? error.message : undefined
+      details: process.env.NODE_ENV === "development" && error instanceof Error ? error.message : undefined
     }, { status: 500 });
   }
 }
