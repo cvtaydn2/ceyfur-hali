@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { CheckCircle2, ShieldCheck, Clock, Award } from "lucide-react";
 import { SiteContent } from "@/types";
@@ -70,14 +70,13 @@ export const About = ({ content }: { content?: SiteContent }) => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
-              <img
+            <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white aspect-[4/5] lg:aspect-auto min-h-[500px]">
+              <Image
                 src={aboutData.image || "/images/about-image.png"}
                 alt="Ceyfur Halı Yıkama Tesisleri"
-                className="w-full h-auto object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1000&auto=format&fit=crop";
-                }}
+                fill
+                sizes="(max-width: 1024px) 100vw, 500px"
+                className="object-cover"
               />
               {/* Experience Badge */}
               <div className="absolute bottom-10 left-10 glass p-6 rounded-3xl shadow-xl">

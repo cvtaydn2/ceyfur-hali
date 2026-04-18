@@ -14,8 +14,8 @@ export default async function Home() {
       <Hero content={content} />
       <Stats content={content} />
       <Services content={content} />
-      <About content={content} />
       <Campaigns content={content} />
+      <About content={content} />
       <Testimonials content={content} />
       
       {/* Newsletter or Contact Mini Section */}
@@ -28,10 +28,10 @@ export default async function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <a 
-                href={`tel:${content.contact.phone.replace(/\s/g, "")}`} 
+                href={`tel:${content.contact.phone[0].replace(/\s/g, "")}`} 
                 className="px-10 py-5 bg-white text-slate-900 rounded-2xl font-bold text-xl hover:bg-slate-100 transition-all"
               >
-                {content.contact.phone}
+                {content.contact.phone[0]}
               </a>
               <a 
                  href={`https://wa.me/${content.contact.whatsapp}`}

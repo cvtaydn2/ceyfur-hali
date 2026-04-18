@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Brush, Armchair, Waves, Bed, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -85,15 +85,14 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                 {/* Image Header */}
                 <div className={cn(
                   "relative overflow-hidden",
-                  index === 0 ? "flex-grow" : "h-48"
+                  index === 0 ? "flex-grow min-h-[300px]" : "h-48"
                 )}>
-                  <img 
+                  <Image 
                     src={service.image} 
                     alt={service.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = `https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=600&auto=format&fit=crop&sig=${index}`;
-                    }}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 300px"
+                    className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
                   

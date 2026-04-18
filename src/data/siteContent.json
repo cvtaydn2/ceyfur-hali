@@ -126,7 +126,7 @@
     ]
   },
   "contact": {
-    "phone": "0212 555 55 55",
+    "phone": ["0212 555 55 55"],
     "whatsapp": "905555555555",
     "email": "info@ceyfurhaliyikama.com",
     "address": "Huzur Mahallesi, Temizlik Sokak No:42/A",
@@ -138,11 +138,11 @@
     "facebook": "https://facebook.com/ceyfurhali"
   },
   "navigation": [
-    { "label": "Ana Sayfa", "href": "#" },
-    { "label": "Hizmetler", "href": "#services" },
-    { "label": "Kampanyalar", "href": "#campaigns" },
-    { "label": "Hakkımızda", "href": "#about" },
-    { "label": "İletişim", "href": "#contact" }
+    { "label": "Ana Sayfa", "href": "/" },
+    { "label": "Hizmetler", "href": "/#services" },
+    { "label": "Kampanyalar", "href": "/#campaigns" },
+    { "label": "Hakkımızda", "href": "/#about" },
+    { "label": "İletişim", "href": "/#contact" }
   ],
   "footer": {
     "about": "Ceyfur Halı Yıkama, yılların verdiği tecrübe ve modern teknoloji ile halılarınızda derinlemesine temizlik ve hijyen sağlar.",

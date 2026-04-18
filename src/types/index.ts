@@ -18,7 +18,7 @@ export interface CampaignItem {
 }
 
 export interface ContactInfo {
-  phone: string;
+  phone: string[];
   whatsapp: string;
   email: string;
   address: string;

@@ -69,11 +69,15 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
                 <MapPin size={18} className="text-primary-ocean shrink-0" />
                 <span>{data.contact.address}, {data.contact.district}/{data.contact.city}</span>
               </li>
-              <li className="flex items-center gap-3 text-sm">
-                <Phone size={18} className="text-primary-ocean shrink-0" />
-                <a href={`tel:${data.contact.phone.replace(/\s/g, "")}`} className="hover:text-primary-ocean transition-colors">
-                  {data.contact.phone}
-                </a>
+              <li className="flex flex-col gap-3 text-sm">
+                {data.contact.phone.map((num) => (
+                  <div key={num} className="flex items-center gap-3">
+                    <Phone size={18} className="text-primary-ocean shrink-0" />
+                    <a href={`tel:${num.replace(/\s/g, "")}`} className="hover:text-primary-ocean transition-colors">
+                      {num}
+                    </a>
+                  </div>
+                ))}
               </li>
               <li className="flex items-center gap-3 text-sm">
                 <Mail size={18} className="text-primary-ocean shrink-0" />

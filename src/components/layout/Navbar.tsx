@@ -77,7 +77,11 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
           <div className="flex items-center gap-4">
              <div className="hidden md:flex flex-col items-end mr-4 text-right">
                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Müşteri Destek</span>
-               <a href={`tel:${data.contact.phone}`} className="text-sm font-black text-slate-900 hover:text-primary-ocean transition-colors">{data.contact.phone}</a>
+               {data.contact.phone.map((num, i) => (
+                 <a key={num} href={`tel:${num.replace(/\s/g, "")}`} className="text-sm font-black text-slate-900 hover:text-primary-ocean transition-colors">
+                   {num}
+                 </a>
+               ))}
              </div>
              
              <a
@@ -122,11 +126,11 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
             ))}
             <hr className="border-slate-100" />
             <a
-              href={`tel:${data.contact.phone}`}
+              href={`tel:${data.contact.phone[0].replace(/\s/g, "")}`}
               className="flex items-center gap-3 text-slate-900 font-bold"
             >
               <Phone size={20} className="text-primary-ocean" />
-              {data.contact.phone}
+              {data.contact.phone[0]}
             </a>
           </div>
         </motion.div>

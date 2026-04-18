@@ -53,7 +53,7 @@ export const SiteContentSchema = z.object({
     items: z.array(z.any()),
   }),
   contact: z.object({
-    phone: z.string(),
+    phone: z.array(z.string()).min(1),
     whatsapp: z.string(),
     email: z.string(),
     address: z.string(),
