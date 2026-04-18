@@ -1,18 +1,37 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { updateSiteContent } from "@/lib/content-repository";
+import { SiteContentSchema } from "@/lib/content-schema";
+import { ZodError } from "zod";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const filePath = path.join(process.cwd(), "src/data/siteContent.json");
     
-    // In a real production app, you would use a database.
-    // This is a local development helper for the user.
-    fs.writeFileSync(filePath, JSON.stringify(body, null, 2));
+    // 1. Validation with Zod
+    const validatedData = SiteContentSchema.parse(body);
     
-    return NextResponse.json({ success: true });
+    // 2. Repository Update (Supabase)
+    await updateSiteContent(validatedData as any);
+    
+    return NextResponse.json({ 
+      success: true, 
+      message: "Content updated successfully" 
+    });
+
   } catch (error) {
-    return NextResponse.json({ success: false, error: "Failed to save content" }, { status: 500 });
+    if (error instanceof ZodError) {
+      return NextResponse.json({ 
+        success: false, 
+        message: "Validation failed", 
+        errors: error.issues 
+      }, { status: 400 });
+    }
+
+    console.error("Content API Error:", error);
+    return NextResponse.json({ 
+      success: false, 
+      message: "An internal server error occurred",
+      code: "INTERNAL_ERROR"
+    }, { status: 500 });
   }
 }

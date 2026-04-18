@@ -2,13 +2,16 @@
 
 import React from "react";
 import { MessageCircle } from "lucide-react";
-import { siteContent } from "@/data/siteContent";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 import { motion } from "framer-motion";
 
-export const WhatsAppButton = () => {
+export const WhatsAppButton = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
+
   return (
     <motion.a
-      href={`https://wa.me/${siteContent.contact.whatsapp}`}
+      href={`https://wa.me/${data.contact.whatsapp}`}
       target="_blank"
       rel="noopener noreferrer"
       initial={{ scale: 0, opacity: 0 }}

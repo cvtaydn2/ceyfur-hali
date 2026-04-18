@@ -1,14 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
-import { siteContent as initialContent } from "@/data/siteContent";
-import { Save, RefreshCcw, LayoutDashboard, Settings, FileText } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Save, RefreshCcw, LayoutDashboard, Settings, FileText, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export default function AdminPage() {
-  const [content, setContent] = useState(initialContent);
+  const [content, setContent] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchContent() {
+      try {
+        const res = await fetch("/api/content/get");
+        const data = await res.json();
+        if (data.success) setContent(data.content);
+      } catch (e) {
+        console.error("Failed to fetch content");
+      }
+    }
+    fetchContent();
+  }, []);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -27,6 +41,17 @@ export default function AdminPage() {
       setIsSaving(false);
     }
   };
+
+  const handleLogout = () => {
+    document.cookie = "admin_auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    router.push("/auth/login");
+  };
+
+  if (!content) return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <RefreshCcw className="animate-spin text-primary-ocean" size={40} />
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-slate-50 pt-32 pb-24 px-4">
@@ -49,6 +74,15 @@ export default function AdminPage() {
               <FileText size={18} />
               İçerik Editörü
             </button>
+            <div className="pt-4 mt-4 border-t border-slate-200">
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-6 py-3 rounded-2xl bg-rose-50 text-rose-600 font-bold hover:bg-rose-100 transition-colors"
+              >
+                <LogOut size={18} />
+                Güvenli Çıkış
+              </button>
+            </div>
           </aside>
 
           {/* Main Content */}

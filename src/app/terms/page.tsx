@@ -1,19 +1,21 @@
 import React from "react";
-import { siteContent } from "@/data/siteContent";
+import { getSiteContent } from "@/lib/content-repository";
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const content = await getSiteContent();
+
   return (
     <main className="pt-32 pb-24 px-4">
       <div className="max-w-4xl mx-auto glass p-12 rounded-[2.5rem]">
         <h1 className="text-4xl font-black text-slate-900 mb-8">Kullanım Koşulları</h1>
         <div className="prose prose-slate max-w-none space-y-6 text-slate-600">
           <p>
-            {siteContent.brand.name} web sitesini kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız.
+            {content.brand.name} web sitesini kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız.
           </p>
           
           <h2 className="text-2xl font-bold text-slate-800 pt-4">1. Hizmet Tanımı</h2>
           <p>
-            {siteContent.brand.name}, halı, koltuk, perde ve benzeri tekstil ürünlerinin profesyonel temizlik hizmetlerini sunar. Sitede yer alan bilgiler genel bilgilendirme amaçlıdır.
+            {content.brand.name}, halı, koltuk, perde ve benzeri tekstil ürünlerinin profesyonel temizlik hizmetlerini sunar. Sitede yer alan bilgiler genel bilgilendirme amaçlıdır.
           </p>
 
           <h2 className="text-2xl font-bold text-slate-800 pt-4">2. Randevu ve İptal</h2>

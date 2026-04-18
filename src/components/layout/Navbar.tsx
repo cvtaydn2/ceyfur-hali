@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
-import { siteContent } from "@/data/siteContent";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 import { cn } from "@/lib/utils";
 
-export const Navbar = () => {
+export const Navbar = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -34,20 +36,20 @@ export const Navbar = () => {
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-primary-ocean rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-primary-ocean/10">
-            C
+            {data.brand.name.charAt(0)}
           </div>
           <span className={cn(
             "font-bold text-xl tracking-tight hidden sm:block",
             isScrolled ? "text-slate-900" : "text-slate-900"
           )}>
-            {siteContent.brand.name.split(' ')[0]}
-            <span className="text-primary-ocean ml-1">{siteContent.brand.name.split(' ')[1]}</span>
+            {data.brand.name.split(' ')[0]}
+            <span className="text-primary-ocean ml-1">{data.brand.name.split(' ').slice(1).join(' ')}</span>
           </span>
         </div>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex items-center gap-8">
-          {siteContent.navigation.map((item) => (
+          {data.navigation.map((item : any) => (
             <li key={item.label}>
               <a
                 href={item.href}
@@ -62,12 +64,12 @@ export const Navbar = () => {
         {/* CTA */}
         <div className="flex items-center gap-4">
           <a
-            href={`tel:${siteContent.contact.phone.replace(/\s/g, "")}`}
+            href={`tel:${data.contact.phone.replace(/\s/g, "")}`}
             className="hidden lg:flex items-center gap-2 text-primary-ocean font-semibold"
             aria-label="Bizi arayın"
           >
             <Phone size={18} />
-            <span className="text-sm">{siteContent.contact.phone}</span>
+            <span className="text-sm">{data.contact.phone}</span>
           </a>
           <button className="bg-primary-ocean text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary-ocean/20 hover:scale-105 transition-transform active:scale-95">
             Teklif Al
@@ -94,7 +96,7 @@ export const Navbar = () => {
             className="absolute top-24 left-4 right-4 glass rounded-3xl p-6 shadow-2xl md:hidden"
           >
             <div className="flex flex-col gap-4">
-              {siteContent.navigation.map((item) => (
+              {data.navigation.map((item : any) => (
                 <a
                   key={item.label}
                   href={item.href}
@@ -107,8 +109,8 @@ export const Navbar = () => {
               <hr className="border-slate-200" />
               <div className="flex flex-col gap-2">
                  <p className="text-xs text-slate-500 uppercase font-bold tracking-widest">Bizi Arayın</p>
-                 <a href={`tel:${siteContent.contact.phone}`} className="text-xl font-bold text-primary-ocean">
-                   {siteContent.contact.phone}
+                 <a href={`tel:${data.contact.phone.replace(/\s/g, "")}`} className="text-xl font-bold text-primary-ocean">
+                   {data.contact.phone}
                  </a>
               </div>
             </div>

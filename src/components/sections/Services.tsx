@@ -2,9 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { siteContent } from "@/data/siteContent";
 import { Brush, Armchair, Waves, Bed, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 
 const iconMap: Record<string, React.ElementType> = {
   Brush: Brush,
@@ -13,7 +14,9 @@ const iconMap: Record<string, React.ElementType> = {
   Bed: Bed,
 };
 
-export const Services = () => {
+export const Services = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
+
   return (
     <section id="services" className="py-24 px-4 bg-white/50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -33,7 +36,7 @@ export const Services = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold text-slate-900 mb-4"
           >
-            {siteContent.services.title}
+            {data.services.title}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -42,14 +45,14 @@ export const Services = () => {
             transition={{ delay: 0.2 }}
             className="text-slate-600 max-w-2xl mx-auto"
           >
-            {siteContent.services.subtitle}
+            {data.services.subtitle}
           </motion.p>
         </div>
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-6 h-auto md:h-[600px]">
-          {siteContent.services.items.map((service, index) => {
-            const Icon = iconMap[service.icon];
+          {data.services.items.map((service : any, index : number) => {
+            const Icon = iconMap[service.icon] || Brush;
             
             // Bento logic: 1st and 4th are larger
             const gridClass = index === 0 
@@ -72,7 +75,6 @@ export const Services = () => {
                   gridClass
                 )}
               >
-                {/* Visual indicator of bg image */}
                 <div className="absolute top-0 right-0 -z-0 opacity-5 group-hover:scale-110 transition-transform duration-700">
                   <Icon size={200} />
                 </div>
@@ -93,7 +95,7 @@ export const Services = () => {
                   </p>
 
                   <div className="mt-auto flex flex-wrap gap-3">
-                    {service.features.map((feature, fIndex) => (
+                    {service.features.map((feature : string, fIndex : number) => (
                       <div key={fIndex} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 border border-slate-100 text-xs font-semibold text-slate-600">
                         <CheckCircle2 size={12} className="text-turquoise" />
                         {feature}

@@ -1,50 +1,55 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { siteContent } from "@/data/siteContent";
+import { getSiteContent } from "@/lib/content-repository";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 
 const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
 
-export const metadata: Metadata = {
-  title: siteContent.seo.title,
-  description: siteContent.seo.description,
-  keywords: siteContent.seo.keywords,
-  openGraph: {
-    title: siteContent.seo.title,
-    description: siteContent.seo.description,
-    type: "website",
-    locale: "tr_TR",
-    url: "https://ceyfurhaliyikama.com",
-    siteName: siteContent.brand.name,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteContent.seo.title,
-    description: siteContent.seo.description,
-  },
-  robots: "index, follow",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent();
+  return {
+    title: content.seo.title,
+    description: content.seo.description,
+    keywords: content.seo.keywords,
+    openGraph: {
+      title: content.seo.title,
+      description: content.seo.description,
+      type: "website",
+      locale: "tr_TR",
+      url: "https://ceyfurhaliyikama.com",
+      siteName: content.brand.name,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: content.seo.title,
+      description: content.seo.description,
+    },
+    robots: "index, follow",
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const content = await getSiteContent();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": siteContent.brand.name,
-    "description": siteContent.seo.description,
+    "name": content.brand.name,
+    "description": content.seo.description,
     "url": "https://ceyfurhaliyikama.com",
-    "telephone": siteContent.contact.phone,
+    "telephone": content.contact.phone,
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": siteContent.contact.address,
-      "addressLocality": siteContent.contact.district,
-      "addressRegion": siteContent.contact.city,
+      "streetAddress": content.contact.address,
+      "addressLocality": content.contact.district,
+      "addressRegion": content.contact.city,
       "addressCountry": "TR"
     },
     "openingHoursSpecification": [
@@ -65,10 +70,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Navbar />
+        <Navbar content={content} />
         {children}
-        <Footer />
-        <WhatsAppButton />
+        <Footer content={content} />
+        <WhatsAppButton content={content} />
       </body>
     </html>
   );

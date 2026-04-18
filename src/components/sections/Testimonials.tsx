@@ -2,20 +2,23 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { siteContent } from "@/data/siteContent";
 import { Star, Quote } from "lucide-react";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 
-export const Testimonials = () => {
+export const Testimonials = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
+
   return (
     <section className="py-24 px-4 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">{siteContent.testimonials.title}</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto">{siteContent.testimonials.subtitle}</p>
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">{data.testimonials.title}</h2>
+          <p className="text-slate-600 max-w-2xl mx-auto">{data.testimonials.subtitle}</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-          {siteContent.testimonials.items.map((item, i) => (
+          {data.testimonials.items.map((item : any, i : number) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}

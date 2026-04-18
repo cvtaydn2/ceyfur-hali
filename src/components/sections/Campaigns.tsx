@@ -2,10 +2,13 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { siteContent } from "@/data/siteContent";
 import { Tag, Check, ArrowRight } from "lucide-react";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 
-export const Campaigns = () => {
+export const Campaigns = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
+
   return (
     <section id="campaigns" className="py-24 px-4 bg-slate-50 relative">
       <div className="max-w-7xl mx-auto">
@@ -15,8 +18,8 @@ export const Campaigns = () => {
               <Tag size={14} />
               <span>Sınırlı Süreli Teklifler</span>
             </div>
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">{siteContent.campaigns.title}</h2>
-            <p className="text-slate-600">{siteContent.campaigns.subtitle}</p>
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">{data.campaigns.title}</h2>
+            <p className="text-slate-600">{data.campaigns.subtitle}</p>
           </div>
           <a href="#contact" className="text-primary-ocean font-bold flex items-center gap-2 hover:gap-3 transition-all shrink-0">
             Tüm Fırsatları Gör <ArrowRight size={20} />
@@ -24,7 +27,7 @@ export const Campaigns = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          {siteContent.campaigns.items.map((campaign, index) => (
+          {data.campaigns.items.map((campaign : any, index : number) => (
             <motion.div
               key={campaign.id}
               initial={{ opacity: 0, x: index === 0 ? -20 : 20 }}
@@ -43,7 +46,7 @@ export const Campaigns = () => {
                 <div className="bg-primary-ocean/5 p-6 rounded-3xl mb-8">
                   <p className="text-primary-ocean text-2xl font-black mb-6">{campaign.priceNote}</p>
                   <ul className="space-y-4">
-                    {campaign.features.map((feature, i) => (
+                    {campaign.features.map((feature : string, i : number) => (
                       <li key={i} className="flex items-center gap-3 text-slate-700 font-medium">
                         <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm">
                           <Check size={14} className="text-turquoise" />
@@ -55,7 +58,7 @@ export const Campaigns = () => {
                 </div>
 
                 <a
-                  href={`https://wa.me/${siteContent.contact.whatsapp}?text=${encodeURIComponent(campaign.title + " kampanyası hakkında bilgi almak istiyorum.")}`}
+                  href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(campaign.title + " kampanyası hakkında bilgi almak istiyorum.")}`}
                   className="w-full inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-colors"
                 >
                   {campaign.ctaLabel}

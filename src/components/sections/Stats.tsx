@@ -2,14 +2,17 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { siteContent } from "@/data/siteContent";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 
-export const Stats = () => {
+export const Stats = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
+
   return (
-    <section className="py-20 px-4 bg-primary-ocean">
+    <section className="py-20 px-4 bg-primary-ocean text-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
-          {siteContent.stats.map((stat, i) => (
+          {data.stats.map((stat : any, i : number) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -18,10 +21,10 @@ export const Stats = () => {
               transition={{ delay: i * 0.1 }}
               className="text-center"
             >
-              <div className="text-4xl lg:text-5xl font-black text-white mb-2 tabular-nums">
+              <div className="text-4xl lg:text-5xl font-black mb-2 tabular-nums">
                 {stat.value}{stat.suffix}
               </div>
-              <div className="text-primary-ocean-foreground/70 font-semibold uppercase tracking-widest text-[10px] md:text-xs">
+              <div className="text-blue-100/70 font-semibold uppercase tracking-widest text-[10px] md:text-xs">
                 {stat.label}
               </div>
             </motion.div>

@@ -1,14 +1,16 @@
 import React from "react";
-import { siteContent } from "@/data/siteContent";
+import { getSiteContent } from "@/lib/content-repository";
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const content = await getSiteContent();
+
   return (
     <main className="pt-32 pb-24 px-4">
       <div className="max-w-4xl mx-auto glass p-12 rounded-[2.5rem]">
         <h1 className="text-4xl font-black text-slate-900 mb-8">Gizlilik Politikası</h1>
         <div className="prose prose-slate max-w-none space-y-6 text-slate-600">
           <p>
-            {siteContent.brand.name} olarak, web sitemizi ziyaret eden kullanıcılarımızın gizliliğini korumak önceliğimizdir. Bu politika, hangi verileri topladığımızı ve bunları nasıl kullandığımızı açıklar.
+            {content.brand.name} olarak, web sitemizi ziyaret eden kullanıcılarımızın gizliliğini korumak önceliğimizdir. Bu politika, hangi verileri topladığımızı ve bunları nasıl kullandığımızı açıklar.
           </p>
           
           <h2 className="text-2xl font-bold text-slate-800 pt-4">1. Toplanan Veriler</h2>

@@ -3,9 +3,12 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { MessageCircle, ArrowRight, ShieldCheck, Sparkles, Clock } from "lucide-react";
-import { siteContent } from "@/data/siteContent";
+import { SiteContent } from "@/types";
+import { siteContent as fallbackContent } from "@/data/siteContent";
 
-export const Hero = () => {
+export const Hero = ({ content }: { content?: SiteContent }) => {
+  const data = content || fallbackContent;
+
   return (
     <section className="relative pt-32 pb-20 overflow-hidden min-h-screen flex items-center">
       {/* Background blobs */}
@@ -21,13 +24,13 @@ export const Hero = () => {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-ocean/10 text-primary-ocean text-sm font-bold mb-6">
               <Sparkles size={14} />
-              <span>{siteContent.brand.slogan}</span>
+              <span>{data.brand.slogan}</span>
             </div>
             
             <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6">
-              {siteContent.hero.title} <br />
+              {data.hero.title} <br />
               <span className="text-primary-ocean relative">
-                {siteContent.hero.highlight}
+                {data.hero.highlight}
                 <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 358 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 9C118.5 2.5 239.5 2.5 355 9" stroke="#0077b6" strokeWidth="6" strokeLinecap="round" opacity="0.2"/>
                 </svg>
@@ -35,22 +38,22 @@ export const Hero = () => {
             </h1>
 
             <p className="text-lg text-slate-600 mb-8 max-w-lg leading-relaxed">
-              {siteContent.hero.description}
+              {data.hero.description}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <a
-                href={`https://wa.me/${siteContent.contact.whatsapp}`}
+                href={`https://wa.me/${data.contact.whatsapp}`}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary-ocean text-white rounded-2xl font-bold text-lg shadow-xl shadow-primary-ocean/30 hover:scale-105 active:scale-95 transition-all group"
               >
                 <MessageCircle size={22} className="group-hover:rotate-12 transition-transform" />
-                {siteContent.hero.primaryCta}
+                {data.hero.primaryCta}
               </a>
               <a
                 href="#services"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all"
               >
-                {siteContent.hero.secondaryCta}
+                {data.hero.secondaryCta}
                 <ArrowRight size={20} />
               </a>
             </div>
@@ -78,7 +81,7 @@ export const Hero = () => {
           >
             <div className="relative z-10 w-full aspect-square rounded-[3rem] overflow-hidden shadow-2xl floating border-8 border-white">
                <Image 
-                 src={siteContent.hero.image} 
+                 src={data.hero.image} 
                  alt="Premium Halı Yıkama" 
                  fill 
                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
