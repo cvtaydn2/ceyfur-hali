@@ -51,6 +51,7 @@ export const LeadForm = () => {
         toast.error(result.message || "Bir hata oluştu.");
       }
     } catch (error) {
+      console.error("LeadForm submission error:", error);
       toast.error("Lütfen bağlantınızı kontrol edin.");
     } finally {
       setIsSubmitting(false);
@@ -104,10 +105,11 @@ export const LeadForm = () => {
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Adınız Soyadınız</label>
+                <label htmlFor="fullName" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Adınız Soyadınız</label>
                 <div className="relative group">
                   <User className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary-ocean transition-colors" size={20} />
                   <input 
+                    id="fullName"
                     required
                     value={formData.fullName}
                     onChange={(e) => setFormData({...formData, fullName: e.target.value})}
@@ -118,10 +120,11 @@ export const LeadForm = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Telefon Numaranız</label>
+                <label htmlFor="phone" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Telefon Numaranız</label>
                 <div className="relative group">
                   <Phone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary-ocean transition-colors" size={20} />
                   <input 
+                    id="phone"
                     required
                     type="tel"
                     value={formData.phone}
@@ -133,10 +136,11 @@ export const LeadForm = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">İstediğiniz Hizmet</label>
+                <label htmlFor="serviceId" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">İstediğiniz Hizmet</label>
                 <div className="relative group">
                   <MessageSquare className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary-ocean transition-colors" size={20} />
                   <select 
+                    id="serviceId"
                     required
                     value={formData.serviceId}
                     onChange={(e) => setFormData({...formData, serviceId: e.target.value})}
@@ -153,10 +157,11 @@ export const LeadForm = () => {
 
             <div className="space-y-6">
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">İlçe / Semt</label>
+                <label htmlFor="district" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">İlçe / Semt</label>
                 <div className="relative group">
                   <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary-ocean transition-colors" size={20} />
                   <input 
+                    id="district"
                     required
                     value={formData.district}
                     onChange={(e) => setFormData({...formData, district: e.target.value})}
@@ -167,10 +172,11 @@ export const LeadForm = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tercih Edilen Tarih</label>
+                <label htmlFor="preferredDate" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tercih Edilen Tarih</label>
                 <div className="relative group">
                   <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-primary-ocean transition-colors" size={20} />
                   <input 
+                    id="preferredDate"
                     type="date"
                     value={formData.preferredDate}
                     onChange={(e) => setFormData({...formData, preferredDate: e.target.value})}
@@ -180,10 +186,11 @@ export const LeadForm = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Ek Notlar</label>
+                <label htmlFor="notes" className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Ek Notlar</label>
                 <div className="relative group">
                   <MessageSquare className="absolute left-6 top-6 text-slate-300 group-focus-within:text-primary-ocean transition-colors" size={20} />
                   <textarea 
+                    id="notes"
                     value={formData.notes}
                     onChange={(e) => setFormData({...formData, notes: e.target.value})}
                     placeholder="M² bilgisi veya özel notunuz..."

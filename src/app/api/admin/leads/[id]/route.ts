@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { updateLeadStatus } from "@/lib/leads-repository";
+import { requireAuth } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -7,8 +8,14 @@ export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authError = await requireAuth();
+  if (authError) {
+    return authError;
+  }
+
   try {
-    const { status } = await request.json();
+    const body = await request.json();
+    const { status } = body;
     const { id } = await params;
 
     if (!status) {

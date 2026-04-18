@@ -2,10 +2,15 @@ import { NextResponse } from "next/server";
 import { updateSiteContent } from "@/lib/content-repository";
 import { SiteContentSchema } from "@/lib/content-schema";
 import { ZodError } from "zod";
+import { requireAuth } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
+  const authError = await requireAuth();
+  if (authError) {
+    return authError;
+  }
   try {
     const body = await request.json();
     

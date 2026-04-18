@@ -11,7 +11,7 @@ export default async function Home() {
   const content = await getSiteContent();
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <main id="main-content" className="flex min-h-screen flex-col">
       <Hero content={content} />
       <Stats content={content} />
       <Services content={content} />

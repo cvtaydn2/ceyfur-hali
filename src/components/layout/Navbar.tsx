@@ -59,7 +59,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
 
           {/* Desktop Links */}
           <div className="hidden lg:flex items-center gap-10">
-            {data.navigation.map((item: any) => (
+            {data.navigation.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}
@@ -84,8 +84,8 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
                ))}
              </div>
              
-             <a
-              href={`https://wa.me/${data.contact.whatsapp}?text=Bilgi almak istiyorum.`}
+<a
+               href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, '')}?text=Bilgi almak istiyorum.`}
               className={cn(
                 "px-4 py-2 md:px-6 md:py-3 rounded-2xl font-black text-xs md:text-sm transition-all shadow-xl hover:-translate-y-1 active:scale-95",
                 isScrolled 
@@ -99,6 +99,9 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-1.5 md:p-2 text-slate-900"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-menu"
+              aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -109,12 +112,13 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <motion.div
+          id="mobile-menu"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="lg:hidden absolute top-full left-4 right-4 mt-4 glass p-8 rounded-[2.5rem] shadow-2xl border-white"
         >
           <div className="flex flex-col gap-6">
-            {data.navigation.map((item: any) => (
+            {data.navigation.map((item) => (
               <Link
                 key={item.label}
                 href={item.href}

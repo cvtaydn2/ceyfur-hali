@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import { getLeads, getArchive } from "@/lib/leads-repository";
+import { requireAuth } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
+  const authError = await requireAuth();
+  if (authError) {
+    return authError;
+  }
+
   try {
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get("type"); // "active" or "archive"
+    const type = searchParams.get("type");
 
     if (type === "archive") {
       const archive = await getArchive();
