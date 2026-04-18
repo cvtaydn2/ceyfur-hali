@@ -32,8 +32,8 @@ export const ContactSection = ({ data, onChange }: SectionProps) => {
 
   return (
     <AdminCard title="İletişim Bilgileri" subtitle="Müşterilerinizin size ulaşacağı kanallar.">
-      <div className="space-y-8">
-        <div className="grid md:grid-cols-2 gap-8">
+      <div className="space-y-6 md:space-y-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <AdminInputGroup label="WhatsApp Hattı" helperText="Sadece rakam (Örn: 90532...)">
             <Input 
               value={data.contact.whatsapp} 
@@ -76,13 +76,13 @@ export const ContactSection = ({ data, onChange }: SectionProps) => {
 
         <AdminInputGroup label="Açık Adres">
           <textarea 
-            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[100px]"
+            className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
             value={data.contact.address}
             onChange={(e) => updateContact({ address: e.target.value })}
           />
         </AdminInputGroup>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <AdminInputGroup label="İlçe">
             <Input value={data.contact.district} onChange={(e) => updateContact({ district: e.target.value })} />
           </AdminInputGroup>
@@ -102,7 +102,7 @@ export const AboutSection = ({ data, onChange }: SectionProps) => {
 
   return (
     <AdminCard title="Hakkımızda Bölümü" subtitle="İşletme hikayeniz ve öne çıkan özellikleriniz.">
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         <AdminInputGroup label="Bölüm Başlığı">
           <Input value={data.about.title} onChange={(e) => updateAbout({ title: e.target.value })} />
         </AdminInputGroup>
@@ -111,7 +111,7 @@ export const AboutSection = ({ data, onChange }: SectionProps) => {
         </AdminInputGroup>
         <AdminInputGroup label="Ana İçerik Metni">
           <textarea 
-            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[200px]"
+            className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[150px] md:min-h-[200px]"
             value={data.about.content}
             onChange={(e) => updateAbout({ content: e.target.value })}
           />

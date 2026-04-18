@@ -12,10 +12,10 @@ export const Testimonials = ({ content }: { content?: SiteContent }) => {
   if (!data?.testimonials) return null;
 
   return (
-    <section className="py-24 px-4 bg-white overflow-hidden">
+    <section className="py-16 md:py-24 px-4 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">{data.testimonials.title}</h2>
+        <div className="text-center mb-12 md:mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{data.testimonials.title}</h2>
           <p className="text-slate-600 max-w-2xl mx-auto">{data.testimonials.subtitle}</p>
         </div>
 
@@ -37,7 +37,7 @@ export const Testimonials = ({ content }: { content?: SiteContent }) => {
                 scale: 1.02,
                 boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
               }}
-              className="group glass p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg transition-all duration-500"
+              className="group glass p-6 md:p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg transition-all duration-500"
             >
               <div className="flex gap-1 mb-6">
                 {[...Array(item.rating)].map((_, starI) => (

@@ -68,7 +68,7 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
   return (
     <div className="space-y-8">
       <AdminCard title="Kampanyalar Bölümü Başlıkları">
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <AdminInputGroup label="Bölüm Başlığı">
             <Input value={data.campaigns.title} onChange={(e) => updateCampaigns({ title: e.target.value })} />
           </AdminInputGroup>
@@ -93,7 +93,7 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
               <Trash2 size={16} />
             </button>
 
-            <div className="grid md:grid-cols-3 gap-8 mb-8">
+            <div className="grid md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-6 md:mb-8">
               <AdminInputGroup label="Etiket (Badge)">
                 <Input value={item.badge} onChange={(e) => updateItem(idx, { badge: e.target.value })} />
               </AdminInputGroup>
@@ -104,15 +104,15 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
               </div>
             </div>
 
-            <AdminInputGroup label="Kampanya Detayı" className="mb-8">
+            <AdminInputGroup label="Kampanya Detayı" className="mb-6 md:mb-8">
               <textarea 
-                className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[100px]"
+                className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
                 value={item.description}
                 onChange={(e) => updateItem(idx, { description: e.target.value })}
               />
             </AdminInputGroup>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
+            <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-6 md:mb-8">
               <AdminInputGroup label="Fiyat / İndirim Notu" helperText="Örn: %20'ye Varan İndirim">
                 <Input value={item.priceNote || ""} onChange={(e) => updateItem(idx, { priceNote: e.target.value })} />
               </AdminInputGroup>

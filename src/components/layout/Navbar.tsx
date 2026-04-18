@@ -34,8 +34,8 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
         className={cn(
           "max-w-7xl mx-auto rounded-[2rem] transition-all duration-500 border border-transparent",
           isScrolled 
-            ? "bg-white/80 backdrop-blur-xl shadow-2xl shadow-primary-ocean/5 border-white/20 py-3 px-6 md:px-8 lg:w-[95%]" 
-            : "bg-transparent py-4 px-0"
+            ? "bg-white/80 backdrop-blur-xl shadow-2xl shadow-primary-ocean/5 border-white/20 py-3 px-4 sm:px-6 md:px-8 lg:w-[95%]" 
+            : "bg-transparent py-3 md:py-4 px-0"
         )}
       >
         <div className="flex justify-between items-center">
@@ -45,13 +45,13 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
             </div>
             <div className="flex flex-col">
               <span className={cn(
-                "font-black text-xl tracking-tighter leading-none transition-colors",
+                "font-black text-lg sm:text-xl tracking-tighter leading-none transition-colors",
                 isScrolled ? "text-slate-900" : "text-slate-900"
               )}>
                 {data.brand.name.split(' ')[0]}
                 <span className="text-primary-ocean ml-1">{data.brand.name.split(' ')[1]}</span>
               </span>
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">
+              <span className="text-[8px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">
                 {data.brand.slogan.split(' ')[0]} {data.brand.slogan.split(' ')[1]}
               </span>
             </div>
@@ -87,7 +87,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
              <a
               href={`https://wa.me/${data.contact.whatsapp}?text=Bilgi almak istiyorum.`}
               className={cn(
-                "px-6 py-3 rounded-2xl font-black text-sm transition-all shadow-xl hover:-translate-y-1 active:scale-95",
+                "px-4 py-2 md:px-6 md:py-3 rounded-2xl font-black text-xs md:text-sm transition-all shadow-xl hover:-translate-y-1 active:scale-95",
                 isScrolled 
                   ? "bg-primary-ocean text-white shadow-primary-ocean/20 hover:bg-slate-900" 
                   : "bg-slate-900 text-white shadow-slate-900/10 hover:bg-primary-ocean"
@@ -98,7 +98,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-900"
+              className="lg:hidden p-1.5 md:p-2 text-slate-900"
             >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>

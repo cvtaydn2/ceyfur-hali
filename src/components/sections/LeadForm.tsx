@@ -87,18 +87,18 @@ export const LeadForm = () => {
 
   return (
     <motion.section 
-      id="teklif-al"
+      id="contact"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="container mx-auto px-6 py-20"
+      className="container mx-auto px-4 md:px-6 py-16 md:py-20"
     >
-      <div className="max-w-4xl mx-auto rounded-[4rem] bg-slate-900 p-1 md:p-2 shadow-2xl shadow-primary-ocean/20">
-        <div className="bg-white rounded-[3.5rem] p-8 md:p-16 space-y-12">
+      <div className="max-w-4xl mx-auto rounded-[3rem] md:rounded-[4rem] bg-slate-900 p-1 md:p-2 shadow-2xl shadow-primary-ocean/20">
+        <div className="bg-white rounded-[2.8rem] md:rounded-[3.5rem] p-6 sm:p-8 md:p-16 space-y-8 md:space-y-12">
           <div className="text-center space-y-4">
             <span className="text-[10px] font-black text-primary-ocean uppercase tracking-[0.3em] bg-primary-ocean/5 px-6 py-2 rounded-full">Hızlı Teklif Sistemi</span>
-            <h2 className="text-4xl md:text-5xl font-black text-slate-900 italic tracking-tight">Hemen Randevu Alın</h2>
-            <p className="text-slate-400 font-medium max-w-md mx-auto italic">Formu doldurun, uzman ekibimiz sizi 15 dakika içinde arasın.</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 italic tracking-tight">Hemen Randevu Alın</h2>
+            <p className="text-sm md:text-base text-slate-400 font-medium max-w-md mx-auto italic">Formu doldurun, uzman ekibimiz sizi 15 dakika içinde arasın.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -198,7 +198,7 @@ export const LeadForm = () => {
               <Button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full py-8 text-lg rounded-[2rem] bg-slate-900 text-white hover:bg-primary-ocean"
+                className="w-full py-6 md:py-8 text-base md:text-lg rounded-[1.5rem] md:rounded-[2rem] bg-slate-900 text-white hover:bg-primary-ocean"
                 leftIcon={<Send size={24} />}
               >
                 {isSubmitting ? "Gönderiliyor..." : "Teklif Talebini İlet"}

@@ -17,7 +17,7 @@ export const SEOSection = ({ data, onChange }: SectionProps) => {
 
   return (
     <AdminCard title="SEO ve Meta Veriler" subtitle="Arama motoru görünürlüğü ve sosyal medya paylaşım ayarları.">
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         <AdminInputGroup label="Site Başlığı" helperText="Tarayıcı sekmesinde ve Google sonuçlarında görünür.">
           <Input 
             value={data.seo.title} 
@@ -28,7 +28,7 @@ export const SEOSection = ({ data, onChange }: SectionProps) => {
 
         <AdminInputGroup label="Meta Açıklama" helperText="Site içeriğinin kısa bir özeti (max 160 karakter önerilir).">
           <textarea 
-            className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[120px]"
+            className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[100px] md:min-h-[120px]"
             value={data.seo.description}
             onChange={(e) => updateSEO({ description: e.target.value })}
           />
@@ -52,7 +52,7 @@ export const GeneralSection = ({ data, onChange }: SectionProps) => {
 
   return (
     <AdminCard title="Genel İşletme Ayarları" subtitle="Brand kimliği ve slogan yönetimi.">
-      <div className="space-y-8">
+      <div className="space-y-6 md:space-y-8">
         <AdminInputGroup label="Marka İsmi">
           <Input 
             value={data.brand.name} 
@@ -67,7 +67,7 @@ export const GeneralSection = ({ data, onChange }: SectionProps) => {
           />
         </AdminInputGroup>
         
-        <div className="grid md:grid-cols-2 gap-8 pt-4">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 pt-4">
            <AdminInputGroup label="Logo URL (Opsiyonel)">
             <Input 
               value={data.brand.logo || ""} 

@@ -13,14 +13,14 @@ export const AdminCard = ({ children, className, title, subtitle }: {
   title?: string;
   subtitle?: string;
 }) => (
-  <div className={cn("bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden", className)}>
+  <div className={cn("bg-white rounded-[1.5rem] md:rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden", className)}>
     {(title || subtitle) && (
-      <div className="px-10 py-8 border-b border-slate-50">
-        {title && <h3 className="text-xl font-black text-slate-900 tracking-tight">{title}</h3>}
-        {subtitle && <p className="text-sm font-medium text-slate-400 mt-1">{subtitle}</p>}
+      <div className="px-6 py-5 md:px-10 md:py-8 border-b border-slate-50">
+        {title && <h3 className="text-lg md:text-xl font-black text-slate-900 tracking-tight">{title}</h3>}
+        {subtitle && <p className="text-xs md:text-sm font-medium text-slate-400 mt-1">{subtitle}</p>}
       </div>
     )}
-    <div className="p-10">{children}</div>
+    <div className="p-6 md:p-10">{children}</div>
   </div>
 );
 
@@ -62,7 +62,7 @@ export const AdminNav = ({
   onTabChange: (id: string) => void; 
   tabs: { id: string; label: string; icon: React.ElementType }[] 
 }) => (
-  <nav className="flex lg:flex-col gap-2 p-2 bg-slate-50/50 rounded-[2rem] border border-slate-100/50 overflow-x-auto lg:overflow-x-visible">
+  <nav className="flex lg:flex-col gap-2 p-2 bg-slate-50/50 rounded-2xl md:rounded-[2rem] border border-slate-100/50 overflow-x-auto lg:overflow-x-visible snap-x">
     {tabs.map((tab) => {
       const Icon = tab.icon;
       const isActive = activeTab === tab.id;
@@ -71,7 +71,7 @@ export const AdminNav = ({
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
           className={cn(
-            "flex items-center gap-3 px-6 py-4 rounded-2xl font-bold text-sm transition-all whitespace-nowrap",
+            "flex items-center gap-2 md:gap-3 px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl font-bold text-xs md:text-sm transition-all whitespace-nowrap snap-start shrink-0",
             isActive 
               ? "bg-white text-primary-ocean shadow-lg shadow-primary-ocean/5 border border-primary-ocean/10" 
               : "text-slate-400 hover:text-slate-600 hover:bg-white/50"

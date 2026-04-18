@@ -41,7 +41,7 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
   return (
     <div className="space-y-8">
       <AdminCard title="Hizmetler Bölümü Başlıkları">
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <AdminInputGroup label="Bölüm Başlığı">
             <Input value={data.services.title} onChange={(e) => updateServices({ title: e.target.value })} />
           </AdminInputGroup>
@@ -65,8 +65,8 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
             >
               <Trash2 size={16} />
             </button>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+              <div className="space-y-4 md:space-y-6">
                 <AdminInputGroup label="Hizmet Adı">
                   <Input value={item.title} onChange={(e) => updateItem(idx, { title: e.target.value })} />
                 </AdminInputGroup>
@@ -77,10 +77,10 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
                   <Input value={item.image} onChange={(e) => updateItem(idx, { image: e.target.value })} />
                 </AdminInputGroup>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-4 md:space-y-6">
                 <AdminInputGroup label="Kısa Açıklama">
                    <textarea 
-                    className="w-full px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[100px]"
+                    className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
                     value={item.description}
                     onChange={(e) => updateItem(idx, { description: e.target.value })}
                   />

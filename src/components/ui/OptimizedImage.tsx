@@ -16,6 +16,7 @@ export const OptimizedImage = ({
   className,
   containerClassName,
   fallbackSrc = "/images/placeholder.png",
+  fill,
   ...props
 }: OptimizedImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,7 +24,11 @@ export const OptimizedImage = ({
   const [isError, setIsError] = useState(false);
 
   return (
-    <div className={cn("relative overflow-hidden bg-slate-100", containerClassName)}>
+    <div className={cn(
+      "overflow-hidden bg-slate-100",
+      fill ? "absolute inset-0" : "relative",
+      containerClassName
+    )}>
       <AnimatePresence>
         {isLoading && (
           <motion.div 
@@ -36,6 +41,7 @@ export const OptimizedImage = ({
       
       <Image
         {...props}
+        fill={fill}
         src={imgSrc}
         alt={alt}
         className={cn(

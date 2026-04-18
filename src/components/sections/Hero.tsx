@@ -12,13 +12,13 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
   if (!data?.hero) return null;
 
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden min-h-[90vh] flex items-center">
+    <section className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[100svh] lg:min-h-[90vh] flex items-center">
       {/* Background blobs for Antigravity feeling */}
       <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-ocean/5 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-turquoise/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -34,26 +34,26 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
               İstanbul Geneli Profesyonel Hizmet
             </motion.div>
             
-            <h1 className="text-6xl lg:text-8xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-8">
+            <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-6 md:mb-8">
               {data.hero.title} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-ocean to-turquoise">
                 {data.hero.highlight}
               </span>
             </h1>
-            <p className="text-lg text-slate-500 max-w-lg mb-10 leading-relaxed font-medium">
+            <p className="text-base md:text-lg text-slate-500 max-w-sm md:max-w-lg mb-8 md:mb-10 leading-relaxed font-medium">
               {data.hero.description}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
               <a
                 href="#teklif-al"
-                className="px-10 py-5 bg-slate-900 text-white rounded-3xl font-black text-lg hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 hover:-translate-y-1 hover:shadow-slate-900/30 flex items-center justify-center gap-2 group"
+                className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-slate-900 text-white rounded-3xl font-black text-base md:text-lg hover:bg-slate-800 transition-all shadow-2xl shadow-slate-900/20 hover:-translate-y-1 hover:shadow-slate-900/30 flex items-center justify-center gap-2 group"
               >
                 {data.hero.primaryCta}
                 <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="#teklif-al"
-                className="px-10 py-5 bg-white border border-slate-100 text-slate-900 rounded-3xl font-black text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-white border border-slate-100 text-slate-900 rounded-3xl font-black text-base md:text-lg hover:bg-slate-50 transition-all flex items-center justify-center gap-2"
               >
                 Hemen Randevu Al
               </a>
@@ -94,9 +94,9 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
               <motion.div 
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-10 -left-10 glass p-6 rounded-3xl shadow-2xl border-white max-w-[200px]"
+                className="absolute -bottom-4 -left-2 sm:-bottom-10 sm:-left-10 glass p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border-white max-w-[160px] sm:max-w-[200px] scale-90 sm:scale-100 origin-bottom-left z-20"
               >
-                <div className="flex gap-1 mb-2">
+                <div className="flex gap-1 mb-1 sm:mb-2 text-primary-ocean">
                   <Star size={12} className="fill-yellow-400 text-yellow-400" />
                   <Star size={12} className="fill-yellow-400 text-yellow-400" />
                   <Star size={12} className="fill-yellow-400 text-yellow-400" />
@@ -111,7 +111,7 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
               <motion.div 
                  animate={{ y: [0, -8, 0] }}
                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                 className="absolute -top-6 -right-6 w-20 h-20 bg-white rounded-full flex items-center justify-center p-2 shadow-2xl border border-slate-50"
+                 className="absolute -top-2 -right-2 sm:-top-6 sm:-right-6 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center p-1.5 sm:p-2 shadow-2xl border border-slate-50 z-20 scale-90 sm:scale-100 origin-top-right"
               >
                 <div className="w-full h-full rounded-full border-2 border-dashed border-primary-ocean flex items-center justify-center text-[10px] font-black text-primary-ocean leading-none text-center">
                   100%<br/>HİJYEN

@@ -141,24 +141,26 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
               )}
             </AnimatePresence>
 
-            <Button onClick={handleSave} isLoading={isSaving} disabled={!isDirty || isSaving} variant={isDirty ? "primary" : "outline"} className="rounded-2xl h-12 px-8 shadow-xl shadow-slate-200">
-              <Save size={18} className="mr-2" /> Değişiklikleri Kaydet
+            <Button onClick={handleSave} isLoading={isSaving} disabled={!isDirty || isSaving} variant={isDirty ? "primary" : "outline"} className="rounded-xl sm:rounded-2xl h-10 sm:h-12 px-4 sm:px-8 shadow-xl shadow-slate-200">
+              <Save size={18} className="mr-1 sm:mr-2" /> 
+              <span className="hidden sm:inline">Değişiklikleri Kaydet</span>
+              <span className="sm:hidden text-xs">Kaydet</span>
             </Button>
             
-            <button onClick={handleLogout} className="p-3 bg-slate-50 rounded-2xl text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-all border border-slate-100">
+            <button onClick={handleLogout} className="p-2 sm:p-3 bg-slate-50 rounded-xl sm:rounded-2xl text-slate-400 hover:bg-rose-50 hover:text-rose-500 transition-all border border-slate-100">
               <LogOut size={20} />
             </button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-[1600px] mx-auto p-6 md:p-10 flex flex-col lg:flex-row gap-10">
+      <div className="max-w-[1600px] mx-auto p-4 sm:p-6 md:p-10 flex flex-col lg:flex-row gap-6 lg:gap-10">
         {/* Navigation Sidebar */}
         <aside className="w-full lg:w-80 shrink-0">
-          <div className="sticky top-28 space-y-8">
+          <div className="lg:sticky lg:top-28 space-y-6 lg:space-y-8">
             <AdminNav activeTab={activeTab} onTabChange={setActiveTab} tabs={TABS} />
             
-            <div className="p-8 rounded-[2.5rem] bg-slate-900 text-white shadow-2xl shadow-slate-200 overflow-hidden relative group">
+            <div className="hidden lg:block p-8 rounded-[2.5rem] bg-slate-900 text-white shadow-2xl shadow-slate-200 overflow-hidden relative group">
               <div className="relative z-10">
                 <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 italic opacity-80">Sistem Bilgisi</h4>
                 <div className="space-y-4">
@@ -183,8 +185,8 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
               
               {/* DASHBOARD TAB */}
               {activeTab === "dashboard" && (
-                <div className="space-y-10">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="space-y-8 lg:space-y-10">
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
                     {[
                       { label: "Toplam Talepler", value: leads.length, icon: Inbox, color: "text-primary-ocean" },
                       { label: "Tamamlanan İşler", value: archive.length, icon: Archive, color: "text-emerald-500" },
@@ -201,11 +203,11 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
                     ))}
                   </div>
 
-                  <div className="grid lg:grid-cols-2 gap-10">
+                  <div className="grid lg:grid-cols-2 gap-6 lg:gap-10">
                     <AdminCard title="Son Talepler" subtitle="İlgi bekleyen en yeni müşteri kayıtları.">
                       <div className="space-y-4">
                         {leads.slice(0, 5).map((lead) => (
-                          <div key={lead.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between group hover:bg-white hover:border-primary-ocean/20 transition-all">
+                          <div key={lead.id} className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between group hover:bg-white hover:border-primary-ocean/20 transition-all">
                             <div className="flex items-center gap-4">
                               <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 font-black">
                                 {lead.fullName[0].toUpperCase()}
@@ -284,11 +286,11 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
                             {lead.notes && <div className="mt-4 p-4 rounded-2xl bg-slate-50/50 italic text-slate-400 text-[11px] font-medium">&ldquo;{lead.notes}&rdquo;</div>}
                           </div>
                           
-                          <div className="flex items-center gap-4">
+                          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full lg:w-auto">
                             <select 
                               onChange={(e) => handleUpdateLeadStatus(lead.id, e.target.value)}
                               value={lead.status}
-                              className="px-6 py-4 rounded-2xl bg-slate-50 border border-slate-100 text-xs font-black uppercase tracking-widest outline-none hover:bg-white hover:border-primary-ocean transition-all cursor-pointer appearance-none min-w-[200px] text-center"
+                              className="w-full sm:w-auto px-4 py-3 sm:px-6 sm:py-4 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-100 text-[10px] sm:text-xs font-black uppercase tracking-widest outline-none hover:bg-white hover:border-primary-ocean transition-all cursor-pointer appearance-none min-w-[200px] text-center"
                             >
                               <option value="new">Durum: Yeni</option>
                               <option value="called">Durum: Arandı</option>
@@ -298,8 +300,9 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
                               <option value="completed" className="text-emerald-500 font-black italic">✓ TAMAMLA VE ARŞİVLE</option>
                               <option value="cancelled" className="text-rose-500 font-black italic">✕ İPTAL ET VE ARŞİVLE</option>
                             </select>
-                            <Button onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g,'')}`)} variant="outline" className="rounded-2xl h-[52px] w-12 p-0 flex items-center justify-center">
+                            <Button onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g,'')}`)} variant="outline" className="w-full sm:w-12 rounded-xl sm:rounded-2xl h-[48px] sm:h-[52px] p-0 flex items-center justify-center">
                               <Phone size={18} className="text-emerald-500" />
+                              <span className="ml-2 sm:hidden text-xs font-bold text-emerald-500">WhatsApp'tan Ulaş</span>
                             </Button>
                           </div>
                         </div>
@@ -309,12 +312,12 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
                 </div>
               )}
 
-              {/* ARCHIVE TAB */}
+               {/* ARCHIVE TAB */}
               {activeTab === "archive" && (
                 <div className="space-y-6">
                    <h2 className="text-2xl font-black tracking-tight italic mb-6">İş Arşivi</h2>
-                   <div className="overflow-hidden rounded-[2.5rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/20">
-                      <table className="w-full text-left">
+                   <div className="overflow-x-auto rounded-[1.5rem] md:rounded-[2.5rem] bg-white border border-slate-100 shadow-xl shadow-slate-200/20 pb-4">
+                      <table className="w-full text-left min-w-[800px]">
                         <thead className="bg-slate-50 border-b border-slate-100">
                           <tr>
                             <th className="px-8 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Müşteri / İletişim</th>
@@ -363,9 +366,9 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
               
               {activeTab === "advanced" && (
                 <AdminCard title="Gelişmiş Veri Editörü" subtitle="DİKKAT: JSON formatını bozarsanız site çalışmayabilir.">
-                  <div className="p-6 bg-slate-900 rounded-3xl">
+                  <div className="p-4 sm:p-6 bg-slate-900 rounded-[1.5rem] md:rounded-3xl overflow-hidden">
                     <textarea 
-                      className="w-full h-[600px] bg-transparent text-emerald-400 font-mono text-xs outline-none leading-relaxed resize-none p-4"
+                      className="w-full h-[400px] md:h-[600px] bg-transparent text-emerald-400 font-mono text-[10px] sm:text-xs outline-none leading-relaxed resize-none overflow-y-auto min-w-[100%]"
                       spellCheck={false}
                       value={JSON.stringify(content, null, 2)}
                       onChange={(e) => {

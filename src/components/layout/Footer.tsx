@@ -7,7 +7,7 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
   const data = content || fallbackContent;
 
   return (
-    <footer className="bg-slate-900 text-slate-400 py-16 px-4">
+    <footer className="bg-slate-900 text-slate-400 py-12 md:py-16 px-4 md:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         {/* Brand */}
         <div className="space-y-6">

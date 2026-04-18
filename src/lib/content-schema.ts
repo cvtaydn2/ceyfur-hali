@@ -94,7 +94,7 @@ export const SiteContentSchema = z.object({
     items: z.array(TestimonialItemSchema),
   }),
   contact: z.object({
-    phone: z.array(z.string().trim().min(1)).min(1),
+    phone: z.preprocess((val) => typeof val === "string" ? [val] : val, z.array(z.string().trim().min(1)).min(1)),
     whatsapp: requiredString,
     email: z.string().email().trim(),
     address: requiredString,

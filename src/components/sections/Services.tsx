@@ -20,9 +20,9 @@ export const Services = ({ content }: { content?: SiteContent }) => {
   if (!data?.services) return null;
 
   return (
-    <section id="services" className="py-24 px-4 bg-white/50 relative overflow-hidden">
+    <section id="services" className="py-16 md:py-24 px-4 bg-white/50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 md:mb-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -36,7 +36,7 @@ export const Services = ({ content }: { content?: SiteContent }) => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-bold text-slate-900 mb-4"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4"
           >
             {data.services.title}
           </motion.h2>
@@ -91,7 +91,7 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                 {/* Image Header */}
                 <div className={cn(
                   "relative overflow-hidden",
-                  index === 0 ? "flex-grow min-h-[300px]" : "h-48"
+                  index === 0 ? "flex-grow min-h-[250px] md:min-h-[300px]" : "h-48"
                 )}>
                   <OptimizedImage 
                     src={service.image} 
@@ -108,11 +108,11 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                   </div>
                 </div>
 
-                <div className="p-8 flex flex-col justify-end relative z-10 bg-white">
+                <div className="p-6 md:p-8 flex flex-col justify-end relative z-10 bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.05)]">
                   <div className="flex justify-between items-start mb-4">
                     <h3 className={cn(
                       "font-bold text-slate-900 tracking-tight group-hover:text-primary-ocean transition-colors",
-                      index === 0 ? "text-3xl" : "text-2xl"
+                      index === 0 ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"
                     )}>
                       {service.title}
                     </h3>

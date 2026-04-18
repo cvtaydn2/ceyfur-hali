@@ -12,15 +12,15 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
   if (!data?.campaigns) return null;
 
   return (
-    <section id="campaigns" className="py-24 px-4 bg-slate-50 relative">
+    <section id="campaigns" className="py-16 md:py-24 px-4 bg-slate-50 relative">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-6">
           <div className="max-w-xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-turquoise/10 text-turquoise text-sm font-bold mb-4">
               <Tag size={14} />
               <span>Sınırlı Süreli Teklifler</span>
             </div>
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">{data.campaigns.title}</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{data.campaigns.title}</h2>
             <p className="text-slate-600">{data.campaigns.subtitle}</p>
           </div>
           <a href="#contact" className="text-primary-ocean font-bold flex items-center gap-2 hover:gap-3 transition-all shrink-0">
@@ -46,7 +46,7 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
                 scale: 1.02,
                 boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
               }}
-              className="group relative glass p-10 rounded-[3rem] border-white shadow-xl transition-all duration-500 overflow-hidden"
+              className="group relative glass p-6 sm:p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-white shadow-xl transition-all duration-500 overflow-hidden"
             >
               {/* Decoration */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-ocean/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary-ocean/10 transition-colors" />
@@ -71,11 +71,11 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
                 ))}
               </ul>
 
-              <div className="flex items-center justify-between pt-8 border-t border-slate-100">
+              <div className="flex flex-col sm:flex-row items-center sm:justify-between gap-4 sm:gap-0 pt-6 sm:pt-8 border-t border-slate-100">
                 <span className="text-lg font-black text-primary-ocean tracking-tight">{campaign.priceNote}</span>
                 <a
                   href={`https://wa.me/${data.contact.whatsapp}?text=${encodeURIComponent(campaign.title + " kampanyası için bilgi almak istiyorum.")}`}
-                  className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:bg-primary-ocean transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary-ocean/20"
+                  className="w-full sm:w-auto flex items-center justify-center px-6 py-3 md:px-8 md:py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:bg-primary-ocean transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary-ocean/20"
                 >
                   {campaign.ctaLabel}
                 </a>
