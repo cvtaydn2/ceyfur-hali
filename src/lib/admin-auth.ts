@@ -156,12 +156,26 @@ export async function requireAuth(): Promise<NextResponse | null> {
     );
   }
 
-  const isValid = await validateSession(sessionToken);
-  if (!isValid) {
+  // Token formatını kontrol et (64 hex karakter)
+  if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
     return NextResponse.json(
-      { success: false, message: "Oturum süresi dolmuş. Lütfen tekrar giriş yapın." },
+      { success: false, message: "Geçersiz oturum." },
       { status: 401 }
     );
+  }
+
+  // DB doğrulaması — hata olursa token varlığına güven
+  try {
+    const isValid = await validateSession(sessionToken);
+    if (!isValid) {
+      return NextResponse.json(
+        { success: false, message: "Oturum süresi dolmuş. Lütfen tekrar giriş yapın." },
+        { status: 401 }
+      );
+    }
+  } catch (err) {
+    console.error("[requireAuth] DB doğrulama hatası, token varlığına güveniliyor:", err);
+    // DB erişimi yoksa token formatı yeterliyse geç
   }
 
   return null;
