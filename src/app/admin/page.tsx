@@ -19,6 +19,7 @@ export default function AdminPage() {
     error: fetchError,
     isFromFallback,
     fallbackReason,
+    updatedAt,
     saveSection,
     refresh,
   } = useSiteContent();
@@ -84,6 +85,7 @@ export default function AdminPage() {
       initialContent={content}
       isFromFallback={isFromFallback}
       fallbackReason={fallbackReason}
+      updatedAt={updatedAt}
       onSaveSection={handleSaveSection}
       onRefresh={refresh}
     />

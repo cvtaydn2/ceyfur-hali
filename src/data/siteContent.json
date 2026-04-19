@@ -36,6 +36,7 @@
     "items": [
       {
         "id": "1",
+        "slug": "hali-yikama",
         "title": "Halı Yıkama",
         "description": "Halılarınızın cinsine (yün, ipek, makine) göre özel şampuanlar ve tam otomatik makinelerle derinlemesine temizlik.",
         "icon": "Brush",
@@ -44,6 +45,7 @@
       },
       {
         "id": "2",
+        "slug": "koltuk-yikama",
         "title": "Koltuk Yıkama",
         "description": "Yerinde vakumlu yıkama teknolojisi ile koltuklarınızdaki kir ve lekelerden kurtulun, hijyenin keyfini sürün.",
         "icon": "Armchair",
@@ -52,6 +54,7 @@
       },
       {
         "id": "3",
+        "slug": "perde-yikama",
         "title": "Perde Yıkama",
         "description": "Stor, zebra ve fon perdeleriniz hassas dokularına zarar verilmeden profesyonelce temizlenir.",
         "icon": "Waves",
@@ -60,6 +63,7 @@
       },
       {
         "id": "4",
+        "slug": "yorgan-battaniye-yikama",
         "title": "Yorgan & Battaniye",
         "description": "Endüstriyel makinelerde yüksek ısıda dezenfekte edilerek yıkanan yorganlarınız sağlıkla uyumanız için hazır.",
         "icon": "Bed",

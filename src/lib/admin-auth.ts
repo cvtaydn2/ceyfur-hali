@@ -23,9 +23,6 @@ export function generateSessionToken(): string {
 export async function createSession(token: string): Promise<void> {
   const expiresAt = new Date(Date.now() + SESSION_CONFIG.maxAge * 1000).toISOString();
 
-  console.log("[createSession] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 30));
-  console.log("[createSession] Service key prefix:", process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 20));
-
   const { error } = await supabaseAdmin.from("admin_sessions").upsert({
     token,
     expires_at: expiresAt,
@@ -160,7 +157,7 @@ export async function requireAuth(): Promise<NextResponse | null> {
     }
   }
 
-  console.log("[requireAuth] token exists:", !!sessionToken);
+  // console.log("[requireAuth] token exists:", !!sessionToken);
 
   if (!sessionToken) {
     return NextResponse.json(
@@ -186,6 +183,10 @@ export async function requireAuth(): Promise<NextResponse | null> {
     }
   } catch (err) {
     console.error("[requireAuth] DB doğrulama hatası:", err);
+    return NextResponse.json(
+      { success: false, message: "Oturum doğrulanırken bir hata oluştu." },
+      { status: 500 }
+    );
   }
 
   return null;

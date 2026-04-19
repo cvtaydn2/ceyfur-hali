@@ -32,6 +32,7 @@ interface AdminDashboardProps {
   initialContent: SiteContent;
   isFromFallback: boolean;
   fallbackReason?: string;
+  updatedAt?: string;
   onSaveSection: (
     section: ContentSection,
     data: SiteContent[ContentSection]
@@ -81,6 +82,7 @@ export const AdminDashboard = ({
   initialContent,
   isFromFallback,
   fallbackReason,
+  updatedAt,
   onSaveSection,
   onRefresh,
 }: AdminDashboardProps) => {
@@ -249,6 +251,7 @@ export const AdminDashboard = ({
           <FallbackBanner
             isVisible={isFromFallback}
             reason={fallbackReason}
+            updatedAt={updatedAt}
             onRefresh={onRefresh}
           />
           <AdminNav

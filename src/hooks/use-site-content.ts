@@ -22,6 +22,7 @@ interface CacheEntry {
   data: SiteContent;
   timestamp: number;
   isFromFallback: boolean;
+  updatedAt?: string;
 }
 
 function readCache(): CacheEntry | null {
@@ -40,10 +41,10 @@ function readCache(): CacheEntry | null {
   }
 }
 
-function writeCache(data: SiteContent, isFromFallback: boolean): void {
+function writeCache(data: SiteContent, isFromFallback: boolean, updatedAt?: string): void {
   if (typeof window === "undefined") return;
   try {
-    const entry: CacheEntry = { data, timestamp: Date.now(), isFromFallback };
+    const entry: CacheEntry = { data, timestamp: Date.now(), isFromFallback, updatedAt };
     localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
   } catch {
     // localStorage dolu veya erişilemez
@@ -68,6 +69,7 @@ export function useSiteContent() {
   const [error, setError] = useState<string | null>(null);
   const [isFromFallback, setIsFromFallback] = useState(false);
   const [fallbackReason, setFallbackReason] = useState<string | undefined>();
+  const [updatedAt, setUpdatedAt] = useState<string | undefined>();
 
   const fetchContent = useCallback(async (forceRefresh = false) => {
     if (!forceRefresh) {
@@ -75,6 +77,7 @@ export function useSiteContent() {
       if (cached) {
         setContent(cached.data);
         setIsFromFallback(cached.isFromFallback);
+        setUpdatedAt((cached as any).updatedAt);
         setIsLoading(false);
         return;
       }
@@ -94,7 +97,8 @@ export function useSiteContent() {
         setContent(data.content);
         setIsFromFallback(data.isFromFallback ?? false);
         setFallbackReason(data.fallbackReason);
-        writeCache(data.content, data.isFromFallback ?? false);
+        setUpdatedAt(data.updatedAt);
+        writeCache(data.content, data.isFromFallback ?? false, data.updatedAt);
       } else {
         setError(data.message || "İçerik yüklenemedi.");
       }
@@ -152,7 +156,7 @@ export function useSiteContent() {
 
     try {
       const res = await fetch(`/api/admin/content/${section}`, {
-        method: "PATCH",
+        method: "POST",
         headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         credentials: "include",
         body: JSON.stringify(sectionData),
@@ -187,6 +191,7 @@ export function useSiteContent() {
     error,
     isFromFallback,
     fallbackReason,
+    updatedAt,
     refresh: () => fetchContent(true),
     save,
     saveSection,

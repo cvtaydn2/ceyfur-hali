@@ -35,7 +35,7 @@ export default async function ServicesPage() {
       "@type": "ListItem",
       position: index + 1,
       name: item.title,
-      url: `${APP_CONFIG.url}/hizmetler/${item.id}`,
+      url: `${APP_CONFIG.url}/hizmetler/${item.slug}`,
     })),
   };
 
@@ -75,7 +75,7 @@ export default async function ServicesPage() {
             {content.services.items.map((item) => (
               <Link
                 key={item.id}
-                href={`/hizmetler/${item.id}`}
+                href={`/hizmetler/${item.slug}`}
                 className="group bg-white rounded-3xl border border-slate-100 overflow-hidden hover:shadow-xl hover:shadow-slate-200/60 hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="relative h-48 overflow-hidden">

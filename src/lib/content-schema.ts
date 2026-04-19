@@ -35,6 +35,7 @@ export const AboutSchema = z.object({
 
 export const ServiceItemSchema = z.object({
   id: requiredString,
+  slug: requiredString,
   title: requiredString,
   description: requiredString,
   icon: requiredString,
@@ -86,59 +87,71 @@ export const PriceItemSchema = z.object({
   note: z.string().optional(), // Ek not
 });
 
+export const ServicesSchema = z.object({
+  title: requiredString,
+  subtitle: requiredString,
+  items: z.array(ServiceItemSchema),
+  areas: z.array(ServiceAreaSchema).optional().default([]),
+});
+
+export const PricingSchema = z.object({
+  title: requiredString,
+  subtitle: requiredString,
+  note: z.string().optional(),
+  items: z.array(PriceItemSchema),
+});
+
+export const CampaignsSchema = z.object({
+  title: requiredString,
+  subtitle: requiredString,
+  items: z.array(CampaignItemSchema),
+});
+
+export const TestimonialsSchema = z.object({
+  title: requiredString,
+  subtitle: requiredString,
+  items: z.array(TestimonialItemSchema),
+});
+
+export const ContactSchema = z.object({
+  phone: z.preprocess(
+    (val) => (typeof val === "string" ? [val] : val),
+    z.array(z.string().trim().min(1)).min(1)
+  ),
+  whatsapp: requiredString,
+  email: z.string().email().trim(),
+  address: requiredString,
+  district: requiredString,
+  city: requiredString,
+  workingHours: requiredString,
+  googleMapsUrl: z.string().url().trim(),
+  instagram: z.string().optional(),
+  facebook: z.string().optional(),
+});
+
+export const FooterSchema = z.object({
+  about: requiredString,
+  copyright: requiredString,
+  links: z.array(FooterLinkSchema),
+});
+
 // Full SiteContent Schema
 export const SiteContentSchema = z.object({
   brand: BrandSchema,
   seo: SEOSchema,
   hero: HeroSchema,
   about: AboutSchema,
-  services: z.object({
-    title: requiredString,
-    subtitle: requiredString,
-    items: z.array(ServiceItemSchema),
-    areas: z.array(ServiceAreaSchema).optional().default([]),
-  }),
-  pricing: z.object({
-    title: requiredString,
-    subtitle: requiredString,
-    note: z.string().optional(),
-    items: z.array(PriceItemSchema),
-  }),
-  campaigns: z.object({
-    title: requiredString,
-    subtitle: requiredString,
-    items: z.array(CampaignItemSchema),
-  }),
+  services: ServicesSchema,
+  pricing: PricingSchema,
+  campaigns: CampaignsSchema,
   stats: z.array(StatItemSchema),
-  testimonials: z.object({
-    title: requiredString,
-    subtitle: requiredString,
-    items: z.array(TestimonialItemSchema),
-  }),
-  contact: z.object({
-    phone: z.preprocess(
-      (val) => (typeof val === "string" ? [val] : val),
-      z.array(z.string().trim().min(1)).min(1)
-    ),
-    whatsapp: requiredString,
-    email: z.string().email().trim(),
-    address: requiredString,
-    district: requiredString,
-    city: requiredString,
-    workingHours: requiredString,
-    googleMapsUrl: z.string().url().trim(),
-    instagram: z.string().optional(),
-    facebook: z.string().optional(),
-  }),
+  testimonials: TestimonialsSchema,
+  contact: ContactSchema,
   navigation: z.array(
     z.object({
       label: requiredString,
       href: requiredString,
     })
   ),
-  footer: z.object({
-    about: requiredString,
-    copyright: requiredString,
-    links: z.array(FooterLinkSchema),
-  }),
+  footer: FooterSchema,
 });

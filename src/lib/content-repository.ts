@@ -10,8 +10,8 @@ import { SiteContentSchema } from "./content-schema";
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type ContentReadResult =
-  | { data: SiteContent; isFromFallback: false }
-  | { data: SiteContent; isFromFallback: true; reason: string };
+  | { data: SiteContent; isFromFallback: false; updatedAt?: string }
+  | { data: SiteContent; isFromFallback: true; reason: string; updatedAt?: string };
 
 // ─── Read ─────────────────────────────────────────────────────────────────────
 
@@ -32,7 +32,7 @@ export const getSiteContent = cache(async (): Promise<SiteContent> => {
 export async function getSiteContentWithMeta(): Promise<ContentReadResult> {
   const { data, error } = await supabase
     .from("site_configs")
-    .select("content")
+    .select("content, updated_at")
     .eq("id", "main")
     .single();
 
@@ -43,6 +43,7 @@ export async function getSiteContentWithMeta(): Promise<ContentReadResult> {
       data: fallbackContent as unknown as SiteContent,
       isFromFallback: true,
       reason,
+      updatedAt: data?.updated_at,
     };
   }
 
@@ -56,10 +57,11 @@ export async function getSiteContentWithMeta(): Promise<ContentReadResult> {
       data: fallbackContent as unknown as SiteContent,
       isFromFallback: true,
       reason: `Validation hatası: ${issues}`,
+      updatedAt: data?.updated_at,
     };
   }
 
-  return { data: parsed.data, isFromFallback: false };
+  return { data: parsed.data, isFromFallback: false, updatedAt: data?.updated_at };
 }
 
 /**

@@ -13,7 +13,7 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
   const content = await getSiteContent();
-  return content.services.items.map((item) => ({ slug: item.id }));
+  return content.services.items.map((item) => ({ slug: item.slug }));
 }
 
 // ─── Metadata ─────────────────────────────────────────────────────────────────
@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const content = await getSiteContent();
-  const service = content.services.items.find((s) => s.id === slug);
+  const service = content.services.items.find((s) => s.slug === slug);
 
   if (!service) return { title: "Hizmet Bulunamadı" };
 
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ServiceDetailPage({ params }: Props) {
   const { slug } = await params;
   const content = await getSiteContent();
-  const service = content.services.items.find((s) => s.id === slug);
+  const service = content.services.items.find((s) => s.slug === slug);
 
   if (!service) notFound();
 

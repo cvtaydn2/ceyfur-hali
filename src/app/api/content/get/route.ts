@@ -20,6 +20,7 @@ export async function GET() {
       content: result.data,
       isFromFallback: result.isFromFallback,
       fallbackReason: result.isFromFallback ? result.reason : undefined,
+      updatedAt: result.updatedAt,
     });
   } catch (error) {
     console.error("[content/get] Hata:", error);
