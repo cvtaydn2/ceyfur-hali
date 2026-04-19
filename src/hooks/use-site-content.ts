@@ -83,7 +83,9 @@ export function useSiteContent() {
     setError(null);
 
     try {
-      const res = await fetch("/api/content/get");
+      const res = await fetch("/api/content/get", {
+        credentials: "include",
+      });
       const data = await res.json();
 
       if (data.success) {
@@ -115,6 +117,7 @@ export function useSiteContent() {
       const res = await fetch("/api/content", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(newContent),
       });
       const data = await res.json();
@@ -149,6 +152,7 @@ export function useSiteContent() {
       const res = await fetch(`/api/admin/content/${section}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(sectionData),
       });
       const data = await res.json();

@@ -104,8 +104,8 @@ export const AdminDashboard = ({
     setIsLoadingLeads(true);
     try {
       const [leadsRes, archiveRes] = await Promise.all([
-        fetch("/api/admin/leads").then((r) => r.json()),
-        fetch("/api/admin/leads?type=archive").then((r) => r.json()),
+        fetch("/api/admin/leads", { credentials: "include" }).then((r) => r.json()),
+        fetch("/api/admin/leads?type=archive", { credentials: "include" }).then((r) => r.json()),
       ]);
       if (leadsRes.success) setLeads(leadsRes.data);
       if (archiveRes.success) setArchive(archiveRes.data);
@@ -182,6 +182,7 @@ export const AdminDashboard = ({
       const res = await fetch(`/api/admin/leads/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ status }),
       });
       const data = await res.json();
@@ -199,7 +200,7 @@ export const AdminDashboard = ({
   // ─── Logout ──────────────────────────────────────────────────────────────────
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     router.push("/auth/login");
   };
 

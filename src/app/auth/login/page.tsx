@@ -26,8 +26,8 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok) {
-        router.push("/admin");
-        router.refresh();
+        // Hard redirect — cookie'nin kesinlikle gönderilmesini sağlar
+        window.location.href = "/admin";
       } else {
         setError(data.message || "Giriş başarısız.");
       }
