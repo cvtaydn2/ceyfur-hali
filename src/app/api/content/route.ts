@@ -1,11 +1,16 @@
 import { NextResponse } from "next/server";
-import { updateSiteContent } from "@/lib/content-repository";
+import { updateSiteContent, getSiteContentFresh } from "@/lib/content-repository";
 import { SiteContentSchema } from "@/lib/content-schema";
-import { ZodError } from "zod";
+import { writeAuditLog } from "@/lib/audit-log";
 import { requireAuth } from "@/lib/admin-auth";
+import { ZodError } from "zod";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Tüm site içeriğini günceller.
+ * Kayıt sonrası DB'den tekrar okuyarak doğrular (save-verify).
+ */
 export async function POST(request: Request) {
   const authError = await requireAuth();
   if (authError) return authError;
@@ -13,7 +18,20 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const validatedData = SiteContentSchema.parse(body);
+
+    // Mevcut içeriği audit log için sakla
+    const before = await getSiteContentFresh().catch(() => null);
+
     await updateSiteContent(validatedData);
+
+    // Audit log
+    await writeAuditLog({
+      action: "content_update",
+      entityType: "site_content",
+      entityId: "main",
+      beforeData: before ? (before as Record<string, unknown>) : undefined,
+      afterData: validatedData as unknown as Record<string, unknown>,
+    });
 
     return NextResponse.json({
       success: true,
@@ -32,23 +50,23 @@ export async function POST(request: Request) {
       );
     }
 
-    if (error instanceof Error && error.message.includes("İçerik güncellenemedi")) {
+    if (error instanceof Error && error.message.includes("Kaydedilen içerik geçersiz")) {
       return NextResponse.json(
         {
           success: false,
-          code: "DATABASE_ERROR",
-          message: "Veritabanına kayıt yapılamadı.",
+          code: "VERIFY_FAILED",
+          message: "Kayıt doğrulanamadı. Lütfen tekrar deneyin.",
         },
         { status: 500 }
       );
     }
 
-    console.error("Content API hatası:", error);
+    console.error("[content] POST hatası:", error);
     return NextResponse.json(
       {
         success: false,
         code: "INTERNAL_ERROR",
-        message: "Sunucu tarafında beklenmedik bir hata oluştu.",
+        message: "Sunucu hatası oluştu.",
       },
       { status: 500 }
     );

@@ -1,6 +1,5 @@
 /**
  * Uygulama genelinde kullanılan sabitler.
- * leads-schema.ts ile senkronize tutulur.
  */
 
 export const APP_CONFIG = {
@@ -20,12 +19,13 @@ export const API_ENDPOINTS = {
   admin: {
     leads: "/api/admin/leads",
     leadsById: (id: string) => `/api/admin/leads/${id}`,
+    content: {
+      section: (section: string) => `/api/admin/content/${section}`,
+      auditLogs: "/api/admin/audit-logs",
+    },
   },
 } as const;
 
-/**
- * Aktif lead durumları — LeadStatusSchema ile eşleşmelidir.
- */
 export const LEAD_STATUS = {
   new: "new",
   called: "called",
@@ -33,9 +33,6 @@ export const LEAD_STATUS = {
   booked: "booked",
 } as const;
 
-/**
- * Arşiv durumları — ArchiveStatusSchema ile eşleşmelidir.
- */
 export const ARCHIVE_STATUS = {
   completed: "completed",
   cancelled: "cancelled",
@@ -51,3 +48,32 @@ export const CACHE_DURATION = {
   medium: 5 * 60 * 1000,
   long: 30 * 60 * 1000,
 } as const;
+
+/** ISR revalidation süreleri (saniye) — sabit sayı olarak kullanın, nesne property olarak değil */
+export const REVALIDATE_HOME = 3600;
+export const REVALIDATE_SERVICE = 3600;
+export const REVALIDATE_DISTRICT = 3600;
+
+/** Brute force koruma */
+export const AUTH_CONFIG = {
+  maxLoginAttempts: 5,
+  lockoutWindowMinutes: 15,
+} as const;
+
+/** Desteklenen içerik bölümleri */
+export const CONTENT_SECTIONS = [
+  "brand",
+  "seo",
+  "hero",
+  "about",
+  "services",
+  "pricing",
+  "campaigns",
+  "stats",
+  "testimonials",
+  "contact",
+  "navigation",
+  "footer",
+] as const;
+
+export type ContentSection = (typeof CONTENT_SECTIONS)[number];

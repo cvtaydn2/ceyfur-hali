@@ -5,49 +5,60 @@ import { useSiteContent } from "@/hooks/use-site-content";
 import { AdminDashboard } from "./AdminDashboard";
 import { Loader2 } from "lucide-react";
 import { SiteContent } from "@/types";
+import { ContentSection } from "@/lib/constants";
 
 /**
  * Admin Page Entry Point
- * 
- * This page serves as the high-level coordinator for the Admin Dashboard.
- * It handles the initial data fetching and provides the central save logic.
+ *
+ * Veri yükleme, fallback durumu ve section-based save koordinasyonu burada yapılır.
  */
 export default function AdminPage() {
-  const { 
-    content, 
-    isLoading, 
-    save, 
-    error: fetchError 
+  const {
+    content,
+    isLoading,
+    error: fetchError,
+    isFromFallback,
+    fallbackReason,
+    saveSection,
+    refresh,
   } = useSiteContent();
 
-  // Show a premium loading state
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 gap-6">
         <div className="w-16 h-16 relative">
           <div className="absolute inset-0 border-4 border-slate-100 rounded-[2rem] animate-pulse" />
-          <Loader2 className="w-full h-full text-slate-900 animate-spin transition-all" size={64} strokeWidth={1} />
+          <Loader2
+            className="w-full h-full text-slate-900 animate-spin"
+            size={64}
+            strokeWidth={1}
+          />
         </div>
         <div className="text-center space-y-2">
-          <h2 className="text-2xl font-black text-slate-900 italic tracking-tight">Ceyfur Admin</h2>
-          <p className="text-slate-400 font-bold text-xs uppercase tracking-widest animate-pulse">Panel Verileri Yükleniyor...</p>
+          <h2 className="text-2xl font-black text-slate-900 italic tracking-tight">
+            Ceyfur Admin
+          </h2>
+          <p className="text-slate-400 font-bold text-xs uppercase tracking-widest animate-pulse">
+            Panel Verileri Yükleniyor...
+          </p>
         </div>
       </div>
     );
   }
 
-  // Handle configuration error
   if (fetchError || !content) {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6 text-center">
         <div className="w-20 h-20 rounded-[2.5rem] bg-rose-50 text-rose-500 flex items-center justify-center mb-6 border border-rose-100">
-           <span className="text-3xl font-black">!</span>
+          <span className="text-3xl font-black">!</span>
         </div>
-        <h2 className="text-2xl font-black text-slate-900 italic tracking-tight">Bağlantı Hatası</h2>
+        <h2 className="text-2xl font-black text-slate-900 italic tracking-tight">
+          Bağlantı Hatası
+        </h2>
         <p className="text-slate-400 font-medium max-w-sm mt-2 italic px-8">
-          Veritabanı ile bağlantı kurulamadı. Lütfen internet bağlantınızı kontrol edip tekrar deneyin.
+          {fetchError ?? "Veritabanı ile bağlantı kurulamadı."}
         </p>
-        <button 
+        <button
           onClick={() => window.location.reload()}
           className="mt-8 px-10 py-4 bg-slate-900 text-white rounded-2xl font-black text-sm hover:scale-105 transition-all shadow-xl shadow-slate-200"
         >
@@ -57,18 +68,24 @@ export default function AdminPage() {
     );
   }
 
-  const handleSaveContent = async (updatedData: SiteContent) => {
+  const handleSaveSection = async (
+    section: ContentSection,
+    data: SiteContent[ContentSection]
+  ) => {
     try {
-      return await save(updatedData);
+      return await saveSection(section, data);
     } catch {
       return { success: false, message: "Ağ hatası oluştu." };
     }
   };
 
   return (
-    <AdminDashboard 
-      initialContent={content} 
-      onSaveContent={handleSaveContent} 
+    <AdminDashboard
+      initialContent={content}
+      isFromFallback={isFromFallback}
+      fallbackReason={fallbackReason}
+      onSaveSection={handleSaveSection}
+      onRefresh={refresh}
     />
   );
 }

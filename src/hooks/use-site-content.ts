@@ -2,6 +2,17 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { SiteContent } from "@/types";
+import { ContentSection } from "@/lib/constants";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+export interface ContentFetchResult {
+  content: SiteContent | null;
+  isFromFallback: boolean;
+  fallbackReason?: string;
+}
+
+// ─── Cache ────────────────────────────────────────────────────────────────────
 
 const CACHE_KEY = "site_content_cache";
 const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 dakika
@@ -9,9 +20,10 @@ const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 dakika
 interface CacheEntry {
   data: SiteContent;
   timestamp: number;
+  isFromFallback: boolean;
 }
 
-function readCache(): SiteContent | null {
+function readCache(): CacheEntry | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = localStorage.getItem(CACHE_KEY);
@@ -21,19 +33,19 @@ function readCache(): SiteContent | null {
       localStorage.removeItem(CACHE_KEY);
       return null;
     }
-    return entry.data;
+    return entry;
   } catch {
     return null;
   }
 }
 
-function writeCache(data: SiteContent): void {
+function writeCache(data: SiteContent, isFromFallback: boolean): void {
   if (typeof window === "undefined") return;
   try {
-    const entry: CacheEntry = { data, timestamp: Date.now() };
+    const entry: CacheEntry = { data, timestamp: Date.now(), isFromFallback };
     localStorage.setItem(CACHE_KEY, JSON.stringify(entry));
   } catch {
-    // localStorage dolu veya erişilemez — sessizce geç
+    // localStorage dolu veya erişilemez
   }
 }
 
@@ -46,18 +58,22 @@ function clearCache(): void {
   }
 }
 
+// ─── Hook ─────────────────────────────────────────────────────────────────────
+
 export function useSiteContent() {
   const [content, setContent] = useState<SiteContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isFromFallback, setIsFromFallback] = useState(false);
+  const [fallbackReason, setFallbackReason] = useState<string | undefined>();
 
   const fetchContent = useCallback(async (forceRefresh = false) => {
-    // Cache kontrolü (force refresh değilse)
     if (!forceRefresh) {
       const cached = readCache();
       if (cached) {
-        setContent(cached);
+        setContent(cached.data);
+        setIsFromFallback(cached.isFromFallback);
         setIsLoading(false);
         return;
       }
@@ -65,28 +81,36 @@ export function useSiteContent() {
 
     setIsLoading(true);
     setError(null);
+
     try {
       const res = await fetch("/api/content/get");
       const data = await res.json();
+
       if (data.success) {
         setContent(data.content);
-        writeCache(data.content);
+        setIsFromFallback(data.isFromFallback ?? false);
+        setFallbackReason(data.fallbackReason);
+        writeCache(data.content, data.isFromFallback ?? false);
       } else {
         setError(data.message || "İçerik yüklenemedi.");
       }
     } catch (err) {
-      console.error("İçerik fetch hatası:", err);
+      console.error("[use-site-content] Fetch hatası:", err);
       setError("Sunucu hatası oluştu.");
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const saveContent = async (
+  /**
+   * Tüm içeriği kaydeder (full update).
+   */
+  const save = async (
     newContent: SiteContent
   ): Promise<{ success: boolean; message?: string }> => {
     setIsSaving(true);
     clearCache();
+
     try {
       const res = await fetch("/api/content", {
         method: "POST",
@@ -97,15 +121,48 @@ export function useSiteContent() {
 
       if (res.ok && data.success) {
         setContent(newContent);
+        setIsFromFallback(false);
         return { success: true };
       }
 
-      return {
-        success: false,
-        message: data.message || "Güncelleme başarısız.",
-      };
+      return { success: false, message: data.message || "Güncelleme başarısız." };
     } catch (err) {
-      console.error("İçerik kaydetme hatası:", err);
+      console.error("[use-site-content] Save hatası:", err);
+      return { success: false, message: "Ağ hatası oluştu." };
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  /**
+   * Belirli bir bölümü kaydeder (partial update).
+   * Sadece ilgili bölüm API'ye gönderilir.
+   */
+  const saveSection = async <K extends ContentSection>(
+    section: K,
+    sectionData: SiteContent[K]
+  ): Promise<{ success: boolean; message?: string }> => {
+    setIsSaving(true);
+    clearCache();
+
+    try {
+      const res = await fetch(`/api/admin/content/${section}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(sectionData),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        // Local state'i güncelle
+        setContent((prev) => (prev ? { ...prev, [section]: sectionData } : prev));
+        setIsFromFallback(false);
+        return { success: true, message: data.message };
+      }
+
+      return { success: false, message: data.message || "Güncelleme başarısız." };
+    } catch (err) {
+      console.error(`[use-site-content] saveSection(${section}) hatası:`, err);
       return { success: false, message: "Ağ hatası oluştu." };
     } finally {
       setIsSaving(false);
@@ -122,7 +179,10 @@ export function useSiteContent() {
     isLoading,
     isSaving,
     error,
+    isFromFallback,
+    fallbackReason,
     refresh: () => fetchContent(true),
-    save: saveContent,
+    save,
+    saveSection,
   };
 }
