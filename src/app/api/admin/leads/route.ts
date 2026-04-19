@@ -6,9 +6,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const authError = await requireAuth();
-  if (authError) {
-    return authError;
-  }
+  if (authError) return authError;
 
   try {
     const { searchParams } = new URL(request.url);
@@ -21,12 +19,11 @@ export async function GET(request: Request) {
 
     const leads = await getLeads();
     return NextResponse.json({ success: true, data: leads });
-
   } catch (error: unknown) {
-    console.error("Admin Lead API Error:", error);
-    return NextResponse.json({ 
-      success: false, 
-      message: "Veriler yüklenirken bir hata oluştu." 
-    }, { status: 500 });
+    console.error("Admin Lead API hatası:", error);
+    return NextResponse.json(
+      { success: false, message: "Veriler yüklenirken bir hata oluştu." },
+      { status: 500 }
+    );
   }
 }

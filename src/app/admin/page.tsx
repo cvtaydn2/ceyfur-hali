@@ -4,6 +4,7 @@ import React from "react";
 import { useSiteContent } from "@/hooks/use-site-content";
 import { AdminDashboard } from "./AdminDashboard";
 import { Loader2 } from "lucide-react";
+import { SiteContent } from "@/types";
 
 /**
  * Admin Page Entry Point
@@ -56,18 +57,10 @@ export default function AdminPage() {
     );
   }
 
-  /**
-   * Safe Save Action
-   * Wraps the save logic to match the Dashboard's expected signature
-   */
-  const handleSaveContent = async (updatedData: any) => {
+  const handleSaveContent = async (updatedData: SiteContent) => {
     try {
-      const result = await save(updatedData);
-      return { 
-        success: (result as any).success, 
-        message: (result as any).message 
-      };
-    } catch (err) {
+      return await save(updatedData);
+    } catch {
       return { success: false, message: "Ağ hatası oluştu." };
     }
   };

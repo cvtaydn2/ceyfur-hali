@@ -8,6 +8,10 @@ export async function GET() {
     const content = await getSiteContent();
     return NextResponse.json({ success: true, content });
   } catch (error) {
-    return NextResponse.json({ success: false, message: "Failed to fetch content" }, { status: 500 });
+    console.error("Content GET hatası:", error);
+    return NextResponse.json(
+      { success: false, message: "İçerik alınamadı." },
+      { status: 500 }
+    );
   }
 }

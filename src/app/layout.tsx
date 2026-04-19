@@ -7,34 +7,40 @@ import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800", "900"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
 
+const BASE_URL = "https://ceyfurhaliyikama.com";
+
+function resolveOgImage(ogImage: string | undefined): string {
+  if (!ogImage) return `${BASE_URL}/images/og-image.png`;
+  return ogImage.startsWith("http") ? ogImage : `${BASE_URL}${ogImage}`;
+}
+
+/**
+ * getSiteContent() React cache() ile sarıldığı için generateMetadata ve
+ * RootLayout aynı render cycle'da yalnızca bir kez DB'ye gider.
+ */
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
-  const baseUrl = "https://ceyfurhaliyikama.com";
-  const ogImageUrl = content.seo.ogImage?.startsWith('http') 
-    ? content.seo.ogImage 
-    : `${baseUrl}${content.seo.ogImage || '/images/og-image.png'}`;
-  
+  const ogImageUrl = resolveOgImage(content.seo.ogImage);
+
   return {
     title: content.seo.title,
     description: content.seo.description,
     keywords: content.seo.keywords,
+    metadataBase: new URL(BASE_URL),
+    robots: "index, follow",
     openGraph: {
       title: content.seo.title,
       description: content.seo.description,
       type: "website",
       locale: "tr_TR",
-      url: baseUrl,
+      url: BASE_URL,
       siteName: content.brand.name,
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: content.brand.name,
-        }
-      ],
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: content.brand.name }],
     },
     twitter: {
       card: "summary_large_image",
@@ -42,8 +48,6 @@ export async function generateMetadata(): Promise<Metadata> {
       description: content.seo.description,
       images: [ogImageUrl],
     },
-    robots: "index, follow",
-    metadataBase: new URL(baseUrl),
   };
 }
 
@@ -52,47 +56,43 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const content = await getSiteContent();
-  const baseUrl = "https://ceyfurhaliyikama.com";
+  const content = await getSiteContent(); // React cache() sayesinde DB'ye ikinci kez gitmez
+  const ogImageUrl = resolveOgImage(content.seo.ogImage);
 
-  // Parse working hours string to JSON-LD format
-  // Example: "Pazartesi - Cumartesi: 09:00 - 19:00"
+  // Çalışma saatlerini JSON-LD formatına çevir
   const timeMatch = content.contact.workingHours.match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
-  const opens = timeMatch ? timeMatch[1] : "09:00";
-  const closes = timeMatch ? timeMatch[2] : "19:00";
+  const opens = timeMatch?.[1] ?? "09:00";
+  const closes = timeMatch?.[2] ?? "19:00";
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": content.brand.name,
-    "description": content.seo.description,
-    "url": baseUrl,
-    "telephone": content.contact.phone[0] || "",
-    "email": content.contact.email,
-    "address": {
+    name: content.brand.name,
+    description: content.seo.description,
+    url: BASE_URL,
+    telephone: content.contact.phone[0] ?? "",
+    email: content.contact.email,
+    address: {
       "@type": "PostalAddress",
-      "streetAddress": content.contact.address,
-      "addressLocality": content.contact.district,
-      "addressRegion": content.contact.city,
-      "addressCountry": "TR"
+      streetAddress: content.contact.address,
+      addressLocality: content.contact.district,
+      addressRegion: content.contact.city,
+      addressCountry: "TR",
     },
-    "openingHoursSpecification": [
+    openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-        "opens": opens,
-        "closes": closes
-      }
+        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        opens,
+        closes,
+      },
     ],
-    "image": content.seo.ogImage?.startsWith('http') ? content.seo.ogImage : `${baseUrl}${content.seo.ogImage || '/images/og-image.png'}`,
-    "sameAs": [
-      content.contact.instagram,
-      content.contact.facebook,
-    ].filter(Boolean)
+    image: ogImageUrl,
+    sameAs: [content.contact.instagram, content.contact.facebook].filter(Boolean),
   };
 
   return (
-    <html lang="tr" className="scroll-smooth" data-scroll-behavior="smooth">
+    <html lang="tr" className="scroll-smooth">
       <body className={inter.className}>
         <a
           href="#main-content"

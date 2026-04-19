@@ -16,7 +16,10 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
     onChange({ campaigns: { ...data.campaigns, ...updates } });
   };
 
-  const updateItem = (index: number, updates: Partial<SiteContent["campaigns"]["items"][number]>) => {
+  const updateItem = (
+    index: number,
+    updates: Partial<SiteContent["campaigns"]["items"][number]>
+  ) => {
     const newItems = [...data.campaigns.items];
     newItems[index] = { ...newItems[index], ...updates };
     updateCampaigns({ items: newItems });
@@ -24,13 +27,13 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
 
   const addItem = () => {
     const newItem = {
-      id: `c${Date.now()}`,
+      id: crypto.randomUUID(),
       title: "Yeni Kampanya",
       description: "Kampanya açıklaması",
       badge: "Yeni",
       priceNote: "İndirim Oranı",
       features: ["Özellik 1"],
-      ctaLabel: "Teklif Al"
+      ctaLabel: "Teklif Al",
     };
     updateCampaigns({ items: [...data.campaigns.items, newItem] });
   };
@@ -49,9 +52,9 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
 
   const addFeature = (itemIndex: number) => {
     const newItems = [...data.campaigns.items];
-    newItems[itemIndex] = { 
-      ...newItems[itemIndex], 
-      features: [...newItems[itemIndex].features, "Yeni Madde"] 
+    newItems[itemIndex] = {
+      ...newItems[itemIndex],
+      features: [...newItems[itemIndex].features, "Yeni Madde"],
     };
     updateCampaigns({ items: newItems });
   };
@@ -60,7 +63,7 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
     const newItems = [...data.campaigns.items];
     newItems[itemIndex] = {
       ...newItems[itemIndex],
-      features: newItems[itemIndex].features.filter((_, i) => i !== featureIndex)
+      features: newItems[itemIndex].features.filter((_, i) => i !== featureIndex),
     };
     updateCampaigns({ items: newItems });
   };
@@ -70,10 +73,16 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
       <AdminCard title="Kampanyalar Bölümü Başlıkları">
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
           <AdminInputGroup label="Bölüm Başlığı">
-            <Input value={data.campaigns.title} onChange={(e) => updateCampaigns({ title: e.target.value })} />
+            <Input
+              value={data.campaigns.title}
+              onChange={(e) => updateCampaigns({ title: e.target.value })}
+            />
           </AdminInputGroup>
           <AdminInputGroup label="Alt Başlık">
-            <Input value={data.campaigns.subtitle} onChange={(e) => updateCampaigns({ subtitle: e.target.value })} />
+            <Input
+              value={data.campaigns.subtitle}
+              onChange={(e) => updateCampaigns({ subtitle: e.target.value })}
+            />
           </AdminInputGroup>
         </div>
       </AdminCard>
@@ -81,31 +90,40 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h4 className="text-lg font-black text-slate-900 tracking-tight">Kampanya Listesi</h4>
-          <span className="text-xs font-bold text-slate-400">{data.campaigns.items.length} Kampanya Kayıtlı</span>
+          <span className="text-xs font-bold text-slate-400">
+            {data.campaigns.items.length} Kampanya Kayıtlı
+          </span>
         </div>
 
         {data.campaigns.items.map((item, idx) => (
           <AdminCard key={item.id} className="relative">
-            <button 
+            <button
               onClick={() => removeItem(idx)}
               className="absolute top-6 right-6 p-2 rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-100 transition-colors"
+              aria-label={`${item.title} kampanyasını sil`}
             >
               <Trash2 size={16} />
             </button>
 
             <div className="grid md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-6 md:mb-8">
               <AdminInputGroup label="Etiket (Badge)">
-                <Input value={item.badge} onChange={(e) => updateItem(idx, { badge: e.target.value })} />
+                <Input
+                  value={item.badge}
+                  onChange={(e) => updateItem(idx, { badge: e.target.value })}
+                />
               </AdminInputGroup>
               <div className="md:col-span-2">
                 <AdminInputGroup label="Kampanya Başlığı">
-                  <Input value={item.title} onChange={(e) => updateItem(idx, { title: e.target.value })} />
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem(idx, { title: e.target.value })}
+                  />
                 </AdminInputGroup>
               </div>
             </div>
 
             <AdminInputGroup label="Kampanya Detayı" className="mb-6 md:mb-8">
-              <textarea 
+              <textarea
                 className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
                 value={item.description}
                 onChange={(e) => updateItem(idx, { description: e.target.value })}
@@ -113,11 +131,20 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
             </AdminInputGroup>
 
             <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 mb-6 md:mb-8">
-              <AdminInputGroup label="Fiyat / İndirim Notu" helperText="Örn: %20'ye Varan İndirim">
-                <Input value={item.priceNote || ""} onChange={(e) => updateItem(idx, { priceNote: e.target.value })} />
+              <AdminInputGroup
+                label="Fiyat / İndirim Notu"
+                helperText="Örn: %20'ye Varan İndirim"
+              >
+                <Input
+                  value={item.priceNote ?? ""}
+                  onChange={(e) => updateItem(idx, { priceNote: e.target.value })}
+                />
               </AdminInputGroup>
               <AdminInputGroup label="Buton Yazısı">
-                <Input value={item.ctaLabel} onChange={(e) => updateItem(idx, { ctaLabel: e.target.value })} />
+                <Input
+                  value={item.ctaLabel}
+                  onChange={(e) => updateItem(idx, { ctaLabel: e.target.value })}
+                />
               </AdminInputGroup>
             </div>
 
@@ -125,20 +152,21 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
               <div className="space-y-3">
                 {item.features.map((feature, fIdx) => (
                   <div key={fIdx} className="flex gap-2">
-                    <Input 
-                      value={feature} 
+                    <Input
+                      value={feature}
                       onChange={(e) => updateFeature(idx, fIdx, e.target.value)}
                       className="flex-grow"
                     />
-                    <button 
+                    <button
                       onClick={() => removeFeature(idx, fIdx)}
                       className="p-4 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-100 transition-colors"
+                      aria-label="Maddeyi sil"
                     >
                       <Trash2 size={18} />
                     </button>
                   </div>
                 ))}
-                <button 
+                <button
                   onClick={() => addFeature(idx)}
                   className="w-full py-4 rounded-2xl border-2 border-dashed border-slate-100 text-slate-400 font-bold text-sm hover:border-primary-ocean/30 hover:text-primary-ocean transition-all flex items-center justify-center gap-2"
                 >
@@ -149,7 +177,7 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
           </AdminCard>
         ))}
 
-        <button 
+        <button
           onClick={addItem}
           className="w-full py-8 rounded-[2.5rem] border-2 border-dashed border-slate-100 text-slate-400 font-bold hover:border-primary-ocean/30 hover:text-primary-ocean hover:bg-primary-ocean/5 transition-all flex items-center justify-center gap-3 group"
         >

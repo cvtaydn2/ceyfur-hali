@@ -1,9 +1,19 @@
-import { supabase, supabaseAdmin } from "./supabase";
+import "server-only";
+import { cache } from "react";
+import { supabase } from "./supabase";
+import { supabaseAdmin } from "./supabase-admin";
 import { SiteContent } from "@/types";
 import fallbackContent from "@/data/siteContent.json";
 import { SiteContentSchema } from "./content-schema";
 
-export async function getSiteContent(): Promise<SiteContent> {
+/**
+ * Site içeriğini Supabase'den okur.
+ * React `cache()` ile sarıldığı için aynı render cycle'da
+ * (generateMetadata + RootLayout gibi) yalnızca bir kez DB'ye gider.
+ *
+ * Hata veya geçersiz veri durumunda fallback JSON'a döner.
+ */
+export const getSiteContent = cache(async (): Promise<SiteContent> => {
   const { data, error } = await supabase
     .from("site_configs")
     .select("content")
@@ -11,31 +21,32 @@ export async function getSiteContent(): Promise<SiteContent> {
     .single();
 
   if (error || !data?.content) {
-    console.error("Error fetching site content, using fallback:", error);
+    console.error("Site içeriği alınamadı, fallback kullanılıyor:", error?.message);
     return fallbackContent as unknown as SiteContent;
   }
 
-  // Validate on read - if validation fails, the data in DB is corrupted
-  // This ensures we always return valid content
   const result = SiteContentSchema.safeParse(data.content);
   if (!result.success) {
-    console.error("Invalid content in DB, using fallback. Issues:", 
-      result.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join(', ')
-    );
+    const issues = result.error.issues
+      .map((i) => `${i.path.join(".")}: ${i.message}`)
+      .join(", ");
+    console.error("DB içeriği geçersiz, fallback kullanılıyor. Sorunlar:", issues);
     return fallbackContent as unknown as SiteContent;
   }
 
   return result.data;
-}
+});
 
-export async function updateSiteContent(content: SiteContent) {
+/**
+ * Site içeriğini Supabase'e kaydeder.
+ * Yalnızca sunucu tarafında (API route) çağrılmalıdır.
+ */
+export async function updateSiteContent(content: SiteContent): Promise<void> {
   const { error } = await supabaseAdmin
     .from("site_configs")
     .upsert({ id: "main", content, updated_at: new Date().toISOString() });
 
   if (error) {
-    throw new Error(`Failed to update content: ${error.message}`);
+    throw new Error(`İçerik güncellenemedi: ${error.message}`);
   }
-  
-  return true;
 }

@@ -24,6 +24,8 @@ interface AdminDashboardProps {
   onSaveContent: (data: SiteContent) => Promise<{ success: boolean; message?: string }>;
 }
 
+type SaveResult = { success: boolean; message?: string };
+
 const TABS = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
   { id: "leads", label: "Talepler", icon: Inbox },
@@ -56,7 +58,7 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
     setIsLoadingLeads(true);
     try {
       const [leadsRes, archiveRes] = await Promise.all([
-        fetch("/api/admin/leads?type=active").then(r => r.json()),
+        fetch("/api/admin/leads").then(r => r.json()),
         fetch("/api/admin/leads?type=archive").then(r => r.json())
       ]);
       if (leadsRes.success) setLeads(leadsRes.data);
