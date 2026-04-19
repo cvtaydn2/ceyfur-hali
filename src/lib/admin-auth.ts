@@ -146,8 +146,21 @@ export function getSessionTokenFromCookie(cookieHeader: string | null): string |
  * Geçersiz oturum durumunda 401 response döner, aksi halde null.
  */
 export async function requireAuth(): Promise<NextResponse | null> {
+  // Önce cookie'den dene
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get(SESSION_CONFIG.cookieName)?.value;
+  let sessionToken = cookieStore.get(SESSION_CONFIG.cookieName)?.value;
+
+  // Cookie yoksa Authorization header'dan dene
+  if (!sessionToken) {
+    const { headers } = await import("next/headers");
+    const headerStore = await headers();
+    const authHeader = headerStore.get("authorization");
+    if (authHeader?.startsWith("Bearer ")) {
+      sessionToken = authHeader.slice(7);
+    }
+  }
+
+  console.log("[requireAuth] token exists:", !!sessionToken);
 
   if (!sessionToken) {
     return NextResponse.json(
@@ -156,7 +169,6 @@ export async function requireAuth(): Promise<NextResponse | null> {
     );
   }
 
-  // Token formatını kontrol et (64 hex karakter)
   if (!/^[a-f0-9]{64}$/.test(sessionToken)) {
     return NextResponse.json(
       { success: false, message: "Geçersiz oturum." },
@@ -164,7 +176,6 @@ export async function requireAuth(): Promise<NextResponse | null> {
     );
   }
 
-  // DB doğrulaması — hata olursa token varlığına güven
   try {
     const isValid = await validateSession(sessionToken);
     if (!isValid) {
@@ -174,8 +185,7 @@ export async function requireAuth(): Promise<NextResponse | null> {
       );
     }
   } catch (err) {
-    console.error("[requireAuth] DB doğrulama hatası, token varlığına güveniliyor:", err);
-    // DB erişimi yoksa token formatı yeterliyse geç
+    console.error("[requireAuth] DB doğrulama hatası:", err);
   }
 
   return null;

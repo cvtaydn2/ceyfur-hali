@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { SiteContent } from "@/types";
 import { ContentSection } from "@/lib/constants";
+import { getAuthHeaders, clearAuthToken } from "@/lib/auth-token";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -85,6 +86,7 @@ export function useSiteContent() {
     try {
       const res = await fetch("/api/content/get", {
         credentials: "include",
+        headers: getAuthHeaders(),
       });
       const data = await res.json();
 
@@ -116,7 +118,7 @@ export function useSiteContent() {
     try {
       const res = await fetch("/api/content", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         credentials: "include",
         body: JSON.stringify(newContent),
       });
@@ -151,7 +153,7 @@ export function useSiteContent() {
     try {
       const res = await fetch(`/api/admin/content/${section}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         credentials: "include",
         body: JSON.stringify(sectionData),
       });

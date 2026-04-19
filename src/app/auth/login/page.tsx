@@ -1,15 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
 import { motion } from "framer-motion";
+import { setAuthToken } from "@/lib/auth-token";
 
 export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,15 +22,20 @@ export default function LoginPage() {
         body: JSON.stringify({ password }),
       });
 
+      // response.json() yalnızca bir kez çağrılmalı
       const data = await response.json();
 
-      if (response.ok) {
-        // Hard redirect — cookie'nin kesinlikle gönderilmesini sağlar
+      if (response.ok && data.success) {
+        // Token'ı localStorage'a kaydet
+        if (data.token) {
+          setAuthToken(data.token);
+        }
+        // Hard redirect — cookie + token ikisi de hazır
         window.location.href = "/admin";
       } else {
         setError(data.message || "Giriş başarısız.");
       }
-    } catch (err) {
+    } catch {
       setError("Bağlantı hatası oluştu.");
     } finally {
       setIsLoading(false);
@@ -40,7 +44,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center px-4">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="max-w-md w-full glass-dark p-10 rounded-[2.5rem] border-white/10 shadow-2xl text-center"
@@ -48,9 +52,11 @@ export default function LoginPage() {
         <div className="w-16 h-16 bg-primary-ocean/20 rounded-2xl flex items-center justify-center text-primary-ocean mx-auto mb-6">
           <Lock size={32} />
         </div>
-        
+
         <h1 className="text-2xl font-black text-white mb-2">Panel Girişi</h1>
-        <p className="text-slate-400 text-sm mb-8">Devam etmek için yönetici parolasını giriniz.</p>
+        <p className="text-slate-400 text-sm mb-8">
+          Devam etmek için yönetici parolasını giriniz.
+        </p>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <input
@@ -61,7 +67,7 @@ export default function LoginPage() {
             disabled={isLoading}
             className="w-full px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white focus:border-primary-ocean outline-none transition-all text-center tracking-widest disabled:opacity-50"
           />
-          
+
           <button
             type="submit"
             disabled={isLoading}
