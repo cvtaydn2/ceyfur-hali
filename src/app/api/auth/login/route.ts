@@ -7,6 +7,7 @@ import {
   isRateLimited,
   cleanExpiredSessions,
 } from "@/lib/admin-auth";
+import { verifyAdminPassword } from "@/lib/admin-settings";
 import { writeAuditLog } from "@/lib/audit-log";
 import { SESSION_CONFIG } from "@/lib/constants";
 
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const isValid = timingSafeEqual(password, adminSecret);
+    const isValid = await verifyAdminPassword(password);
 
     if (!isValid) {
       // Hata olursa sessizce geç — login'i engelleme
@@ -64,15 +65,13 @@ export async function POST(request: Request) {
     // Session token oluştur ve cookie'ye yaz
     const sessionToken = generateSessionToken();
 
-    // DB'ye session kaydet — hata olursa logla ama devam et
-    const sessionSaved = await createSession(sessionToken)
-      .then(() => true)
-      .catch((err) => {
-        console.error("[auth/login] Session DB'ye kaydedilemedi:", err);
-        return false;
-      });
-
-    if (!sessionSaved) {
+    // DB'ye session kaydet
+    console.log("[auth/login] Session kaydediliyor...");
+    try {
+      await createSession(sessionToken);
+      console.log("[auth/login] Session kaydedildi:", sessionToken.slice(0, 8) + "...");
+    } catch (err) {
+      console.error("[auth/login] Session DB'ye kaydedilemedi:", err);
       return NextResponse.json(
         { success: false, message: "Oturum oluşturulamadı. Lütfen tekrar deneyin." },
         { status: 500 }

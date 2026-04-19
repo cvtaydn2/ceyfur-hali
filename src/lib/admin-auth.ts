@@ -23,6 +23,9 @@ export function generateSessionToken(): string {
 export async function createSession(token: string): Promise<void> {
   const expiresAt = new Date(Date.now() + SESSION_CONFIG.maxAge * 1000).toISOString();
 
+  console.log("[createSession] Supabase URL:", process.env.NEXT_PUBLIC_SUPABASE_URL?.slice(0, 30));
+  console.log("[createSession] Service key prefix:", process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 20));
+
   const { error } = await supabaseAdmin.from("admin_sessions").upsert({
     token,
     expires_at: expiresAt,
@@ -30,7 +33,8 @@ export async function createSession(token: string): Promise<void> {
   });
 
   if (error) {
-    throw new Error(`Session oluşturulamadı: ${error.message}`);
+    console.error("[createSession] Supabase error:", JSON.stringify(error));
+    throw new Error(`Session oluşturulamadı: ${error.message} (code: ${error.code})`);
   }
 }
 

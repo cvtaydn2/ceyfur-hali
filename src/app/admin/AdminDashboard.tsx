@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Settings, Search, Phone, User, Tag, LayoutGrid, Code,
   AlertTriangle, Inbox, Archive, LayoutDashboard, LogOut, ExternalLink,
-  MapPin, Briefcase, Users, DollarSign, History, CheckCircle2,
+  MapPin, Briefcase, Users, DollarSign, History, CheckCircle2, ShieldCheck,
 } from "lucide-react";
 import { SiteContent } from "@/types";
 import { Lead, LeadArchive } from "@/lib/leads-schema";
@@ -19,6 +19,7 @@ import { ServiceAreasSection } from "@/components/admin/sections/ServiceAreasSec
 import { PricingSection } from "@/components/admin/sections/PricingSection";
 import { CampaignsSection } from "@/components/admin/sections/CampaignsSection";
 import { AuditLogSection } from "@/components/admin/sections/AuditLogSection";
+import { SecuritySection } from "@/components/admin/sections/SecuritySection";
 import { Button } from "@/components/ui";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -40,7 +41,7 @@ interface AdminDashboardProps {
 type TabId =
   | "dashboard" | "leads" | "archive" | "general" | "seo"
   | "contact" | "about" | "services" | "areas" | "pricing"
-  | "campaigns" | "advanced" | "logs";
+  | "campaigns" | "advanced" | "logs" | "security";
 
 // ─── Tab Config ───────────────────────────────────────────────────────────────
 
@@ -58,6 +59,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "campaigns",  label: "Kampanyalar",       icon: Tag },
   { id: "advanced",   label: "Gelişmiş",          icon: Code },
   { id: "logs",       label: "Geçmiş",            icon: History },
+  { id: "security",   label: "Güvenlik",          icon: ShieldCheck },
 ];
 
 /** Her tab hangi content section'ına karşılık gelir */
@@ -343,6 +345,7 @@ export const AdminDashboard = ({
                 />
               )}
               {activeTab === "logs" && <AuditLogSection />}
+              {activeTab === "security" && <SecuritySection />}
             </motion.div>
           </AnimatePresence>
         </main>

@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { getSiteContent } from "@/lib/content-repository";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -19,10 +16,6 @@ function resolveOgImage(ogImage: string | undefined): string {
   return ogImage.startsWith("http") ? ogImage : `${BASE_URL}${ogImage}`;
 }
 
-/**
- * getSiteContent() React cache() ile sarıldığı için generateMetadata ve
- * RootLayout aynı render cycle'da yalnızca bir kez DB'ye gider.
- */
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
   const ogImageUrl = resolveOgImage(content.seo.ogImage);
@@ -56,10 +49,9 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const content = await getSiteContent(); // React cache() sayesinde DB'ye ikinci kez gitmez
+  const content = await getSiteContent();
   const ogImageUrl = resolveOgImage(content.seo.ogImage);
 
-  // Çalışma saatlerini JSON-LD formatına çevir
   const timeMatch = content.contact.workingHours.match(/(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})/);
   const opens = timeMatch?.[1] ?? "09:00";
   const closes = timeMatch?.[2] ?? "19:00";
@@ -92,7 +84,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang="tr" className="scroll-smooth">
+    <html lang="tr" data-scroll-behavior="smooth" className="scroll-smooth">
       <body className={inter.className}>
         <a
           href="#main-content"
@@ -104,10 +96,7 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <Navbar content={content} />
         {children}
-        <Footer content={content} />
-        <WhatsAppButton content={content} />
         <Toaster position="bottom-right" />
       </body>
     </html>

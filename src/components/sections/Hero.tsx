@@ -104,7 +104,7 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
                   <Star size={12} className="fill-yellow-400 text-yellow-400" />
                 </div>
                 <p className="text-[10px] font-bold text-slate-900 mb-1">"Halılarım resmen yeni gibi oldu, teşekkürler!"</p>
-                <p className="text-[8px] text-slate-400 font-bold uppercase">Ayşe Y. • Beylikdüzü</p>
+                <p className="text-[8px] text-slate-400 font-bold uppercase">Ayşe Y. • Üsküdar</p>
               </motion.div>
 
               {/* Trust badge */}
