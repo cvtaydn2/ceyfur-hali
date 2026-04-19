@@ -20,14 +20,11 @@ export async function POST(request: Request) {
     "unknown";
 
   try {
-    // Rate limit kontrolü
-    const limited = await isRateLimited(ip);
+    // Rate limit kontrolü — tablo yoksa veya hata varsa geç
+    const limited = await isRateLimited(ip).catch(() => false);
     if (limited) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin.",
-        },
+        { success: false, message: "Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin." },
         { status: 429 }
       );
     }
@@ -51,16 +48,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Sabit zamanlı karşılaştırma (timing attack önlemi)
     const isValid = timingSafeEqual(password, adminSecret);
 
     if (!isValid) {
-      await recordLoginAttempt(ip, false);
-      await writeAuditLog({
-        action: "login_failed",
-        entityType: "auth",
-        metadata: { ip },
-      });
+      // Hata olursa sessizce geç — login'i engelleme
+      recordLoginAttempt(ip, false).catch(() => {});
+      writeAuditLog({ action: "login_failed", entityType: "auth", metadata: { ip } }).catch(() => {});
 
       return NextResponse.json(
         { success: false, message: "Geçersiz parola." },
@@ -68,19 +61,28 @@ export async function POST(request: Request) {
       );
     }
 
-    // Session oluştur
+    // Session token oluştur ve cookie'ye yaz
     const sessionToken = generateSessionToken();
-    await createSession(sessionToken);
-    await recordLoginAttempt(ip, true);
 
-    // Süresi dolmuş session'ları temizle (arka planda)
+    // DB'ye session kaydet — hata olursa logla ama devam et
+    const sessionSaved = await createSession(sessionToken)
+      .then(() => true)
+      .catch((err) => {
+        console.error("[auth/login] Session DB'ye kaydedilemedi:", err);
+        return false;
+      });
+
+    if (!sessionSaved) {
+      return NextResponse.json(
+        { success: false, message: "Oturum oluşturulamadı. Lütfen tekrar deneyin." },
+        { status: 500 }
+      );
+    }
+
+    // Arka plan işlemleri — hata olursa sessizce geç
+    recordLoginAttempt(ip, true).catch(() => {});
     cleanExpiredSessions().catch(() => {});
-
-    await writeAuditLog({
-      action: "login",
-      entityType: "auth",
-      metadata: { ip },
-    });
+    writeAuditLog({ action: "login", entityType: "auth", metadata: { ip } }).catch(() => {});
 
     const cookieStore = await cookies();
     cookieStore.set(SESSION_CONFIG.cookieName, sessionToken, {
@@ -102,18 +104,16 @@ export async function POST(request: Request) {
 }
 
 /**
- * Sabit zamanlı string karşılaştırması.
- * Timing attack'ı önler.
+ * Sabit zamanlı string karşılaştırması — timing attack önlemi.
  */
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) {
-    // Uzunluk farkını gizlemek için yine de karşılaştır
     const dummy = b.padEnd(a.length, "\0");
     let result = 0;
     for (let i = 0; i < a.length; i++) {
       result |= a.charCodeAt(i) ^ dummy.charCodeAt(i);
     }
-    return false; // Uzunluk farklıysa her zaman false
+    return false;
   }
   let result = 0;
   for (let i = 0; i < a.length; i++) {

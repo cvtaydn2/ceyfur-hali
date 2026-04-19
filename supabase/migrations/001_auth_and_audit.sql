@@ -3,8 +3,8 @@
 -- ============================================================
 
 -- ─── Admin Sessions ──────────────────────────────────────────
--- Stateless HMAC token yerine DB'de saklanan session'lar.
--- Rotation, revoke ve expiry desteği sağlar.
+-- Service role key ile erişilir (RLS bypass).
+-- Public erişim tamamen kapalı.
 
 CREATE TABLE IF NOT EXISTS admin_sessions (
   token       TEXT        PRIMARY KEY,
@@ -12,19 +12,28 @@ CREATE TABLE IF NOT EXISTS admin_sessions (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Süresi dolmuş session'ları otomatik temizlemek için index
 CREATE INDEX IF NOT EXISTS idx_admin_sessions_expires_at
   ON admin_sessions (expires_at);
 
--- RLS: Sadece service role erişebilir
 ALTER TABLE admin_sessions ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "admin_sessions_service_only"
-  ON admin_sessions
-  USING (false);  -- Tüm public erişimi engelle, service role bypass eder
+-- Tüm public erişimi engelle (service role RLS'yi bypass eder)
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'admin_sessions' AND policyname = 'admin_sessions_deny_all'
+  ) THEN
+    CREATE POLICY "admin_sessions_deny_all"
+      ON admin_sessions
+      AS RESTRICTIVE
+      FOR ALL
+      TO public
+      USING (false)
+      WITH CHECK (false);
+  END IF;
+END $$;
 
 -- ─── Login Attempts ──────────────────────────────────────────
--- Brute force koruması için başarısız giriş denemeleri.
 
 CREATE TABLE IF NOT EXISTS login_attempts (
   id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -36,27 +45,36 @@ CREATE TABLE IF NOT EXISTS login_attempts (
 CREATE INDEX IF NOT EXISTS idx_login_attempts_ip_time
   ON login_attempts (ip_address, attempted_at);
 
--- Eski kayıtları temizlemek için index
 CREATE INDEX IF NOT EXISTS idx_login_attempts_time
   ON login_attempts (attempted_at);
 
 ALTER TABLE login_attempts ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "login_attempts_service_only"
-  ON login_attempts
-  USING (false);
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'login_attempts' AND policyname = 'login_attempts_deny_all'
+  ) THEN
+    CREATE POLICY "login_attempts_deny_all"
+      ON login_attempts
+      AS RESTRICTIVE
+      FOR ALL
+      TO public
+      USING (false)
+      WITH CHECK (false);
+  END IF;
+END $$;
 
 -- ─── Admin Audit Logs ─────────────────────────────────────────
--- Her admin işleminin kaydı. Veri kaybı durumunda rollback için.
 
 CREATE TABLE IF NOT EXISTS admin_audit_logs (
   id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
-  action_type  TEXT        NOT NULL,  -- content_update, section_update, login, logout, login_failed
-  entity_type  TEXT        NOT NULL,  -- site_content, section, auth
-  entity_id    TEXT,                  -- section adı veya kayıt ID'si
-  before_data  JSONB,                 -- değişiklik öncesi veri
-  after_data   JSONB,                 -- değişiklik sonrası veri
-  metadata     JSONB,                 -- ek bilgi (IP, user agent, vb.)
+  action_type  TEXT        NOT NULL,
+  entity_type  TEXT        NOT NULL,
+  entity_id    TEXT,
+  before_data  JSONB,
+  after_data   JSONB,
+  metadata     JSONB,
   created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -71,12 +89,22 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_entity
 
 ALTER TABLE admin_audit_logs ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "audit_logs_service_only"
-  ON admin_audit_logs
-  USING (false);
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies
+    WHERE tablename = 'admin_audit_logs' AND policyname = 'audit_logs_deny_all'
+  ) THEN
+    CREATE POLICY "audit_logs_deny_all"
+      ON admin_audit_logs
+      AS RESTRICTIVE
+      FOR ALL
+      TO public
+      USING (false)
+      WITH CHECK (false);
+  END IF;
+END $$;
 
 -- ─── Cleanup Function ─────────────────────────────────────────
--- Eski login attempt kayıtlarını temizler (30 günden eski).
 
 CREATE OR REPLACE FUNCTION cleanup_old_login_attempts()
 RETURNS void AS $$
@@ -88,6 +116,6 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- ─── Comments ─────────────────────────────────────────────────
 
-COMMENT ON TABLE admin_sessions IS 'Admin oturum token''ları. Stateless HMAC yerine DB''de saklanır.';
-COMMENT ON TABLE login_attempts IS 'Brute force koruması için giriş denemeleri.';
+COMMENT ON TABLE admin_sessions   IS 'Admin oturum tokenları. Stateless HMAC yerine DB''de saklanır.';
+COMMENT ON TABLE login_attempts   IS 'Brute force koruması için giriş denemeleri.';
 COMMENT ON TABLE admin_audit_logs IS 'Admin işlem geçmişi. Rollback ve denetim için.';

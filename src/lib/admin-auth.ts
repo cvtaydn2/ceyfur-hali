@@ -45,12 +45,19 @@ export async function validateSession(token: string): Promise<boolean> {
     .eq("token", token)
     .single();
 
-  if (error || !data) return false;
+  if (error) {
+    // PGRST116 = satır bulunamadı (normal durum)
+    if (error.code !== "PGRST116") {
+      console.error("[admin-auth] Session doğrulama hatası:", error.message);
+    }
+    return false;
+  }
+
+  if (!data) return false;
 
   const isExpired = new Date(data.expires_at) < new Date();
   if (isExpired) {
-    // Süresi dolmuş session'ı temizle
-    await supabaseAdmin.from("admin_sessions").delete().eq("token", token);
+    void supabaseAdmin.from("admin_sessions").delete().eq("token", token);
     return false;
   }
 
