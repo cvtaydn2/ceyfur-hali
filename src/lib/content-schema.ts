@@ -71,6 +71,21 @@ export const FooterLinkSchema = z.object({
   href: requiredString,
 });
 
+// Hizmet bölgesi şeması
+export const ServiceAreaSchema = z.object({
+  name: requiredString,
+  slug: requiredString,
+});
+
+// Fiyat kalemi şeması
+export const PriceItemSchema = z.object({
+  id: requiredString,
+  type: requiredString,       // Halı tipi / ürün adı
+  price: z.number().min(0),   // Fiyat (TL)
+  unit: z.string().optional(), // Birim (m², adet, vb.)
+  note: z.string().optional(), // Ek not
+});
+
 // Full SiteContent Schema
 export const SiteContentSchema = z.object({
   brand: BrandSchema,
@@ -81,6 +96,13 @@ export const SiteContentSchema = z.object({
     title: requiredString,
     subtitle: requiredString,
     items: z.array(ServiceItemSchema),
+    areas: z.array(ServiceAreaSchema).optional().default([]),
+  }),
+  pricing: z.object({
+    title: requiredString,
+    subtitle: requiredString,
+    note: z.string().optional(),
+    items: z.array(PriceItemSchema),
   }),
   campaigns: z.object({
     title: requiredString,
@@ -94,7 +116,10 @@ export const SiteContentSchema = z.object({
     items: z.array(TestimonialItemSchema),
   }),
   contact: z.object({
-    phone: z.preprocess((val) => typeof val === "string" ? [val] : val, z.array(z.string().trim().min(1)).min(1)),
+    phone: z.preprocess(
+      (val) => (typeof val === "string" ? [val] : val),
+      z.array(z.string().trim().min(1)).min(1)
+    ),
     whatsapp: requiredString,
     email: z.string().email().trim(),
     address: requiredString,
@@ -105,10 +130,12 @@ export const SiteContentSchema = z.object({
     instagram: z.string().optional(),
     facebook: z.string().optional(),
   }),
-  navigation: z.array(z.object({
-    label: requiredString,
-    href: requiredString,
-  })),
+  navigation: z.array(
+    z.object({
+      label: requiredString,
+      href: requiredString,
+    })
+  ),
   footer: z.object({
     about: requiredString,
     copyright: requiredString,

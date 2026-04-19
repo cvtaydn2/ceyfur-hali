@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Save, Settings, Search, Phone, User, Tag, LayoutGrid, Code, 
   AlertTriangle, Inbox, Archive, LayoutDashboard, LogOut, ExternalLink,
-  ChevronRight, MapPin, Calendar, Briefcase, Users, CheckCircle2
+  ChevronRight, MapPin, Calendar, Briefcase, Users, DollarSign
 } from "lucide-react";
 import { SiteContent } from "@/types";
 import { Lead, LeadArchive } from "@/lib/leads-schema";
@@ -13,6 +13,8 @@ import { AdminNav, AdminCard } from "@/components/admin/AdminUI";
 import { GeneralSection, SEOSection } from "@/components/admin/sections/BasicSections";
 import { ContactSection, AboutSection } from "@/components/admin/sections/ContentSections";
 import { ServicesSection } from "@/components/admin/sections/ServicesSection";
+import { ServiceAreasSection } from "@/components/admin/sections/ServiceAreasSection";
+import { PricingSection } from "@/components/admin/sections/PricingSection";
 import { CampaignsSection } from "@/components/admin/sections/CampaignsSection";
 import { Button } from "@/components/ui";
 import toast from "react-hot-toast";
@@ -27,16 +29,18 @@ interface AdminDashboardProps {
 type SaveResult = { success: boolean; message?: string };
 
 const TABS = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "leads", label: "Talepler", icon: Inbox },
-  { id: "archive", label: "Arşiv", icon: Archive },
-  { id: "general", label: "Genel", icon: Settings },
-  { id: "seo", label: "SEO", icon: Search },
-  { id: "contact", label: "İletişim", icon: Phone },
-  { id: "about", label: "Hakkımızda", icon: User },
-  { id: "services", label: "Hizmetler", icon: LayoutGrid },
-  { id: "campaigns", label: "Kampanyalar", icon: Tag },
-  { id: "advanced", label: "Gelişmiş", icon: Code },
+  { id: "dashboard",    label: "Dashboard",       icon: LayoutDashboard },
+  { id: "leads",        label: "Talepler",         icon: Inbox },
+  { id: "archive",      label: "Arşiv",            icon: Archive },
+  { id: "general",      label: "Genel",            icon: Settings },
+  { id: "seo",          label: "SEO",              icon: Search },
+  { id: "contact",      label: "İletişim",         icon: Phone },
+  { id: "about",        label: "Hakkımızda",       icon: User },
+  { id: "services",     label: "Hizmetler",        icon: LayoutGrid },
+  { id: "areas",        label: "Hizmet Bölgeleri", icon: MapPin },
+  { id: "pricing",      label: "Fiyatlar",         icon: DollarSign },
+  { id: "campaigns",    label: "Kampanyalar",      icon: Tag },
+  { id: "advanced",     label: "Gelişmiş",         icon: Code },
 ];
 
 export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboardProps) => {
@@ -364,6 +368,8 @@ export const AdminDashboard = ({ initialContent, onSaveContent }: AdminDashboard
               {activeTab === "contact" && <ContactSection data={content} onChange={handleContentChange} />}
               {activeTab === "about" && <AboutSection data={content} onChange={handleContentChange} />}
               {activeTab === "services" && <ServicesSection data={content} onChange={handleContentChange} />}
+              {activeTab === "areas" && <ServiceAreasSection data={content} onChange={handleContentChange} />}
+              {activeTab === "pricing" && <PricingSection data={content} onChange={handleContentChange} />}
               {activeTab === "campaigns" && <CampaignsSection data={content} onChange={handleContentChange} />}
               
               {activeTab === "advanced" && (

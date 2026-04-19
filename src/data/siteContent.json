@@ -66,6 +66,42 @@
         "features": ["Yüksek Isı Dezenfeksiyon", "Yumuşatıcı Bakımı", "Poşetli Teslimat"],
         "image": "/images/service-blanket.png"
       }
+    ],
+    "areas": [
+      { "name": "Ümraniye", "slug": "umraniye" },
+      { "name": "Üsküdar", "slug": "uskudar" },
+      { "name": "Çekmeköy", "slug": "cekmekoy" },
+      { "name": "Maltepe", "slug": "maltepe" },
+      { "name": "Sancaktepe", "slug": "sancaktepe" },
+      { "name": "Kadıköy", "slug": "kadikoy" }
+    ]
+  },
+  "pricing": {
+    "title": "Fiyat Listemiz",
+    "subtitle": "Şeffaf ve rekabetçi fiyatlarla profesyonel temizlik hizmeti",
+    "note": "Fiyatlarımız m² başına geçerlidir. Koltuk ve perde fiyatları adet üzerindendir. KDV dahildir.",
+    "items": [
+      { "id": "p1",  "type": "BAMBU",          "price": 250, "unit": "m²" },
+      { "id": "p2",  "type": "YORGAN",          "price": 500, "unit": "adet" },
+      { "id": "p3",  "type": "BATTANİYE",       "price": 450, "unit": "adet" },
+      { "id": "p4",  "type": "Yün Yorgan",      "price": 750, "unit": "adet" },
+      { "id": "p5",  "type": "OVERLOK",         "price": 125, "unit": "m²" },
+      { "id": "p6",  "type": "STOR PERDE",      "price": 120, "unit": "m²" },
+      { "id": "p7",  "type": "ZEBRA PERDE",     "price": 150, "unit": "m²" },
+      { "id": "p8",  "type": "Patchwork Halı",  "price": 225, "unit": "m²" },
+      { "id": "p9",  "type": "MAKİNE HALI",     "price": 120, "unit": "m²" },
+      { "id": "p10", "type": "MAKİNA YÜN",      "price": 150, "unit": "m²" },
+      { "id": "p11", "type": "SHAGGY",          "price": 130, "unit": "m²" },
+      { "id": "p12", "type": "AKRİLİK HALI",    "price": 175, "unit": "m²" },
+      { "id": "p13", "type": "MİLAS HALI",      "price": 200, "unit": "m²" },
+      { "id": "p14", "type": "ISPARTA",         "price": 150, "unit": "m²" },
+      { "id": "p15", "type": "KİLİM",           "price": 150, "unit": "m²" },
+      { "id": "p16", "type": "BÜNYEN",          "price": 200, "unit": "m²" },
+      { "id": "p17", "type": "HEREKE",          "price": 225, "unit": "m²" },
+      { "id": "p18", "type": "ÇİN-NEPAL",       "price": 250, "unit": "m²" },
+      { "id": "p19", "type": "Dekoratif",       "price": 180, "unit": "m²" },
+      { "id": "p20", "type": "STEP HALI",       "price": 300, "unit": "m²" },
+      { "id": "p21", "type": "İPEK HALI",       "price": 300, "unit": "m²" }
     ]
   },
   "campaigns": {
@@ -138,18 +174,19 @@
     "facebook": "https://facebook.com/ceyfurhali"
   },
   "navigation": [
-    { "label": "Ana Sayfa", "href": "/" },
-    { "label": "Hizmetler", "href": "/#services" },
+    { "label": "Ana Sayfa",    "href": "/" },
+    { "label": "Hizmetler",   "href": "/#services" },
+    { "label": "Fiyatlar",    "href": "/#pricing" },
     { "label": "Kampanyalar", "href": "/#campaigns" },
-    { "label": "Hakkımızda", "href": "/#about" },
-    { "label": "İletişim", "href": "/#contact" }
+    { "label": "Hakkımızda",  "href": "/#about" },
+    { "label": "İletişim",    "href": "/#teklif-al" }
   ],
   "footer": {
     "about": "Ceyfur Halı Yıkama, yılların verdiği tecrübe ve modern teknoloji ile halılarınızda derinlemesine temizlik ve hijyen sağlar.",
     "copyright": "© 2024 Ceyfur Halı Yıkama. Tüm Hakları Saklıdır.",
     "links": [
-      { "label": "Kullanım Koşulları", "href": "/terms" },
-      { "label": "Gizlilik Politikası", "href": "/privacy" },
+      { "label": "Kullanım Koşulları",    "href": "/terms" },
+      { "label": "Gizlilik Politikası",   "href": "/privacy" },
       { "label": "KVKK Aydınlatma Metni", "href": "/kvkk" }
     ]
   }

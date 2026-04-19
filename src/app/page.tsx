@@ -1,5 +1,6 @@
 import { Hero } from "@/components/sections/Hero";
 import { Services } from "@/components/sections/Services";
+import { Pricing } from "@/components/sections/Pricing";
 import { About } from "@/components/sections/About";
 import { Campaigns } from "@/components/sections/Campaigns";
 import { Stats } from "@/components/sections/Stats";
@@ -15,6 +16,7 @@ export default async function Home() {
       <Hero content={content} />
       <Stats content={content} />
       <Services content={content} />
+      <Pricing content={content} />
       <Campaigns content={content} />
       <LeadForm />
       <About content={content} />
