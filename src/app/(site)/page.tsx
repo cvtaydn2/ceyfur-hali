@@ -1,12 +1,16 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/Hero";
-import { Services } from "@/components/sections/Services";
-import { Pricing } from "@/components/sections/Pricing";
-import { About } from "@/components/sections/About";
-import { Campaigns } from "@/components/sections/Campaigns";
-import { Stats } from "@/components/sections/Stats";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { LeadForm } from "@/components/sections/LeadForm";
 import { getSiteContent } from "@/lib/content-repository";
+
+const Stats = dynamic(() => import("@/components/sections/Stats").then(mod => mod.Stats));
+const Services = dynamic(() => import("@/components/sections/Services").then(mod => mod.Services));
+const Pricing = dynamic(() => import("@/components/sections/Pricing").then(mod => mod.Pricing), {
+  loading: () => <div className="h-96 animate-pulse bg-slate-50 rounded-3xl m-8" />
+});
+const Campaigns = dynamic(() => import("@/components/sections/Campaigns").then(mod => mod.Campaigns));
+const LeadForm = dynamic(() => import("@/components/sections/LeadForm").then(mod => mod.LeadForm));
+const About = dynamic(() => import("@/components/sections/About").then(mod => mod.About));
+const Testimonials = dynamic(() => import("@/components/sections/Testimonials").then(mod => mod.Testimonials));
 
 export default async function Home() {
   const content = await getSiteContent();
