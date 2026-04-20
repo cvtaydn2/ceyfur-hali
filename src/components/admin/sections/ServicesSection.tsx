@@ -28,6 +28,7 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
   const addItem = () => {
     const newItem = {
       id: crypto.randomUUID(),
+      slug: "yeni-hizmet",
       title: "Yeni Hizmet",
       description: "Hizmet açıklaması",
       icon: "Brush",
@@ -83,6 +84,12 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
                   <Input
                     value={item.title}
                     onChange={(e) => updateItem(idx, { title: e.target.value })}
+                  />
+                </AdminInputGroup>
+                <AdminInputGroup label="URL Slugu" helperText="Sadece küçük harf, rakam ve tire.">
+                  <Input
+                    value={item.slug}
+                    onChange={(e) => updateItem(idx, { slug: e.target.value })}
                   />
                 </AdminInputGroup>
                 <AdminInputGroup label="İkon İsmi" helperText="Lucide-react ikon ismi.">
