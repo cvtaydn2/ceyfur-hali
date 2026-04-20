@@ -127,51 +127,9 @@
     "note": "Fiyatlarımız m² başına geçerlidir. Koltuk ve perde fiyatları adet üzerindendir. KDV dahildir.",
     "items": [
       {
-        "id": "p1",
-        "type": "BAMBU",
-        "price": 250,
-        "unit": "m²"
-      },
-      {
-        "id": "p2",
-        "type": "YORGAN",
-        "price": 500,
-        "unit": "adet"
-      },
-      {
-        "id": "p3",
-        "type": "BATTANİYE",
-        "price": 450,
-        "unit": "adet"
-      },
-      {
-        "id": "p4",
-        "type": "Yün Yorgan",
-        "price": 750,
-        "unit": "adet"
-      },
-      {
-        "id": "p5",
-        "type": "OVERLOK",
-        "price": 125,
-        "unit": "m²"
-      },
-      {
         "id": "p6",
         "type": "STOR PERDE",
         "price": 120,
-        "unit": "m²"
-      },
-      {
-        "id": "p7",
-        "type": "ZEBRA PERDE",
-        "price": 150,
-        "unit": "m²"
-      },
-      {
-        "id": "p8",
-        "type": "Patchwork Halı",
-        "price": 225,
         "unit": "m²"
       },
       {
@@ -181,9 +139,9 @@
         "unit": "m²"
       },
       {
-        "id": "p10",
-        "type": "MAKİNA YÜN",
-        "price": 150,
+        "id": "p5",
+        "type": "OVERLOK",
+        "price": 125,
         "unit": "m²"
       },
       {
@@ -193,15 +151,15 @@
         "unit": "m²"
       },
       {
-        "id": "p12",
-        "type": "AKRİLİK HALI",
-        "price": 175,
+        "id": "p7",
+        "type": "ZEBRA PERDE",
+        "price": 150,
         "unit": "m²"
       },
       {
-        "id": "p13",
-        "type": "MİLAS HALI",
-        "price": 200,
+        "id": "p10",
+        "type": "MAKİNA YÜN",
+        "price": 150,
         "unit": "m²"
       },
       {
@@ -217,9 +175,33 @@
         "unit": "m²"
       },
       {
+        "id": "p12",
+        "type": "AKRİLİK HALI",
+        "price": 175,
+        "unit": "m²"
+      },
+      {
+        "id": "p19",
+        "type": "DEKORATİF",
+        "price": 180,
+        "unit": "m²"
+      },
+      {
+        "id": "p13",
+        "type": "MİLAS HALI",
+        "price": 200,
+        "unit": "m²"
+      },
+      {
         "id": "p16",
         "type": "BÜNYEN",
         "price": 200,
+        "unit": "m²"
+      },
+      {
+        "id": "p8",
+        "type": "PATCHWORK HALI",
+        "price": 225,
         "unit": "m²"
       },
       {
@@ -229,15 +211,15 @@
         "unit": "m²"
       },
       {
-        "id": "p18",
-        "type": "ÇİN-NEPAL",
+        "id": "p1",
+        "type": "BAMBU",
         "price": 250,
         "unit": "m²"
       },
       {
-        "id": "p19",
-        "type": "Dekoratif",
-        "price": 180,
+        "id": "p18",
+        "type": "ÇİN-NEPAL",
+        "price": 250,
         "unit": "m²"
       },
       {
@@ -251,6 +233,24 @@
         "type": "İPEK HALI",
         "price": 300,
         "unit": "m²"
+      },
+      {
+        "id": "p2",
+        "type": "YORGAN",
+        "price": 500,
+        "unit": "adet"
+      },
+      {
+        "id": "p3",
+        "type": "BATTANİYE",
+        "price": 500,
+        "unit": "adet"
+      },
+      {
+        "id": "p4",
+        "type": "YÜN YORGAN",
+        "price": 750,
+        "unit": "adet"
       }
     ]
   },
@@ -337,12 +337,13 @@
   },
   "contact": {
     "phone": [
-      "0212 555 55 55"
+      "0216 611 86 49",
+      "0216 611 86 50"
     ],
-    "whatsapp": "905555555555",
+    "whatsapp": "905375212223",
     "email": "info@ceyfurhaliyikama.com",
-    "address": "Huzur Mahallesi, Temizlik Sokak No:42/A",
-    "district": "Beylikdüzü",
+    "address": "Cemil Meriç, Çayırönü Cd., 34771 Ümraniye/İstanbul",
+    "district": "Ümraniye",
     "city": "İstanbul",
     "workingHours": "Pazartesi - Cumartesi: 09:00 - 19:00",
     "googleMapsUrl": "https://goo.gl/maps/example",

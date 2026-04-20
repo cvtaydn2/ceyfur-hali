@@ -73,7 +73,7 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
                 {data.contact.phone.map((num) => (
                   <div key={num} className="flex items-center gap-3">
                     <Phone size={18} className="text-primary-ocean shrink-0" />
-                    <a href={`tel:${num.replace(/\s/g, "")}`} className="hover:text-primary-ocean transition-colors">
+                    <a href={`tel:${num.replace(/\s/g, "")}`} className="text-base font-bold text-primary-ocean hover:text-white transition-colors">
                       {num}
                     </a>
                   </div>

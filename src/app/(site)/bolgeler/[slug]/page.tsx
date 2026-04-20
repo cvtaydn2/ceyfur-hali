@@ -146,7 +146,7 @@ export default async function DistrictPage({ params }: Props) {
               </Link>
               <a
                 href={`tel:${content.contact.phone[0]}`}
-                className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 font-black text-sm hover:bg-slate-50 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white border border-primary-ocean/20 text-primary-ocean font-black text-sm hover:bg-primary-ocean hover:text-white transition-all shadow-sm"
               >
                 📞 {content.contact.phone[0]}
               </a>

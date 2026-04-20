@@ -23,7 +23,7 @@ export const Pricing = ({ content }: { content?: SiteContent }) => {
   const { pricing } = data;
 
   const filtered = pricing.items.filter((item) =>
-    item.type.toLowerCase().includes(search.toLowerCase())
+    item.type.toLocaleLowerCase("tr-TR").includes(search.toLocaleLowerCase("tr-TR"))
   );
 
   const INITIAL_VISIBLE = 10;
