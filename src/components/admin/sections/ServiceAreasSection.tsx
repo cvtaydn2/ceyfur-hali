@@ -6,25 +6,16 @@ import { Input } from "@/components/ui";
 import { SiteContent } from "@/types";
 import { Plus, Trash2, MapPin } from "lucide-react";
 
+import { getZodError } from "@/lib/admin-utils";
+import { slugify } from "@/lib/utils";
+
 interface SectionProps {
   data: SiteContent;
   onChange: (updates: Partial<SiteContent>) => void;
+  errors?: any;
 }
 
-function toSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ğ/g, "g")
-    .replace(/ü/g, "u")
-    .replace(/ş/g, "s")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ç/g, "c")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
-
-export const ServiceAreasSection = ({ data, onChange }: SectionProps) => {
+export const ServiceAreasSection = ({ data, onChange, errors }: SectionProps) => {
   const areas = data.services.areas ?? [];
 
   const updateAreas = (newAreas: SiteContent["services"]["areas"]) => {
@@ -67,13 +58,16 @@ export const ServiceAreasSection = ({ data, onChange }: SectionProps) => {
             </div>
 
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <AdminInputGroup label="İlçe / Semt Adı">
+              <AdminInputGroup 
+                label="İlçe / Semt Adı"
+                error={getZodError(errors, "areas", idx, "name")}
+              >
                 <Input
                   value={area.name}
                   onChange={(e) => {
                     updateArea(idx, {
                       name: e.target.value,
-                      slug: toSlug(e.target.value),
+                      slug: slugify(e.target.value),
                     });
                   }}
                   placeholder="Örn: Ümraniye"
@@ -82,6 +76,7 @@ export const ServiceAreasSection = ({ data, onChange }: SectionProps) => {
               <AdminInputGroup
                 label="Slug (URL)"
                 helperText="Otomatik oluşturulur, değiştirebilirsiniz."
+                error={getZodError(errors, "areas", idx, "slug")}
               >
                 <Input
                   value={area.slug}

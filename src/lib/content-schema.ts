@@ -9,7 +9,7 @@ export const BrandSchema = z.object({
   logo: z.string().optional(),
 });
 
-export const SEOSchema = z.object({
+export const SeoSchema = z.object({
   title: requiredString,
   description: requiredString,
   keywords: z.array(z.string().trim()).min(1),
@@ -138,7 +138,7 @@ export const FooterSchema = z.object({
 // Full SiteContent Schema
 export const SiteContentSchema = z.object({
   brand: BrandSchema,
-  seo: SEOSchema,
+  seo: SeoSchema,
   hero: HeroSchema,
   about: AboutSchema,
   services: ServicesSchema,

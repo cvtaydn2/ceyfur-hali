@@ -6,12 +6,15 @@ import { Input } from "@/components/ui";
 import { SiteContent } from "@/types";
 import { Plus, Trash2 } from "lucide-react";
 
+import { getZodError } from "@/lib/admin-utils";
+
 interface SectionProps {
   data: SiteContent;
   onChange: (updates: Partial<SiteContent>) => void;
+  errors?: any;
 }
 
-export const CampaignsSection = ({ data, onChange }: SectionProps) => {
+export const CampaignsSection = ({ data, onChange, errors }: SectionProps) => {
   const updateCampaigns = (updates: Partial<SiteContent["campaigns"]>) => {
     onChange({ campaigns: { ...data.campaigns, ...updates } });
   };
@@ -72,13 +75,19 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
     <div className="space-y-8">
       <AdminCard title="Kampanyalar Bölümü Başlıkları">
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-          <AdminInputGroup label="Bölüm Başlığı">
+          <AdminInputGroup 
+            label="Bölüm Başlığı"
+            error={getZodError(errors, "title")}
+          >
             <Input
               value={data.campaigns.title}
               onChange={(e) => updateCampaigns({ title: e.target.value })}
             />
           </AdminInputGroup>
-          <AdminInputGroup label="Alt Başlık">
+          <AdminInputGroup 
+            label="Alt Başlık"
+            error={getZodError(errors, "subtitle")}
+          >
             <Input
               value={data.campaigns.subtitle}
               onChange={(e) => updateCampaigns({ subtitle: e.target.value })}
@@ -106,14 +115,20 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
             </button>
 
             <div className="grid md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-6 md:mb-8">
-              <AdminInputGroup label="Etiket (Badge)">
+              <AdminInputGroup 
+                label="Etiket (Badge)"
+                error={getZodError(errors, "items", idx, "badge")}
+              >
                 <Input
                   value={item.badge}
                   onChange={(e) => updateItem(idx, { badge: e.target.value })}
                 />
               </AdminInputGroup>
               <div className="md:col-span-2">
-                <AdminInputGroup label="Kampanya Başlığı">
+                <AdminInputGroup 
+                  label="Kampanya Başlığı"
+                  error={getZodError(errors, "items", idx, "title")}
+                >
                   <Input
                     value={item.title}
                     onChange={(e) => updateItem(idx, { title: e.target.value })}
@@ -122,7 +137,11 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
               </div>
             </div>
 
-            <AdminInputGroup label="Kampanya Detayı" className="mb-6 md:mb-8">
+            <AdminInputGroup 
+              label="Kampanya Detayı" 
+              className="mb-6 md:mb-8"
+              error={getZodError(errors, "items", idx, "description")}
+            >
               <textarea
                 className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
                 value={item.description}
@@ -134,13 +153,17 @@ export const CampaignsSection = ({ data, onChange }: SectionProps) => {
               <AdminInputGroup
                 label="Fiyat / İndirim Notu"
                 helperText="Örn: %20'ye Varan İndirim"
+                error={getZodError(errors, "items", idx, "priceNote")}
               >
                 <Input
                   value={item.priceNote ?? ""}
                   onChange={(e) => updateItem(idx, { priceNote: e.target.value })}
                 />
               </AdminInputGroup>
-              <AdminInputGroup label="Buton Yazısı">
+              <AdminInputGroup 
+                label="Buton Yazısı"
+                error={getZodError(errors, "items", idx, "ctaLabel")}
+              >
                 <Input
                   value={item.ctaLabel}
                   onChange={(e) => updateItem(idx, { ctaLabel: e.target.value })}

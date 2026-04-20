@@ -1,19 +1,19 @@
 import { NextResponse } from "next/server";
 import { updateSiteContentSection, getSiteContentFresh } from "@/lib/content-repository";
-import { SEOSchema } from "@/lib/content-schema";
+import { SeoSchema } from "@/lib/content-schema";
 import { writeAuditLog } from "@/lib/audit-log";
 import { requireAuth } from "@/lib/admin-auth";
 import { ZodError } from "zod";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request: Request) {
+export async function PATCH(request: Request) {
   const authError = await requireAuth();
   if (authError) return authError;
 
   try {
     const body = await request.json();
-    const validatedData = SEOSchema.parse(body);
+    const validatedData = SeoSchema.parse(body);
 
     const before = await getSiteContentFresh().catch(() => null);
 

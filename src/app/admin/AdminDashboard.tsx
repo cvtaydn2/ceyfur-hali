@@ -13,6 +13,7 @@ import { ContentSection } from "@/lib/constants";
 import { AdminNav, AdminCard } from "@/components/admin/AdminUI";
 import { FallbackBanner } from "@/components/admin/FallbackBanner";
 import { GeneralSection, SEOSection } from "@/components/admin/sections/BasicSections";
+import { HeroSection } from "@/components/admin/sections/HeroSection";
 import { ContactSection, AboutSection } from "@/components/admin/sections/ContentSections";
 import { ServicesSection } from "@/components/admin/sections/ServicesSection";
 import { ServiceAreasSection } from "@/components/admin/sections/ServiceAreasSection";
@@ -41,7 +42,7 @@ interface AdminDashboardProps {
 }
 
 type TabId =
-  | "dashboard" | "leads" | "archive" | "general" | "seo"
+  | "dashboard" | "leads" | "archive" | "general" | "seo" | "hero"
   | "contact" | "about" | "services" | "areas" | "pricing"
   | "campaigns" | "advanced" | "logs" | "security";
 
@@ -52,6 +53,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "leads",      label: "Talepler",          icon: Inbox },
   { id: "archive",    label: "Arşiv",             icon: Archive },
   { id: "general",    label: "Genel",             icon: Settings },
+  { id: "hero",       label: "Hero",              icon: LayoutGrid },
   { id: "seo",        label: "SEO",               icon: Search },
   { id: "contact",    label: "İletişim",          icon: Phone },
   { id: "about",      label: "Hakkımızda",        icon: User },
@@ -67,6 +69,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
 /** Her tab hangi content section'ına karşılık gelir */
 const TAB_SECTION_MAP: Partial<Record<TabId, ContentSection>> = {
   general:   "brand",
+  hero:      "hero",
   seo:       "seo",
   contact:   "contact",
   about:     "about",
@@ -92,6 +95,7 @@ export const AdminDashboard = ({
   // Dirty tracking: hangi section'lar değişti
   const [dirtySections, setDirtySections] = useState<Set<ContentSection>>(new Set());
   const [savingSection, setSavingSection] = useState<ContentSection | null>(null);
+  const [validationErrors, setValidationErrors] = useState<Record<string, any>>({});
 
   // Leads
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -144,19 +148,25 @@ export const AdminDashboard = ({
 
   const handleSaveSection = async (section: ContentSection) => {
     setSavingSection(section);
+    setValidationErrors({}); // Önceki hataları temizle
     const result = await onSaveSection(section, content[section]);
 
     if (result.success) {
       setDirtySections((prev) => {
         const next = new Set(prev);
         next.delete(section);
-        // services ve areas aynı section'ı paylaşır
         if (section === "services") next.delete("services");
         return next;
       });
-      toast.success(result.message ?? "Kaydedildi.");
+      toast.success(result.message ?? "Başarıyla kaydedildi.");
     } else {
-      toast.error(result.message ?? "Hata oluştu.");
+      // Zod hata detayları varsa state'e kaydet
+      if ((result as any).details) {
+        setValidationErrors((result as any).details);
+        toast.error("Bazı alanlarda hata var, lütfen kontrol edin.");
+      } else {
+        toast.error(result.message ?? "Hata oluştu.");
+      }
     }
 
     setSavingSection(null);
@@ -321,28 +331,31 @@ export const AdminDashboard = ({
                 <ArchiveTab archive={archive} isLoading={isLoadingLeads} />
               )}
               {activeTab === "general" && (
-                <GeneralSection data={content} onChange={handleContentChange} />
+                <GeneralSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "seo" && (
-                <SEOSection data={content} onChange={handleContentChange} />
+                <SEOSection data={content} onChange={handleContentChange} errors={validationErrors} />
+              )}
+              {activeTab === "hero" && (
+                <HeroSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "contact" && (
-                <ContactSection data={content} onChange={handleContentChange} />
+                <ContactSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "about" && (
-                <AboutSection data={content} onChange={handleContentChange} />
+                <AboutSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "services" && (
-                <ServicesSection data={content} onChange={handleContentChange} />
+                <ServicesSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "areas" && (
-                <ServiceAreasSection data={content} onChange={handleContentChange} />
+                <ServiceAreasSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "pricing" && (
-                <PricingSection data={content} onChange={handleContentChange} />
+                <PricingSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "campaigns" && (
-                <CampaignsSection data={content} onChange={handleContentChange} />
+                <CampaignsSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "advanced" && (
                 <AdvancedTab

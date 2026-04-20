@@ -6,12 +6,15 @@ import { Input } from "@/components/ui";
 import { SiteContent } from "@/types";
 import { Plus, Trash2 } from "lucide-react";
 
+import { getZodError } from "@/lib/admin-utils";
+
 interface SectionProps {
   data: SiteContent;
   onChange: (updates: Partial<SiteContent>) => void;
+  errors?: any;
 }
 
-export const ContactSection = ({ data, onChange }: SectionProps) => {
+export const ContactSection = ({ data, onChange, errors }: SectionProps) => {
   const updateContact = (updates: Partial<SiteContent["contact"]>) => {
     onChange({ contact: { ...data.contact, ...updates } });
   };
@@ -34,13 +37,20 @@ export const ContactSection = ({ data, onChange }: SectionProps) => {
     <AdminCard title="İletişim Bilgileri" subtitle="Müşterilerinizin size ulaşacağı kanallar.">
       <div className="space-y-6 md:space-y-8">
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-          <AdminInputGroup label="WhatsApp Hattı" helperText="Sadece rakam (Örn: 90532...)">
+          <AdminInputGroup 
+            label="WhatsApp Hattı" 
+            helperText="Sadece rakam (Örn: 90532...)"
+            error={getZodError(errors, "whatsapp")}
+          >
             <Input 
               value={data.contact.whatsapp} 
               onChange={(e) => updateContact({ whatsapp: e.target.value })}
             />
           </AdminInputGroup>
-          <AdminInputGroup label="E-Posta Adresi">
+          <AdminInputGroup 
+            label="E-Posta Adresi"
+            error={getZodError(errors, "email")}
+          >
             <Input 
               value={data.contact.email} 
               onChange={(e) => updateContact({ email: e.target.value })}
@@ -74,7 +84,10 @@ export const ContactSection = ({ data, onChange }: SectionProps) => {
           </div>
         </AdminInputGroup>
 
-        <AdminInputGroup label="Açık Adres">
+        <AdminInputGroup 
+          label="Açık Adres"
+          error={getZodError(errors, "address")}
+        >
           <textarea 
             className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
             value={data.contact.address}
@@ -83,10 +96,16 @@ export const ContactSection = ({ data, onChange }: SectionProps) => {
         </AdminInputGroup>
 
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-          <AdminInputGroup label="İlçe">
+          <AdminInputGroup 
+            label="İlçe"
+            error={getZodError(errors, "district")}
+          >
             <Input value={data.contact.district} onChange={(e) => updateContact({ district: e.target.value })} />
           </AdminInputGroup>
-          <AdminInputGroup label="Şehir">
+          <AdminInputGroup 
+            label="Şehir"
+            error={getZodError(errors, "city")}
+          >
             <Input value={data.contact.city} onChange={(e) => updateContact({ city: e.target.value })} />
           </AdminInputGroup>
         </div>
@@ -95,7 +114,7 @@ export const ContactSection = ({ data, onChange }: SectionProps) => {
   );
 };
 
-export const AboutSection = ({ data, onChange }: SectionProps) => {
+export const AboutSection = ({ data, onChange, errors }: SectionProps) => {
   const updateAbout = (updates: Partial<SiteContent["about"]>) => {
     onChange({ about: { ...data.about, ...updates } });
   };
@@ -103,20 +122,32 @@ export const AboutSection = ({ data, onChange }: SectionProps) => {
   return (
     <AdminCard title="Hakkımızda Bölümü" subtitle="İşletme hikayeniz ve öne çıkan özellikleriniz.">
       <div className="space-y-6 md:space-y-8">
-        <AdminInputGroup label="Bölüm Başlığı">
+        <AdminInputGroup 
+          label="Bölüm Başlığı"
+          error={getZodError(errors, "title")}
+        >
           <Input value={data.about.title} onChange={(e) => updateAbout({ title: e.target.value })} />
         </AdminInputGroup>
-        <AdminInputGroup label="Alt Başlık (Slogan)">
+        <AdminInputGroup 
+          label="Alt Başlık (Slogan)"
+          error={getZodError(errors, "subtitle")}
+        >
           <Input value={data.about.subtitle} onChange={(e) => updateAbout({ subtitle: e.target.value })} />
         </AdminInputGroup>
-        <AdminInputGroup label="Ana İçerik Metni">
+        <AdminInputGroup 
+          label="Ana İçerik Metni"
+          error={getZodError(errors, "content")}
+        >
           <textarea 
             className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[150px] md:min-h-[200px]"
             value={data.about.content}
             onChange={(e) => updateAbout({ content: e.target.value })}
           />
         </AdminInputGroup>
-        <AdminInputGroup label="Görsel URL">
+        <AdminInputGroup 
+          label="Görsel URL"
+          error={getZodError(errors, "image")}
+        >
           <Input value={data.about.image || ""} onChange={(e) => updateAbout({ image: e.target.value })} placeholder="/images/about.png" />
         </AdminInputGroup>
       </div>

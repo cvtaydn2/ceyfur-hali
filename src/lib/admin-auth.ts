@@ -30,8 +30,7 @@ export async function createSession(token: string): Promise<void> {
   });
 
   if (error) {
-    console.error("[createSession] Supabase error:", JSON.stringify(error));
-    throw new Error(`Session oluşturulamadı: ${error.message} (code: ${error.code})`);
+    throw new Error("Session oluşturulamadı.");
   }
 }
 
@@ -46,15 +45,7 @@ export async function validateSession(token: string): Promise<boolean> {
     .eq("token", token)
     .single();
 
-  if (error) {
-    // PGRST116 = satır bulunamadı (normal durum)
-    if (error.code !== "PGRST116") {
-      console.error("[admin-auth] Session doğrulama hatası:", error.message);
-    }
-    return false;
-  }
-
-  if (!data) return false;
+  if (error || !data) return false;
 
   const isExpired = new Date(data.expires_at) < new Date();
   if (isExpired) {
@@ -157,7 +148,6 @@ export async function requireAuth(): Promise<NextResponse | null> {
     }
   }
 
-  // console.log("[requireAuth] token exists:", !!sessionToken);
 
   if (!sessionToken) {
     return NextResponse.json(
@@ -182,7 +172,6 @@ export async function requireAuth(): Promise<NextResponse | null> {
       );
     }
   } catch (err) {
-    console.error("[requireAuth] DB doğrulama hatası:", err);
     return NextResponse.json(
       { success: false, message: "Oturum doğrulanırken bir hata oluştu." },
       { status: 500 }

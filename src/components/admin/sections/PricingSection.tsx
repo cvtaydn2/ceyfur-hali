@@ -6,12 +6,15 @@ import { Input } from "@/components/ui";
 import { SiteContent } from "@/types";
 import { Plus, Trash2 } from "lucide-react";
 
+import { getZodError, createEmptyPricingItem } from "@/lib/admin-utils";
+
 interface SectionProps {
   data: SiteContent;
   onChange: (updates: Partial<SiteContent>) => void;
+  errors?: any;
 }
 
-export const PricingSection = ({ data, onChange }: SectionProps) => {
+export const PricingSection = ({ data, onChange, errors }: SectionProps) => {
   const updatePricing = (updates: Partial<SiteContent["pricing"]>) => {
     onChange({ pricing: { ...data.pricing, ...updates } });
   };
@@ -26,18 +29,7 @@ export const PricingSection = ({ data, onChange }: SectionProps) => {
   };
 
   const addItem = () => {
-    updatePricing({
-      items: [
-        ...data.pricing.items,
-        {
-          id: crypto.randomUUID(),
-          type: "Yeni Halı Tipi",
-          price: 0,
-          unit: "m²",
-          note: "",
-        },
-      ],
-    });
+    updatePricing({ items: [...data.pricing.items, createEmptyPricingItem()] });
   };
 
   const removeItem = (index: number) => {
@@ -50,13 +42,19 @@ export const PricingSection = ({ data, onChange }: SectionProps) => {
       <AdminCard title="Fiyatlar Bölümü Başlıkları">
         <div className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
-            <AdminInputGroup label="Bölüm Başlığı">
+            <AdminInputGroup 
+              label="Bölüm Başlığı"
+              error={getZodError(errors, "title")}
+            >
               <Input
                 value={data.pricing.title}
                 onChange={(e) => updatePricing({ title: e.target.value })}
               />
             </AdminInputGroup>
-            <AdminInputGroup label="Alt Başlık">
+            <AdminInputGroup 
+              label="Alt Başlık"
+              error={getZodError(errors, "subtitle")}
+            >
               <Input
                 value={data.pricing.subtitle}
                 onChange={(e) => updatePricing({ subtitle: e.target.value })}
@@ -66,6 +64,7 @@ export const PricingSection = ({ data, onChange }: SectionProps) => {
           <AdminInputGroup
             label="Dipnot"
             helperText="Tablonun altında küçük yazıyla gösterilir."
+            error={getZodError(errors, "note")}
           >
             <Input
               value={data.pricing.note ?? ""}
@@ -106,56 +105,64 @@ export const PricingSection = ({ data, onChange }: SectionProps) => {
             >
               {/* Tip */}
               <div className="md:col-span-5">
-                <label className="md:hidden text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">
-                  Halı / Ürün Tipi
-                </label>
-                <Input
-                  value={item.type}
-                  onChange={(e) => updateItem(idx, { type: e.target.value })}
-                  placeholder="Örn: BAMBU"
-                />
+                <AdminInputGroup 
+                  label="Halı / Ürün Tipi" 
+                  error={getZodError(errors, "items", idx, "type")}
+                >
+                  <Input
+                    value={item.type}
+                    onChange={(e) => updateItem(idx, { type: e.target.value })}
+                    placeholder="Örn: BAMBU"
+                  />
+                </AdminInputGroup>
               </div>
 
               {/* Fiyat */}
               <div className="md:col-span-2">
-                <label className="md:hidden text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">
-                  Fiyat (₺)
-                </label>
-                <Input
-                  type="number"
-                  min={0}
-                  step={0.01}
-                  value={item.price}
-                  onChange={(e) =>
-                    updateItem(idx, { price: parseFloat(e.target.value) || 0 })
-                  }
-                  className="text-center"
-                />
+                <AdminInputGroup 
+                  label="Fiyat (₺)" 
+                  error={getZodError(errors, "items", idx, "price")}
+                >
+                  <Input
+                    type="number"
+                    min={0}
+                    step={0.01}
+                    value={item.price}
+                    onChange={(e) =>
+                      updateItem(idx, { price: parseFloat(e.target.value) || 0 })
+                    }
+                    className="text-center"
+                  />
+                </AdminInputGroup>
               </div>
 
               {/* Birim */}
               <div className="md:col-span-2">
-                <label className="md:hidden text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">
-                  Birim
-                </label>
-                <Input
-                  value={item.unit ?? ""}
-                  onChange={(e) => updateItem(idx, { unit: e.target.value })}
-                  placeholder="m², adet..."
-                  className="text-center"
-                />
+                <AdminInputGroup 
+                  label="Birim" 
+                  error={getZodError(errors, "items", idx, "unit")}
+                >
+                  <Input
+                    value={item.unit ?? ""}
+                    onChange={(e) => updateItem(idx, { unit: e.target.value })}
+                    placeholder="m², adet..."
+                    className="text-center"
+                  />
+                </AdminInputGroup>
               </div>
 
               {/* Not */}
               <div className="md:col-span-2">
-                <label className="md:hidden text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 block">
-                  Not
-                </label>
-                <Input
-                  value={item.note ?? ""}
-                  onChange={(e) => updateItem(idx, { note: e.target.value })}
-                  placeholder="Opsiyonel not"
-                />
+                <AdminInputGroup 
+                  label="Not" 
+                  error={getZodError(errors, "items", idx, "note")}
+                >
+                  <Input
+                    value={item.note ?? ""}
+                    onChange={(e) => updateItem(idx, { note: e.target.value })}
+                    placeholder="Opsiyonel not"
+                  />
+                </AdminInputGroup>
               </div>
 
               {/* Sil */}

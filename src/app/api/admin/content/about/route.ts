@@ -7,7 +7,7 @@ import { ZodError } from "zod";
 
 export const dynamic = "force-dynamic";
 
-export async function POST(request: Request) {
+export async function PATCH(request: Request) {
   const authError = await requireAuth();
   if (authError) return authError;
 

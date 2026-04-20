@@ -24,7 +24,7 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.div 
+            <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -33,7 +33,7 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
               <span className="w-2 h-2 rounded-full bg-primary-ocean animate-ping" />
               İstanbul Geneli Profesyonel Hizmet
             </motion.div>
-            
+
             <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-slate-900 leading-[0.95] tracking-tighter mb-6 md:mb-8">
               {data.hero.title} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-ocean to-turquoise">
@@ -68,13 +68,13 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
           >
             {/* Levitation Motion wrapper */}
             <motion.div
-              animate={{ 
+              animate={{
                 y: [0, -15, 0],
               }}
-              transition={{ 
-                duration: 6, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
               className="relative z-10"
             >
@@ -89,9 +89,9 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
                   priority
                 />
               </div>
-              
+
               {/* Floating review card */}
-              <motion.div 
+              <motion.div
                 animate={{ y: [0, 10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 className="absolute -bottom-4 -left-2 sm:-bottom-10 sm:-left-10 glass p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-2xl border-white max-w-[160px] sm:max-w-[200px] scale-90 sm:scale-100 origin-bottom-left z-20"
@@ -104,17 +104,17 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
                   <Star size={12} className="fill-yellow-400 text-yellow-400" />
                 </div>
                 <p className="text-[10px] font-bold text-slate-900 mb-1">"Halılarım resmen yeni gibi oldu, teşekkürler!"</p>
-                <p className="text-[8px] text-slate-400 font-bold uppercase">Ayşe Y. • Üsküdar</p>
+                <p className="text-[8px] text-slate-400 font-bold uppercase">Ayşe Y. • Usküdar</p>
               </motion.div>
 
               {/* Trust badge */}
-              <motion.div 
-                 animate={{ y: [0, -8, 0] }}
-                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                 className="absolute -top-2 -right-2 sm:-top-6 sm:-right-6 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center p-1.5 sm:p-2 shadow-2xl border border-slate-50 z-20 scale-90 sm:scale-100 origin-top-right"
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute -top-2 -right-2 sm:-top-6 sm:-right-6 w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center p-1.5 sm:p-2 shadow-2xl border border-slate-50 z-20 scale-90 sm:scale-100 origin-top-right"
               >
                 <div className="w-full h-full rounded-full border-2 border-dashed border-primary-ocean flex items-center justify-center text-[10px] font-black text-primary-ocean leading-none text-center">
-                  100%<br/>HİJYEN
+                  100%<br />HİJYEN
                 </div>
               </motion.div>
             </motion.div>

@@ -6,12 +6,16 @@ import { Input } from "@/components/ui";
 import { SiteContent } from "@/types";
 import { Plus, Trash2 } from "lucide-react";
 
+import { slugify } from "@/lib/utils";
+import { getZodError, createEmptyServiceItem } from "@/lib/admin-utils";
+
 interface SectionProps {
   data: SiteContent;
   onChange: (updates: Partial<SiteContent>) => void;
+  errors?: any;
 }
 
-export const ServicesSection = ({ data, onChange }: SectionProps) => {
+export const ServicesSection = ({ data, onChange, errors }: SectionProps) => {
   const updateServices = (updates: Partial<SiteContent["services"]>) => {
     onChange({ services: { ...data.services, ...updates } });
   };
@@ -21,21 +25,18 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
     updates: Partial<SiteContent["services"]["items"][number]>
   ) => {
     const newItems = [...data.services.items];
-    newItems[index] = { ...newItems[index], ...updates };
+    const currentItem = newItems[index];
+    
+    if (updates.title && (!currentItem.slug || currentItem.slug === slugify(currentItem.title))) {
+      updates.slug = slugify(updates.title);
+    }
+
+    newItems[index] = { ...currentItem, ...updates };
     updateServices({ items: newItems });
   };
 
   const addItem = () => {
-    const newItem = {
-      id: crypto.randomUUID(),
-      slug: "yeni-hizmet",
-      title: "Yeni Hizmet",
-      description: "Hizmet açıklaması",
-      icon: "Brush",
-      image: "/images/service-placeholder.png",
-      features: ["Özellik 1"],
-    };
-    updateServices({ items: [...data.services.items, newItem] });
+    updateServices({ items: [...data.services.items, createEmptyServiceItem()] });
   };
 
   const removeItem = (index: number) => {
@@ -46,13 +47,19 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
     <div className="space-y-8">
       <AdminCard title="Hizmetler Bölümü Başlıkları">
         <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-          <AdminInputGroup label="Bölüm Başlığı">
+          <AdminInputGroup 
+            label="Bölüm Başlığı"
+            error={getZodError(errors, "title")}
+          >
             <Input
               value={data.services.title}
               onChange={(e) => updateServices({ title: e.target.value })}
             />
           </AdminInputGroup>
-          <AdminInputGroup label="Alt Başlık">
+          <AdminInputGroup 
+            label="Alt Başlık"
+            error={getZodError(errors, "subtitle")}
+          >
             <Input
               value={data.services.subtitle}
               onChange={(e) => updateServices({ subtitle: e.target.value })}
@@ -80,25 +87,39 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
             </button>
             <div className="grid md:grid-cols-2 gap-6 md:gap-8">
               <div className="space-y-4 md:space-y-6">
-                <AdminInputGroup label="Hizmet Adı">
+                <AdminInputGroup 
+                  label="Hizmet Adı"
+                  error={getZodError(errors, "items", idx, "title")}
+                >
                   <Input
                     value={item.title}
                     onChange={(e) => updateItem(idx, { title: e.target.value })}
                   />
                 </AdminInputGroup>
-                <AdminInputGroup label="URL Slugu" helperText="Sadece küçük harf, rakam ve tire.">
+                <AdminInputGroup 
+                  label="URL Slugu" 
+                  helperText="Sadece küçük harf, rakam ve tire."
+                  error={getZodError(errors, "items", idx, "slug")}
+                >
                   <Input
                     value={item.slug}
                     onChange={(e) => updateItem(idx, { slug: e.target.value })}
                   />
                 </AdminInputGroup>
-                <AdminInputGroup label="İkon İsmi" helperText="Lucide-react ikon ismi.">
+                <AdminInputGroup 
+                  label="İkon İsmi" 
+                  helperText="Lucide-react ikon ismi."
+                  error={getZodError(errors, "items", idx, "icon")}
+                >
                   <Input
                     value={item.icon}
                     onChange={(e) => updateItem(idx, { icon: e.target.value })}
                   />
                 </AdminInputGroup>
-                <AdminInputGroup label="Görsel URL">
+                <AdminInputGroup 
+                  label="Görsel URL"
+                  error={getZodError(errors, "items", idx, "image")}
+                >
                   <Input
                     value={item.image}
                     onChange={(e) => updateItem(idx, { image: e.target.value })}
@@ -106,14 +127,21 @@ export const ServicesSection = ({ data, onChange }: SectionProps) => {
                 </AdminInputGroup>
               </div>
               <div className="space-y-4 md:space-y-6">
-                <AdminInputGroup label="Kısa Açıklama">
+                <AdminInputGroup 
+                  label="Kısa Açıklama"
+                  error={getZodError(errors, "items", idx, "description")}
+                >
                   <textarea
                     className="w-full px-4 py-3 md:px-6 md:py-4 rounded-xl md:rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean focus:ring-4 focus:ring-primary-ocean/5 transition-all font-bold text-slate-900 min-h-[80px] md:min-h-[100px]"
                     value={item.description}
                     onChange={(e) => updateItem(idx, { description: e.target.value })}
                   />
                 </AdminInputGroup>
-                <AdminInputGroup label="Öne Çıkan Özellikler" helperText="Virgül ile ayırın.">
+                <AdminInputGroup 
+                  label="Öne Çıkan Özellikler" 
+                  helperText="Virgül ile ayırın."
+                  error={getZodError(errors, "items", idx, "features")}
+                >
                   <Input
                     value={item.features.join(", ")}
                     onChange={(e) =>

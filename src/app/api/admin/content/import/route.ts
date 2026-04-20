@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
  * Tüm site içeriğini günceller.
  * Kayıt sonrası DB'den tekrar okuyarak doğrular (save-verify).
  */
-export async function POST(request: Request) {
+export async function PATCH(request: Request) {
   const authError = await requireAuth();
   if (authError) return authError;
 

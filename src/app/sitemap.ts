@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Hizmet sayfaları
   const serviceRoutes: MetadataRoute.Sitemap = content.services.items.map((item) => ({
-    url: `${base}/hizmetler/${item.slug}`,
+    url: `${base}/hizmetler/${item.slug || item.id.toLowerCase().replace(/\s+/g, "-")}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
     priority: 0.8,

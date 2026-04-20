@@ -6,6 +6,36 @@ import { supabaseAdmin } from "./supabase-admin";
 import { SiteContent } from "@/types";
 import fallbackContent from "@/data/siteContent.json";
 import { SiteContentSchema } from "./content-schema";
+import { slugify } from "./utils";
+
+// ─── Data Normalization ───────────────────────────────────────────────────────
+
+/**
+ * Eski verilerde eksik olabilecek alanları (slug vb.) tamamlar.
+ * Sistem dayanıklılığı için kritik.
+ */
+function normalizeContent(raw: unknown): unknown {
+  if (!raw || typeof raw !== "object") return raw;
+  const content = raw as any;
+
+  // Services normalizasyonu
+  if (content.services && Array.isArray(content.services.items)) {
+    content.services.items = content.services.items.map((item: any) => ({
+      ...item,
+      slug: item.slug || item.id || slugify(item.title || "servis"),
+    }));
+  }
+
+  // Bölgeler normalizasyonu
+  if (content.services && Array.isArray(content.services.areas)) {
+    content.services.areas = content.services.areas.map((area: any) => ({
+      ...area,
+      slug: area.slug || slugify(area.name || "bolge"),
+    }));
+  }
+
+  return content;
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -47,14 +77,15 @@ export async function getSiteContentWithMeta(): Promise<ContentReadResult> {
     };
   }
 
-  const parsed = SiteContentSchema.safeParse(data.content);
+  const normalized = normalizeContent(data.content);
+  const parsed = SiteContentSchema.safeParse(normalized);
   if (!parsed.success) {
     const issues = parsed.error.issues
       .map((i) => `${i.path.join(".")}: ${i.message}`)
       .join(", ");
     console.error("[content-repository] DB içeriği geçersiz, fallback kullanılıyor:", issues);
     return {
-      data: fallbackContent as unknown as SiteContent,
+      data: normalizeContent(fallbackContent) as unknown as SiteContent,
       isFromFallback: true,
       reason: `Validation hatası: ${issues}`,
       updatedAt: data?.updated_at,
@@ -79,7 +110,8 @@ export async function getSiteContentFresh(): Promise<SiteContent> {
     throw new Error(`Taze içerik okunamadı: ${error?.message ?? "Kayıt yok"}`);
   }
 
-  const parsed = SiteContentSchema.safeParse(data.content);
+  const normalized = normalizeContent(data.content);
+  const parsed = SiteContentSchema.safeParse(normalized);
   if (!parsed.success) {
     const issues = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join(", ");
     throw new Error(`Kaydedilen içerik geçersiz: ${issues}`);

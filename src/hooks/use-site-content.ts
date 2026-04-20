@@ -156,7 +156,7 @@ export function useSiteContent() {
 
     try {
       const res = await fetch(`/api/admin/content/${section}`, {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         credentials: "include",
         body: JSON.stringify(sectionData),
