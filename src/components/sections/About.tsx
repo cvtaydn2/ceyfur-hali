@@ -82,7 +82,7 @@ export const About = ({ content }: { content?: SiteContent }) => {
               />
               {/* Experience Badge */}
               <div className="absolute bottom-10 left-10 glass p-6 rounded-3xl shadow-xl">
-                <div className="text-4xl font-black text-primary-ocean mb-1">12+</div>
+                <div className="text-4xl font-black text-primary-ocean mb-1">25+</div>
                 <div className="text-sm font-bold text-slate-900 uppercase tracking-widest">Yıllık Tecrübe</div>
               </div>
             </div>
