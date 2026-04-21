@@ -42,8 +42,22 @@ export async function generateMetadata(): Promise<Metadata> {
       description: content.seo.description,
       images: [ogImageUrl],
     },
+    verification: {
+      google: "qky3rdxrhkalrguRVhZGQTg4p4B_v3e6n9yP_Q",
+    },
     alternates: {
       canonical: BASE_URL,
+    },
+    manifest: "/manifest.json",
+    icons: {
+      apple: [
+        { url: "/images/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/images/icon-192.png", sizes: "192x192", type: "image/png" },
+        { url: "/images/icon-512.png", sizes: "512x512", type: "image/png" },
+      ],
     },
   };
 }
