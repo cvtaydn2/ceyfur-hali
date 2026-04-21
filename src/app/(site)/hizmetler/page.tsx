@@ -39,11 +39,24 @@ export default async function ServicesPage() {
     })),
   };
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: APP_CONFIG.url },
+      { "@type": "ListItem", position: 2, name: "Hizmetler", item: `${APP_CONFIG.url}/hizmetler` },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <main id="main-content" className="min-h-screen bg-slate-50">
         {/* Hero */}

@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Ceyfur Admin | Giriş",
   description: "Ceyfur Halı Yıkama yönetim paneli giriş sayfası.",
+  robots: "noindex, nofollow",
 };
 
 export default function AuthLayout({

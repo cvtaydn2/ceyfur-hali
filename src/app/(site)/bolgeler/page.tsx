@@ -22,8 +22,22 @@ export default async function DistrictsPage() {
   const content = await getSiteContent();
   const areas = content.services.areas ?? [];
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Ana Sayfa", item: APP_CONFIG.url },
+      { "@type": "ListItem", position: 2, name: "Hizmet Bölgeleri", item: `${APP_CONFIG.url}/bolgeler` },
+    ],
+  };
+
   return (
-    <main id="main-content" className="min-h-screen bg-slate-50">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <main id="main-content" className="min-h-screen bg-slate-50">
       <section className="bg-white border-b border-slate-100 py-16 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <nav aria-label="Breadcrumb" className="mb-6">
@@ -70,5 +84,6 @@ export default async function DistrictsPage() {
         </div>
       </section>
     </main>
+    </>
   );
 }

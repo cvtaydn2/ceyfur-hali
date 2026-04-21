@@ -3,13 +3,14 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { getSiteContent } from "@/lib/content-repository";
 import { Toaster } from "react-hot-toast";
+import { APP_CONFIG } from "@/lib/constants";
 
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
-const BASE_URL = "https://ceyfurhaliyikama.com";
+const BASE_URL = APP_CONFIG.url;
 
 function resolveOgImage(ogImage: string | undefined): string {
   if (!ogImage) return `${BASE_URL}/images/og-image.png`;
@@ -40,6 +41,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: content.seo.title,
       description: content.seo.description,
       images: [ogImageUrl],
+    },
+    alternates: {
+      canonical: BASE_URL,
     },
   };
 }
@@ -81,6 +85,8 @@ export default async function RootLayout({
     ],
     image: ogImageUrl,
     sameAs: [content.contact.instagram, content.contact.facebook].filter(Boolean),
+    priceRange: "₺₺",
+    areaServed: (content.services.areas ?? []).map((a) => a.name),
   };
 
   return (
