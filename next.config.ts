@@ -6,16 +6,17 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000,
-    // Uzak görsel kaynakları buraya eklenebilir
-    // remotePatterns: [{ protocol: "https", hostname: "example.com" }],
   },
 
-  // Modern tarayıcıları hedefle — gereksiz polyfill'leri düşür (~13KB tasarruf)
-  // Array.at, Array.flat, Object.fromEntries vb. artık tüm modern tarayıcılarda var
-  // Polyfill chunk'ı Next.js'in SWC compiler'ı tarafından üretilir;
-  // browserslist'i .browserslistrc ile daraltmak bunu azaltır.
+  experimental: {
+    // Kritik CSS'i inline eder → render-blocking CSS chunk ortadan kalkar
+    optimizeCss: true,
+  },
 
-  // Güvenlik ve performans HTTP başlıkları
+  // SWC compiler — console.log'ları production'da kaldır
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
+  },
   async headers() {
     return [
       {

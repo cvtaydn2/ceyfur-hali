@@ -1,8 +1,41 @@
 import React from "react";
 import Link from "next/link";
-import { Globe, Share2, Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
+
+// Lucide'de gerçek sosyal medya ikonları yok — SVG ile tanımla
+const InstagramIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.75"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+const FacebookIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
 
 export const Footer = ({ content }: { content?: SiteContent }) => {
   const data = content || fallbackContent;
@@ -21,27 +54,27 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
           <p className="text-sm leading-relaxed">
             {data.footer.about}
           </p>
-          <div className="flex gap-4">
+          <div className="flex gap-3">
             {data.contact.instagram && (
-              <a 
-                href={data.contact.instagram} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                aria-label="Instagram sayfamız" 
-                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all"
+              <a
+                href={data.contact.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram sayfamız"
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-gradient-to-br hover:from-[#f09433] hover:via-[#e6683c] hover:to-[#bc1888] hover:text-white transition-all duration-300"
               >
-                <Globe size={20} />
+                <InstagramIcon />
               </a>
             )}
             {data.contact.facebook && (
-              <a 
-                href={data.contact.facebook} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                aria-label="Facebook sayfamız" 
-                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary-ocean hover:text-white transition-all"
+              <a
+                href={data.contact.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook sayfamız"
+                className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-[#1877F2] hover:text-white transition-all duration-300"
               >
-                <Share2 size={20} />
+                <FacebookIcon />
               </a>
             )}
           </div>

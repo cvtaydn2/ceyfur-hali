@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Tag, Phone, Search, ChevronDown } from "lucide-react";
 import { SiteContent, PriceItem } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
@@ -116,34 +116,28 @@ export const Pricing = ({ content }: { content?: SiteContent }) => {
 
           {/* Satırlar */}
           <div className="divide-y divide-slate-50">
-            <AnimatePresence initial={false}>
-              {visible.map((item: PriceItem, i: number) => (
-                <motion.div
-                  key={item.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.18, delay: i * 0.02 }}
-                  className="grid grid-cols-3 items-center px-6 py-4 md:px-10 md:py-5 hover:bg-primary-ocean/3 transition-colors group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary-ocean/30 group-hover:bg-primary-ocean transition-colors shrink-0" />
-                    <span className="font-bold text-slate-800 text-sm md:text-base">
-                      {item.type}
-                    </span>
-                  </div>
-                  <span className="text-center text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    {item.unit ?? "—"}
+            {visible.map((item: PriceItem) => (
+              <div
+                key={item.id}
+                className="grid grid-cols-3 items-center px-6 py-4 md:px-10 md:py-5 hover:bg-primary-ocean/5 transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-primary-ocean/30 group-hover:bg-primary-ocean transition-colors shrink-0" />
+                  <span className="font-bold text-slate-800 text-sm md:text-base">
+                    {item.type}
                   </span>
-                  <div className="text-right">
-                    <span className="font-black text-primary-ocean text-base md:text-lg tabular-nums">
-                      {formatPrice(item.price)}
-                    </span>
-                    <span className="text-slate-400 text-xs font-bold ml-1">₺</span>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                </div>
+                <span className="text-center text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  {item.unit ?? "—"}
+                </span>
+                <div className="text-right">
+                  <span className="font-black text-primary-ocean text-base md:text-lg tabular-nums">
+                    {formatPrice(item.price)}
+                  </span>
+                  <span className="text-slate-400 text-xs font-bold ml-1">₺</span>
+                </div>
+              </div>
+            ))}
 
             {filtered.length === 0 && (
               <div className="py-16 text-center text-slate-300 font-bold italic">

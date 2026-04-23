@@ -71,11 +71,10 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                 key={service.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ type: "spring", stiffness: 260, damping: 20, delay: index * 0.1 }}
-                whileHover={{ y: -6, scale: 1.02, boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)" }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
                 className={cn(
-                  "group relative flex flex-col rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-xl transition-shadow duration-500",
+                  "group relative flex flex-col rounded-[2.5rem] overflow-hidden bg-white border border-slate-100 shadow-xl hover:-translate-y-1.5 hover:shadow-2xl transition-[transform,box-shadow] duration-300 will-change-transform",
                   spanClass
                 )}
               >
@@ -178,23 +177,18 @@ export const Services = ({ content }: { content?: SiteContent }) => {
 
             <div className="flex-1 flex flex-wrap gap-3">
               {areas.map((area, i) => (
-                <motion.a
+                <a
                   key={area.slug}
                   href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, "")}?text=${encodeURIComponent(
                     area.name + " bölgesinde halı yıkama hizmeti almak istiyorum."
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.05 * i }}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white font-bold text-sm hover:bg-primary-ocean hover:border-primary-ocean transition-all"
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white font-bold text-sm hover:bg-primary-ocean hover:border-primary-ocean transition-colors"
                 >
-                  <MapPin size={14} className="text-primary-ocean group-hover:text-white" />
+                  <MapPin size={14} aria-hidden="true" />
                   {area.name}
-                </motion.a>
+                </a>
               ))}
             </div>
           </motion.div>

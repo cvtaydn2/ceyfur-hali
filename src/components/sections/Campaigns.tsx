@@ -34,19 +34,9 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
               key={campaign.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ 
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-                delay: i * 0.1 
-              }}
-              whileHover={{ 
-                y: -6,
-                scale: 1.02,
-                boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
-              }}
-              className="group relative glass p-6 sm:p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-white shadow-xl transition-all duration-500 overflow-hidden"
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="group relative glass p-6 sm:p-8 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border-white shadow-xl hover:-translate-y-1.5 hover:shadow-2xl transition-[transform,box-shadow] duration-300 will-change-transform overflow-hidden"
             >
               {/* Decoration */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-ocean/5 rounded-full -mr-16 -mt-16 blur-3xl group-hover:bg-primary-ocean/10 transition-colors" />

@@ -15,7 +15,9 @@ export const Testimonials = ({ content }: { content?: SiteContent }) => {
     <section className="py-16 md:py-24 px-4 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">{data.testimonials.title}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            {data.testimonials.title}
+          </h2>
           <p className="text-slate-600 max-w-2xl mx-auto">{data.testimonials.subtitle}</p>
         </div>
 
@@ -25,38 +27,40 @@ export const Testimonials = ({ content }: { content?: SiteContent }) => {
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ 
-                type: "spring",
-                stiffness: 260,
-                damping: 20,
-                delay: i * 0.1 
-              }}
-              whileHover={{ 
-                y: -6,
-                scale: 1.02,
-                boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)"
-              }}
-              className="group glass p-6 md:p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg transition-all duration-500"
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              // CSS hover — boxShadow okuma/yazma döngüsü yok
+              className="glass p-6 md:p-8 rounded-[2.5rem] border-white flex flex-col h-full shadow-lg hover:-translate-y-1.5 hover:shadow-xl transition-[transform,box-shadow] duration-300 will-change-transform"
             >
-              <div className="flex gap-1 mb-6">
+              <div className="flex gap-1 mb-6" aria-label={`${item.rating} yıldız`}>
                 {[...Array(item.rating)].map((_, starI) => (
-                  <Star key={starI} size={14} className="fill-yellow-400 text-yellow-400 group-hover:scale-110 transition-transform" style={{ transitionDelay: `${starI * 50}ms` }} />
+                  <Star key={starI} size={14} className="fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-              
+
               <div className="relative">
-                <Quote size={40} className="absolute -top-4 -left-2 text-primary-ocean/5 -z-10 group-hover:text-primary-ocean/10 transition-colors" />
-                <p className="text-slate-700 leading-relaxed mb-8 italic font-medium">&quot;{item.comment}&quot;</p>
+                <Quote
+                  size={40}
+                  className="absolute -top-4 -left-2 text-primary-ocean/5 -z-10"
+                  aria-hidden="true"
+                />
+                <p className="text-slate-700 leading-relaxed mb-8 italic font-medium">
+                  &quot;{item.comment}&quot;
+                </p>
               </div>
 
               <div className="mt-auto flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-primary-ocean/10 flex items-center justify-center font-bold text-primary-ocean">
+                <div
+                  className="w-12 h-12 rounded-full bg-primary-ocean/10 flex items-center justify-center font-bold text-primary-ocean"
+                  aria-hidden="true"
+                >
                   {item.name.charAt(0)}
                 </div>
                 <div>
                   <h4 className="font-bold text-slate-900">{item.name}</h4>
-                  <p className="text-xs text-slate-500 font-medium">{item.date}</p>
+                  <p className="text-xs text-slate-500 font-medium">
+                    <time>{item.date}</time>
+                  </p>
                 </div>
               </div>
             </motion.div>

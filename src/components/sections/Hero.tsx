@@ -76,7 +76,7 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
           </div>
 
           {/* ── Sağ: Görsel — client component (animasyonlar burada) ── */}
-          <HeroVisual image={data.hero.image} whatsapp={data.contact.whatsapp} />
+          <HeroVisual image={data.hero.image} />
         </div>
       </div>
     </section>
