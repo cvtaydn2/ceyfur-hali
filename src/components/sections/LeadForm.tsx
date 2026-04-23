@@ -12,7 +12,7 @@ import {
   MessageSquare,
   CheckCircle2,
 } from "lucide-react";
-import { useSiteContent } from "@/hooks/use-site-content";
+import { SiteContent } from "@/types";
 import { toast } from "react-hot-toast";
 
 interface FormData {
@@ -33,8 +33,7 @@ const INITIAL_FORM: FormData = {
   notes: "",
 };
 
-export const LeadForm = () => {
-  const { content } = useSiteContent();
+export const LeadForm = ({ content }: { content: SiteContent }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM);
@@ -45,8 +44,6 @@ export const LeadForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!content) return;
-
     // Client-side telefon validasyonu
     const phoneDigits = formData.phone.replace(/\D/g, "");
     if (phoneDigits.length < 10) {
@@ -210,7 +207,7 @@ export const LeadForm = () => {
                   <select
                     id="serviceId"
                     required
-                    disabled={isSubmitting || !content}
+                    disabled={isSubmitting}
                     value={formData.serviceId}
                     onChange={updateField("serviceId")}
                     className="w-full pl-14 pr-12 py-5 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean transition-all font-bold text-slate-700 appearance-none cursor-pointer disabled:opacity-60"
@@ -307,7 +304,7 @@ export const LeadForm = () => {
               <Button
                 type="submit"
                 isLoading={isSubmitting}
-                disabled={isSubmitting || !content}
+                disabled={isSubmitting}
                 className="w-full py-6 md:py-8 text-base md:text-lg rounded-[1.5rem] md:rounded-[2rem] bg-slate-900 text-white hover:bg-primary-ocean"
                 leftIcon={<Send size={24} />}
               >

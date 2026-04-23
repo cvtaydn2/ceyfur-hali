@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image, { ImageProps } from "next/image";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface OptimizedImageProps extends Omit<ImageProps, "onLoad" | "onError"> {
   priority?: boolean;
@@ -37,22 +36,14 @@ export const OptimizedImage = ({
     <div
       className={cn(
         "overflow-hidden bg-slate-100",
-        // fill modunda parent'ın position:relative'i olduğu varsayılır
-        // bu wrapper'ı absolute yapma — parent zaten konumlandırılmış olmalı
         fill ? "absolute inset-0" : "relative",
         containerClassName
       )}
     >
-      <AnimatePresence>
-        {isLoading && (
-          <motion.div
-            initial={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse z-10"
-          />
-        )}
-      </AnimatePresence>
+      {/* Skeleton — sadece CSS, Framer Motion yok */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse z-10 transition-opacity duration-300" />
+      )}
 
       <Image
         {...props}

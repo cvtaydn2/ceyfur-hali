@@ -91,6 +91,18 @@ export function useSiteContent() {
         credentials: "include",
         headers: getAuthHeaders(),
       });
+
+      // 401 → token yok veya süresi dolmuş, login'e yönlendir
+      if (res.status === 401) {
+        clearAuthToken();
+        setError("Oturum süresi dolmuş. Yeniden giriş yapılıyor...");
+        setIsLoading(false);
+        if (typeof window !== "undefined") {
+          window.location.href = "/auth/login";
+        }
+        return;
+      }
+
       const data = await res.json();
 
       if (data.success) {

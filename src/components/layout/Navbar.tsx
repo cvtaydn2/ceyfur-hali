@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Menu, X, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -11,6 +12,7 @@ import { siteContent as fallbackContent } from "@/data/siteContent";
 export const Navbar = ({ content }: { content?: SiteContent }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
   const data = content || fallbackContent;
 
   useEffect(() => {
@@ -20,6 +22,22 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  /**
+   * Ana Sayfa linkine tıklanınca:
+   * - Zaten "/" sayfasındaysak scroll'u en üste al (Next.js aynı URL'de scroll reset etmez)
+   * - Başka sayfadaysak normal navigasyon yeterli
+   */
+  const handleHomeClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      setIsMobileMenuOpen(false);
+      if (pathname === "/") {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    },
+    [pathname]
+  );
 
   return (
     <nav 
@@ -39,7 +57,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
         )}
       >
         <div className="flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" onClick={handleHomeClick} className="flex items-center gap-3 group">
             <div className="w-10 h-10 bg-primary-ocean rounded-2xl flex items-center justify-center text-white font-black shadow-lg shadow-primary-ocean/30 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
               {data.brand.name.charAt(0)}
             </div>
@@ -63,6 +81,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
               <Link
                 key={item.label}
                 href={item.href}
+                onClick={item.href === "/" ? handleHomeClick : undefined}
                 className={cn(
                   "text-sm font-bold tracking-tight hover:text-primary-ocean transition-all relative group",
                   isScrolled ? "text-slate-600" : "text-slate-800"
@@ -125,7 +144,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
               <Link
                 key={item.label}
                 href={item.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={item.href === "/" ? handleHomeClick : () => setIsMobileMenuOpen(false)}
                 className="text-lg font-bold text-slate-900 hover:text-primary-ocean transition-colors"
               >
                 {item.label}

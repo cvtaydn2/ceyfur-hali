@@ -8,7 +8,9 @@ import { APP_CONFIG } from "@/lib/constants";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700", "800", "900"],
+  // Sadece kullanılan weightler — gereksiz font dosyalarını indirme
+  weight: ["400", "700", "800", "900"],
+  preload: true,
 });
 
 const BASE_URL = APP_CONFIG.url;
@@ -125,6 +127,21 @@ export default async function RootLayout({
 
   return (
     <html lang="tr" data-scroll-behavior="smooth" className="scroll-smooth">
+      <head>
+        {/* DNS prefetch & preconnect — harici kaynaklar için bağlantıyı erkenden aç */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://wa.me" />
+        {/* Hero görseli için preload — LCP'yi hızlandırır */}
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-carpet.png"
+          // @ts-expect-error — fetchpriority henüz React types'a eklenmedi
+          fetchpriority="high"
+          imageSrcSet="/_next/image?url=%2Fimages%2Fhero-carpet.png&w=640&q=75 640w, /_next/image?url=%2Fimages%2Fhero-carpet.png&w=828&q=75 828w, /_next/image?url=%2Fimages%2Fhero-carpet.png&w=1080&q=75 1080w"
+          imageSizes="(max-width: 1024px) calc(100vw - 2rem), 600px"
+        />
+      </head>
       <body className={inter.className}>
         <a
           href="#main-content"

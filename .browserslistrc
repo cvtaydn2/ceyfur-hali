@@ -1,0 +1,14 @@
+# Modern tarayıcıları hedefle — Array.at, Object.fromEntries vb. polyfill'leri düşür
+# Bu dosya Next.js SWC compiler'ının hangi polyfill'leri ekleyeceğini belirler
+[production]
+chrome >= 90
+firefox >= 90
+safari >= 14
+edge >= 90
+ios_saf >= 14
+samsung >= 14
+
+[development]
+last 1 chrome version
+last 1 firefox version
+last 1 safari version

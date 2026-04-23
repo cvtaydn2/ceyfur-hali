@@ -91,7 +91,11 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                     alt={service.title}
                     fill
                     priority={index === 0}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 300px"
+                    sizes={
+                      index === 0
+                        ? "(max-width: 768px) calc(100vw - 2rem), (max-width: 1024px) calc(50vw - 2rem), 560px"
+                        : "(max-width: 768px) calc(100vw - 2rem), (max-width: 1024px) calc(50vw - 2rem), 280px"
+                    }
                     className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
