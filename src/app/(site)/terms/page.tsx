@@ -1,5 +1,20 @@
 import React from "react";
+import { Metadata } from "next";
 import { getSiteContent } from "@/lib/content-repository";
+import { APP_CONFIG } from "@/lib/constants";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent();
+  const title = `Kullanım Koşulları | ${content.brand.name}`;
+  const description = `${content.brand.name} kullanım koşulları. Web sitemizi ve hizmetlerimizi kullanırken geçerli olan şartlar ve koşullar.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `${APP_CONFIG.url}/terms` },
+    robots: { index: false, follow: false },
+    openGraph: { title, description, url: `${APP_CONFIG.url}/terms`, type: "website" },
+  };
+}
 
 export default async function TermsPage() {
   const content = await getSiteContent();

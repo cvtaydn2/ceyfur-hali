@@ -72,7 +72,7 @@ export const About = ({ content }: { content?: SiteContent }) => {
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white aspect-[4/5] lg:aspect-auto min-h-[500px]">
+            <div className="relative z-10 rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white aspect-[4/5] lg:aspect-auto lg:min-h-[480px] max-h-[600px]">
               <OptimizedImage
                 src={aboutData.image || "/images/about-image.png"}
                 alt="Ceyfur Halı Yıkama Tesisleri"

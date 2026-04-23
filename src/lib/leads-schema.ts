@@ -24,12 +24,21 @@ export type AllStatus = z.infer<typeof AllStatusSchema>;
  * Müşteri talebi form girdi şeması.
  */
 export const LeadSchema = z.object({
-  fullName: z.string().trim().min(2, "Lütfen adınızı ve soyadınızı girin."),
-  phone: z.string().trim().min(10, "Lütfen geçerli bir telefon numarası girin."),
-  serviceId: z.string().min(1, "Lütfen bir hizmet seçin."),
-  district: z.string().min(1, "Lütfen ilçenizi seçin."),
+  fullName: z
+    .string()
+    .trim()
+    .min(2, "Lütfen adınızı ve soyadınızı girin.")
+    .max(100, "Ad soyad çok uzun."),
+  phone: z
+    .string()
+    .trim()
+    .min(10, "Lütfen geçerli bir telefon numarası girin.")
+    .max(20, "Telefon numarası çok uzun.")
+    .regex(/^[\d\s\+\-\(\)]+$/, "Geçersiz telefon formatı."),
+  serviceId: z.string().min(1, "Lütfen bir hizmet seçin.").max(100),
+  district: z.string().min(1, "Lütfen ilçenizi seçin.").max(100),
   preferredDate: z.string().optional().nullable(),
-  notes: z.string().trim().optional().nullable(),
+  notes: z.string().trim().max(500, "Not çok uzun.").optional().nullable(),
 });
 
 export type LeadInput = z.infer<typeof LeadSchema>;

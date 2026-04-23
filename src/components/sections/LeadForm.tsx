@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui";
 import {
   Send,
@@ -47,6 +46,13 @@ export const LeadForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!content) return;
+
+    // Client-side telefon validasyonu
+    const phoneDigits = formData.phone.replace(/\D/g, "");
+    if (phoneDigits.length < 10) {
+      toast.error("Lütfen geçerli bir telefon numarası girin.");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -265,6 +271,7 @@ export const LeadForm = () => {
                     disabled={isSubmitting}
                     value={formData.preferredDate}
                     onChange={updateField("preferredDate")}
+                    min={new Date().toISOString().split("T")[0]}
                     className="w-full pl-14 pr-8 py-5 rounded-2xl bg-slate-50 border border-slate-100 outline-none focus:bg-white focus:border-primary-ocean transition-all font-bold text-slate-700 disabled:opacity-60"
                   />
                 </div>

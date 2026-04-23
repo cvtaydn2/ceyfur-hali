@@ -14,7 +14,20 @@ export async function generateMetadata(): Promise<Metadata> {
     title,
     description,
     alternates: { canonical: `${APP_CONFIG.url}/bolgeler` },
-    openGraph: { title, description, url: `${APP_CONFIG.url}/bolgeler`, type: "website" },
+    openGraph: {
+      title,
+      description,
+      url: `${APP_CONFIG.url}/bolgeler`,
+      type: "website",
+      images: [
+        {
+          url: `${APP_CONFIG.url}/images/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
   };
 }
 

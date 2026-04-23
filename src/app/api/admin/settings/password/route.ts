@@ -52,7 +52,7 @@ export async function PATCH(request: Request) {
     await updateAdminPassword(newPassword);
 
     await writeAuditLog({
-      action: "content_update",
+      action: "password_changed",
       entityType: "auth",
       entityId: "admin_password",
       metadata: { action: "password_changed" },

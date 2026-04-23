@@ -5,7 +5,20 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        // Tüm botlar için genel kural
         userAgent: "*",
+        allow: "/",
+        disallow: [
+          "/admin",
+          "/admin/",
+          "/api/",
+          "/auth/",
+          "/_next/",
+        ],
+      },
+      {
+        // Googlebot için özel — daha agresif crawl izni
+        userAgent: "Googlebot",
         allow: "/",
         disallow: ["/admin", "/api/", "/auth/"],
       },

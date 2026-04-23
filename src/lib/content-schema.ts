@@ -124,7 +124,7 @@ export const ContactSchema = z.object({
   district: requiredString,
   city: requiredString,
   workingHours: requiredString,
-  googleMapsUrl: z.string().url().trim(),
+  googleMapsUrl: z.string().trim().optional().or(z.literal("")),
   instagram: z.string().optional(),
   facebook: z.string().optional(),
 });

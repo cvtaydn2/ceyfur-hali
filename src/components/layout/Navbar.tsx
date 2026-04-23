@@ -17,7 +17,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -77,7 +77,7 @@ export const Navbar = ({ content }: { content?: SiteContent }) => {
            <div className="flex items-center gap-4">
              <div className="hidden md:flex flex-col items-end mr-4 text-right">
                <span className="text-[10px] font-black text-primary-ocean uppercase tracking-widest mb-0.5">Müşteri Destek</span>
-               {data.contact.phone.map((num, i) => (
+               {data.contact.phone.map((num) => (
                  <a key={num} href={`tel:${num.replace(/\s/g, "")}`} className="text-base font-black text-primary-ocean hover:text-slate-900 transition-colors flex items-center gap-1.5 drop-shadow-sm">
                    <Phone size={14} className="text-primary-ocean" />
                    {num}

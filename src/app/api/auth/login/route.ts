@@ -52,7 +52,6 @@ export async function POST(request: Request) {
     const isValid = await verifyAdminPassword(password);
 
     if (!isValid) {
-      // Hata olursa sessizce geç — login'i engelleme
       recordLoginAttempt(ip, false).catch(() => {});
       writeAuditLog({ action: "login_failed", entityType: "auth", metadata: { ip } }).catch(() => {});
 
@@ -65,11 +64,8 @@ export async function POST(request: Request) {
     // Session token oluştur ve cookie'ye yaz
     const sessionToken = generateSessionToken();
 
-    // DB'ye session kaydet
-    console.log("[auth/login] Session kaydediliyor...");
     try {
       await createSession(sessionToken);
-      console.log("[auth/login] Session kaydedildi:", sessionToken.slice(0, 8) + "...");
     } catch (err) {
       console.error("[auth/login] Session DB'ye kaydedilemedi:", err);
       return NextResponse.json(
@@ -100,23 +96,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-}
-
-/**
- * Sabit zamanlı string karşılaştırması — timing attack önlemi.
- */
-function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) {
-    const dummy = b.padEnd(a.length, "\0");
-    let result = 0;
-    for (let i = 0; i < a.length; i++) {
-      result |= a.charCodeAt(i) ^ dummy.charCodeAt(i);
-    }
-    return false;
-  }
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
 }

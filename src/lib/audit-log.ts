@@ -3,7 +3,7 @@ import { supabaseAdmin } from "./supabase-admin";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type AuditAction = "content_update" | "section_update" | "login" | "logout" | "login_failed";
+export type AuditAction = "content_update" | "section_update" | "login" | "logout" | "login_failed" | "password_changed";
 export type AuditEntityType = "site_content" | "section" | "auth";
 
 export interface AuditLogEntry {

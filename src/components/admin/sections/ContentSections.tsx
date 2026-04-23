@@ -109,6 +109,53 @@ export const ContactSection = ({ data, onChange, errors }: SectionProps) => {
             <Input value={data.contact.city} onChange={(e) => updateContact({ city: e.target.value })} />
           </AdminInputGroup>
         </div>
+
+        <AdminInputGroup
+          label="Çalışma Saatleri"
+          helperText="Örn: Pazartesi - Cumartesi: 09:00 - 19:00"
+          error={getZodError(errors, "workingHours")}
+        >
+          <Input
+            value={data.contact.workingHours}
+            onChange={(e) => updateContact({ workingHours: e.target.value })}
+            placeholder="Pazartesi - Cumartesi: 09:00 - 19:00"
+          />
+        </AdminInputGroup>
+
+        <AdminInputGroup
+          label="Google Maps URL"
+          helperText="maps.app.goo.gl/... veya google.com/maps/... formatında"
+          error={getZodError(errors, "googleMapsUrl")}
+        >
+          <Input
+            value={data.contact.googleMapsUrl || ""}
+            onChange={(e) => updateContact({ googleMapsUrl: e.target.value })}
+            placeholder="https://maps.app.goo.gl/..."
+          />
+        </AdminInputGroup>
+
+        <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+          <AdminInputGroup
+            label="Instagram URL"
+            error={getZodError(errors, "instagram")}
+          >
+            <Input
+              value={data.contact.instagram || ""}
+              onChange={(e) => updateContact({ instagram: e.target.value })}
+              placeholder="https://instagram.com/..."
+            />
+          </AdminInputGroup>
+          <AdminInputGroup
+            label="Facebook URL"
+            error={getZodError(errors, "facebook")}
+          >
+            <Input
+              value={data.contact.facebook || ""}
+              onChange={(e) => updateContact({ facebook: e.target.value })}
+              placeholder="https://facebook.com/..."
+            />
+          </AdminInputGroup>
+        </div>
       </div>
     </AdminCard>
   );

@@ -2,7 +2,7 @@
 
 import { OptimizedImage } from "@/components/ui";
 import { motion } from "framer-motion";
-import { ArrowRight, Star, Clock } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
 
@@ -13,9 +13,9 @@ export const Hero = ({ content }: { content?: SiteContent }) => {
 
   return (
     <section className="relative pt-28 md:pt-32 pb-16 md:pb-20 overflow-hidden min-h-[100svh] lg:min-h-[90vh] flex items-center">
-      {/* Background blobs for Antigravity feeling */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-ocean/5 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-turquoise/5 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
+      {/* Background blobs — will-change ile GPU'ya taşı */}
+      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary-ocean/5 rounded-full blur-[120px] animate-pulse will-change-[opacity]" />
+      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-turquoise/5 rounded-full blur-[100px] animate-pulse will-change-[opacity]" style={{ animationDelay: '2s' }} />
 
       <div className="max-w-7xl mx-auto px-4 relative z-10 w-full">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">

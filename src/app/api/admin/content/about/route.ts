@@ -43,7 +43,7 @@ export async function PATCH(request: Request) {
         { status: 400 }
       );
     }
-    console.error("[admin-about] POST hatası:", error);
+    console.error("[admin-about] PATCH hatası:", error);
     return NextResponse.json({ success: false, message: "Sunucu hatası." }, { status: 500 });
   }
 }

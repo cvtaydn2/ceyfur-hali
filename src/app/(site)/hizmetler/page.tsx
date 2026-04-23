@@ -20,6 +20,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       url: `${APP_CONFIG.url}/hizmetler`,
       type: "website",
+      images: [
+        {
+          url: `${APP_CONFIG.url}/images/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
   };
 }

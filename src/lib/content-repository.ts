@@ -187,8 +187,11 @@ export async function updateSiteContentSection<K extends keyof SiteContent>(
 function revalidateAllPaths(): void {
   try {
     revalidatePath("/", "layout");
+    revalidatePath("/hizmetler", "page");
     revalidatePath("/hizmetler/[slug]", "page");
+    revalidatePath("/bolgeler", "page");
     revalidatePath("/bolgeler/[slug]", "page");
+    revalidatePath("/sitemap.xml");
   } catch {
     // revalidatePath sadece request context'inde çalışır, hata sessizce geçilir
   }

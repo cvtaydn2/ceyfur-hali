@@ -1,10 +1,13 @@
 import { MetadataRoute } from 'next'
+import { getSiteContent } from '@/lib/content-repository'
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const content = await getSiteContent()
+
   return {
-    name: 'Ceyfur Halı Yıkama',
-    short_name: 'Ceyfur',
-    description: 'Antalya Konyaaltı Halı Yıkama Hizmetleri',
+    name: content.brand.name,
+    short_name: content.brand.name.split(' ')[0],
+    description: content.brand.slogan,
     start_url: '/',
     display: 'standalone',
     background_color: '#ffffff',

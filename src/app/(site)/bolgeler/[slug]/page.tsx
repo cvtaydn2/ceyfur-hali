@@ -36,6 +36,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `${APP_CONFIG.url}/bolgeler/${slug}`,
       type: "website",
+      images: [
+        {
+          url: `${APP_CONFIG.url}/images/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
   };
 }
@@ -52,12 +60,14 @@ export default async function DistrictPage({ params }: Props) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: content.brand.name,
-    description: `${area.name} bölgesinde profesyonel halı yıkama hizmeti`,
+    "@id": `${APP_CONFIG.url}/bolgeler/${slug}#business`,
+    name: `${content.brand.name} - ${area.name}`,
+    description: `${area.name} bölgesinde profesyonel halı yıkama, koltuk yıkama ve perde yıkama hizmeti`,
     url: `${APP_CONFIG.url}/bolgeler/${slug}`,
     telephone: content.contact.phone[0],
+    image: `${APP_CONFIG.url}/images/og-image.png`,
     areaServed: {
-      "@type": "Place",
+      "@type": "City",
       name: area.name,
     },
     address: {
@@ -65,6 +75,11 @@ export default async function DistrictPage({ params }: Props) {
       addressLocality: content.contact.district,
       addressRegion: content.contact.city,
       addressCountry: "TR",
+    },
+    parentOrganization: {
+      "@type": "LocalBusiness",
+      "@id": `${APP_CONFIG.url}/#business`,
+      name: content.brand.name,
     },
   };
 

@@ -7,6 +7,7 @@ import { APP_CONFIG } from "@/lib/constants";
 
 const inter = Inter({
   subsets: ["latin"],
+  display: "swap",
   weight: ["400", "500", "600", "700", "800", "900"],
 });
 
@@ -22,11 +23,14 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImageUrl = resolveOgImage(content.seo.ogImage);
 
   return {
-    title: content.seo.title,
+    title: {
+      default: content.seo.title,
+      template: `%s | ${content.brand.name}`,
+    },
     description: content.seo.description,
     keywords: content.seo.keywords,
     metadataBase: new URL(BASE_URL),
-    robots: "index, follow",
+    robots: { index: true, follow: true, googleBot: { index: true, follow: true } },
     openGraph: {
       title: content.seo.title,
       description: content.seo.description,
@@ -47,6 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     alternates: {
       canonical: BASE_URL,
+      languages: { "tr-TR": BASE_URL },
     },
     manifest: "/manifest.json",
     icons: {
@@ -77,6 +82,7 @@ export default async function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${BASE_URL}/#business`,
     name: content.brand.name,
     description: content.seo.description,
     url: BASE_URL,
@@ -87,8 +93,12 @@ export default async function RootLayout({
       streetAddress: content.contact.address,
       addressLocality: content.contact.district,
       addressRegion: content.contact.city,
+      postalCode: "34771",
       addressCountry: "TR",
     },
+    ...(content.contact.googleMapsUrl
+      ? { hasMap: content.contact.googleMapsUrl }
+      : {}),
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -97,10 +107,20 @@ export default async function RootLayout({
         closes,
       },
     ],
-    image: ogImageUrl,
+    image: [ogImageUrl],
+    logo: {
+      "@type": "ImageObject",
+      url: `${BASE_URL}/images/icon-512.png`,
+    },
     sameAs: [content.contact.instagram, content.contact.facebook].filter(Boolean),
     priceRange: "₺₺",
-    areaServed: (content.services.areas ?? []).map((a) => a.name),
+    currenciesAccepted: "TRY",
+    paymentAccepted: "Nakit, Kredi Kartı",
+    areaServed: (content.services.areas ?? []).map((a) => ({
+      "@type": "City",
+      name: a.name,
+    })),
+    serviceType: content.services.items.map((s) => s.title),
   };
 
   return (

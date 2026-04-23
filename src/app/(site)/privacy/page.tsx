@@ -1,5 +1,20 @@
 import React from "react";
+import { Metadata } from "next";
 import { getSiteContent } from "@/lib/content-repository";
+import { APP_CONFIG } from "@/lib/constants";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent();
+  const title = `Gizlilik Politikası | ${content.brand.name}`;
+  const description = `${content.brand.name} gizlilik politikası. Kişisel verilerinizin nasıl toplandığını, kullanıldığını ve korunduğunu öğrenin.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `${APP_CONFIG.url}/privacy` },
+    robots: { index: false, follow: false },
+    openGraph: { title, description, url: `${APP_CONFIG.url}/privacy`, type: "website" },
+  };
+}
 
 export default async function PrivacyPage() {
   const content = await getSiteContent();

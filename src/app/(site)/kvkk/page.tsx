@@ -1,5 +1,20 @@
 import React from "react";
+import { Metadata } from "next";
 import { getSiteContent } from "@/lib/content-repository";
+import { APP_CONFIG } from "@/lib/constants";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getSiteContent();
+  const title = `KVKK Aydınlatma Metni | ${content.brand.name}`;
+  const description = `${content.brand.name} KVKK aydınlatma metni. 6698 Sayılı Kişisel Verilerin Korunması Kanunu kapsamında kişisel verilerinizin işlenmesine ilişkin bilgilendirme.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `${APP_CONFIG.url}/kvkk` },
+    robots: { index: false, follow: false },
+    openGraph: { title, description, url: `${APP_CONFIG.url}/kvkk`, type: "website" },
+  };
+}
 
 export default async function KVKKPage() {
   const content = await getSiteContent();

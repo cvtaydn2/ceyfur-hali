@@ -36,7 +36,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       url: `${APP_CONFIG.url}/hizmetler/${slug}`,
-      images: [{ url: service.image, alt: service.title }],
+      // Mutlak URL: göreceli path'i base URL ile birleştir
+      images: [
+        {
+          url: service.image.startsWith("http")
+            ? service.image
+            : `${APP_CONFIG.url}${service.image}`,
+          alt: service.title,
+          width: 1200,
+          height: 630,
+        },
+      ],
       type: "website",
     },
   };
@@ -54,10 +64,15 @@ export default async function ServiceDetailPage({ params }: Props) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${APP_CONFIG.url}/hizmetler/${slug}#service`,
     name: service.title,
     description: service.description,
+    image: service.image.startsWith("http")
+      ? service.image
+      : `${APP_CONFIG.url}${service.image}`,
     provider: {
       "@type": "LocalBusiness",
+      "@id": `${APP_CONFIG.url}/#business`,
       name: content.brand.name,
       telephone: content.contact.phone[0],
       address: {
@@ -68,22 +83,57 @@ export default async function ServiceDetailPage({ params }: Props) {
         addressCountry: "TR",
       },
     },
-    areaServed: (content.services.areas ?? []).map((a) => a.name),
+    areaServed: (content.services.areas ?? []).map((a) => ({
+      "@type": "City",
+      name: a.name,
+    })),
     url: `${APP_CONFIG.url}/hizmetler/${slug}`,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "TRY",
+      availability: "https://schema.org/InStock",
+      url: `${APP_CONFIG.url}/hizmetler/${slug}`,
+    },
   };
 
-  // FAQ için hizmet özellikleri
+  // Gerçek ve anlamlı FAQ soruları
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: service.features.map((feature) => ({
-      "@type": "Question",
-      name: `${service.title} hizmetinde ${feature} var mı?`,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: `Evet, ${content.brand.name} ${service.title.toLowerCase()} hizmetinde ${feature} sunulmaktadır.`,
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `${service.title} hizmeti nasıl çalışır?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${content.brand.name} ${service.title.toLowerCase()} hizmetinde kapıdan kapıya ücretsiz servis sunuyoruz. ${service.description}`,
+        },
       },
-    })),
+      {
+        "@type": "Question",
+        name: `${service.title} fiyatları nedir?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${service.title} fiyatlarımız ürünün cinsine ve boyutuna göre değişmektedir. Ücretsiz fiyat teklifi için ${content.contact.phone[0]} numaralı hattımızı arayabilir veya WhatsApp üzerinden ulaşabilirsiniz.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `${service.title} ne kadar sürer?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${service.title} hizmetimizde genellikle 1-2 iş günü içinde teslim yapılmaktadır. Çalışma saatlerimiz: ${content.contact.workingHours}.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: `${service.title} için hangi bölgelere hizmet veriyorsunuz?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `${content.contact.city} genelinde ${(content.services.areas ?? []).map((a) => a.name).join(", ")} bölgelerine kapıdan kapıya ${service.title.toLowerCase()} hizmeti sunuyoruz.`,
+        },
+      },
+    ],
   };
 
   const breadcrumbJsonLd = {

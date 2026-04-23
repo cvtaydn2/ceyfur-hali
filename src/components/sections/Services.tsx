@@ -56,14 +56,14 @@ export const Services = ({ content }: { content?: SiteContent }) => {
         </div>
 
         {/* Hizmet Kartları */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {data.services.items.map((service, index) => {
             const Icon = iconMap[service.icon] ?? Brush;
             const spanClass =
               index === 0
-                ? "lg:col-span-2 lg:row-span-2 h-[500px] lg:h-auto"
+                ? "lg:col-span-2 lg:row-span-2"
                 : index === 1
-                ? "lg:col-span-2 lg:row-span-1"
+                ? "lg:col-span-2"
                 : "col-span-1";
 
             return (
@@ -82,8 +82,8 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                 {/* Görsel */}
                 <div
                   className={cn(
-                    "relative overflow-hidden",
-                    index === 0 ? "flex-grow min-h-[250px] md:min-h-[300px]" : "h-48"
+                    "relative overflow-hidden shrink-0",
+                    index === 0 ? "h-56 md:h-72 lg:h-80" : "h-44 md:h-48"
                   )}
                 >
                   <OptimizedImage
@@ -95,55 +95,54 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                     className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                  <div className="absolute top-6 left-6 w-14 h-14 rounded-2xl bg-white/95 backdrop-blur-md flex items-center justify-center text-primary-ocean shadow-xl transform group-hover:rotate-6 transition-transform">
-                    <Icon size={28} />
+                  <div className="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-white/95 backdrop-blur-md flex items-center justify-center text-primary-ocean shadow-xl transform group-hover:rotate-6 transition-transform">
+                    <Icon size={24} />
                   </div>
                 </div>
 
                 {/* İçerik */}
-                <div className="p-6 md:p-8 flex flex-col justify-end relative z-10 bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.05)]">
-                  <div className="flex justify-between items-start mb-4">
+                <div className="p-5 md:p-6 flex flex-col flex-1 bg-white">
+                  <div className="flex justify-between items-start mb-3">
                     <h3
                       className={cn(
-                        "font-bold text-slate-900 tracking-tight group-hover:text-primary-ocean transition-colors",
-                        index === 0 ? "text-2xl md:text-3xl" : "text-xl md:text-2xl"
+                        "font-bold text-slate-900 tracking-tight group-hover:text-primary-ocean transition-colors leading-tight",
+                        index === 0 ? "text-xl md:text-2xl" : "text-lg md:text-xl"
                       )}
                     >
                       {service.title}
                     </h3>
-                    <div className="p-2 rounded-full bg-slate-50 text-slate-300 group-hover:bg-primary-ocean/10 group-hover:text-primary-ocean transition-all">
-                      <ArrowUpRight size={20} />
+                    <div className="p-1.5 rounded-full bg-slate-50 text-slate-300 group-hover:bg-primary-ocean/10 group-hover:text-primary-ocean transition-all shrink-0 ml-2">
+                      <ArrowUpRight size={16} />
                     </div>
                   </div>
 
-                  <p className="text-slate-500 mb-6 text-sm leading-relaxed line-clamp-2 md:line-clamp-none">
+                  <p className="text-slate-500 mb-4 text-sm leading-relaxed line-clamp-2">
                     {service.description}
                   </p>
 
-                  <div className="space-y-3">
-                    <div className="flex flex-wrap gap-2">
-                      {service.features.slice(0, 3).map((feature, fIndex) => (
-                        <div
-                          key={fIndex}
-                          className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-bold text-slate-500 uppercase tracking-tight"
-                        >
-                          <CheckCircle2 size={12} className="text-primary-ocean" />
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, "")}?text=${encodeURIComponent(
-                        service.title + " hakkında bilgi almak istiyorum."
-                      )}`}
-                      className="mt-4 w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-primary-ocean transition-all shadow-lg shadow-slate-900/10 hover:shadow-primary-ocean/20"
-                    >
-                      Hemen Teklif Al
-                    </a>
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    {service.features.slice(0, 3).map((feature, fIndex) => (
+                      <div
+                        key={fIndex}
+                        className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-bold text-slate-500 uppercase tracking-tight"
+                      >
+                        <CheckCircle2 size={10} className="text-primary-ocean shrink-0" />
+                        <span className="truncate max-w-[120px]">{feature}</span>
+                      </div>
+                    ))}
                   </div>
+
+                  {/* Buton — mt-auto ile her zaman alta yapışır */}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, "")}?text=${encodeURIComponent(
+                      service.title + " hakkında bilgi almak istiyorum."
+                    )}`}
+                    className="mt-auto w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-primary-ocean transition-all shadow-lg shadow-slate-900/10 hover:shadow-primary-ocean/20"
+                  >
+                    Hemen Teklif Al
+                  </a>
                 </div>
               </motion.div>
             );

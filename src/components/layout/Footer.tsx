@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Globe, Share2, Phone, Mail, MapPin } from "lucide-react";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
@@ -52,9 +53,15 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
           <ul className="space-y-4">
             {data.navigation.map((item) => (
               <li key={item.label}>
-                <a href={item.href} className="text-sm hover:text-primary-ocean transition-colors">
-                  {item.label}
-                </a>
+                {item.href.startsWith("/") && !item.href.startsWith("/#") ? (
+                  <Link href={item.href} className="text-sm hover:text-primary-ocean transition-colors">
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a href={item.href} className="text-sm hover:text-primary-ocean transition-colors">
+                    {item.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -114,9 +121,9 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
         <p className="text-xs">{data.footer.copyright}</p>
         <div className="flex gap-6">
           {data.footer.links.map((link) => (
-            <a key={link.label} href={link.href} className="text-xs hover:text-white transition-colors">
+            <Link key={link.label} href={link.href} className="text-xs hover:text-white transition-colors">
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
       </div>

@@ -174,7 +174,8 @@ export const AdminDashboard = ({
 
   // ─── Tab Change Guard ────────────────────────────────────────────────────────
 
-  const handleTabChange = (id: TabId) => {
+  const handleTabChange = (id: string) => {
+    const tabId = id as TabId;
     const currentSection = TAB_SECTION_MAP[activeTab];
     if (currentSection && dirtySections.has(currentSection)) {
       const confirmed = window.confirm(
@@ -185,7 +186,7 @@ export const AdminDashboard = ({
       setContent(initialContent);
       setDirtySections(new Set());
     }
-    setActiveTab(id);
+    setActiveTab(tabId);
   };
 
   // ─── Lead Actions ────────────────────────────────────────────────────────────

@@ -77,7 +77,7 @@ export function useSiteContent() {
       if (cached) {
         setContent(cached.data);
         setIsFromFallback(cached.isFromFallback);
-        setUpdatedAt((cached as any).updatedAt);
+        setUpdatedAt(cached.updatedAt);
         setIsLoading(false);
         return;
       }

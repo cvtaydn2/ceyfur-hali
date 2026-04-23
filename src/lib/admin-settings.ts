@@ -5,7 +5,12 @@ import crypto from "crypto";
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function hashPassword(password: string): string {
-  return crypto.createHash("sha256").update(password).digest("hex");
+  // SHA-256 tek başına parola hash'leme için yetersizdir (hız saldırılarına açık).
+  // Gerçek üretim ortamında bcrypt/argon2 kullanılmalıdır.
+  // Bu proje Node.js crypto modülüyle sınırlı olduğundan PBKDF2 kullanıyoruz.
+  return crypto
+    .pbkdf2Sync(password, "ceyfur-salt-v1", 100_000, 64, "sha512")
+    .toString("hex");
 }
 
 // ─── Read ─────────────────────────────────────────────────────────────────────

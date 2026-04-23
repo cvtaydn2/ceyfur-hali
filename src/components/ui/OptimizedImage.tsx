@@ -16,31 +16,44 @@ export const OptimizedImage = ({
   alt,
   className,
   containerClassName,
-  fallbackSrc = "/images/placeholder.png",
+  fallbackSrc,
   priority = false,
   fill,
   ...props
 }: OptimizedImageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [imgSrc, setImgSrc] = useState(src);
-  const [isError, setIsError] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (fallbackSrc && imgSrc !== fallbackSrc) {
+      setImgSrc(fallbackSrc);
+    }
+    setHasError(true);
+    setIsLoading(false);
+  };
 
   return (
-    <div className={cn(
-      "overflow-hidden bg-slate-100",
-      fill ? "absolute inset-0" : "relative",
-      containerClassName
-    )}>
+    <div
+      className={cn(
+        "overflow-hidden bg-slate-100",
+        // fill modunda parent'ın position:relative'i olduğu varsayılır
+        // bu wrapper'ı absolute yapma — parent zaten konumlandırılmış olmalı
+        fill ? "absolute inset-0" : "relative",
+        containerClassName
+      )}
+    >
       <AnimatePresence>
         {isLoading && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
             className="absolute inset-0 bg-gradient-to-br from-slate-100 to-slate-200 animate-pulse z-10"
           />
         )}
       </AnimatePresence>
-      
+
       <Image
         {...props}
         fill={fill}
@@ -53,16 +66,12 @@ export const OptimizedImage = ({
           className
         )}
         onLoad={() => setIsLoading(false)}
-        onError={() => {
-          setImgSrc(fallbackSrc);
-          setIsError(true);
-          setIsLoading(false);
-        }}
+        onError={handleError}
       />
-      
-      {isError && (
+
+      {hasError && !fallbackSrc && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-50 text-slate-300">
-          <span className="text-[10px] font-black uppercase tracking-tighter">Görsel Seçilemedi</span>
+          <span className="text-[10px] font-black uppercase tracking-tighter">Görsel Yüklenemedi</span>
         </div>
       )}
     </div>

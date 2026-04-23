@@ -55,7 +55,7 @@ export const Campaigns = ({ content }: { content?: SiteContent }) => {
                 <span className="w-1.5 h-1.5 rounded-full bg-primary-ocean" />
                 {campaign.badge}
               </div>
-              <h3 className="text-3xl font-black text-slate-900 mb-4 tracking-tighter">{campaign.title}</h3>
+              <h3 className="text-2xl font-black text-slate-900 mb-4 tracking-tighter">{campaign.title}</h3>
               <p className="text-slate-500 mb-8 leading-relaxed font-medium">
                 {campaign.description}
               </p>
