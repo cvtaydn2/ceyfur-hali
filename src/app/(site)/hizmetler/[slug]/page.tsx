@@ -195,7 +195,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                     Hemen Randevu Al
                   </Link>
                   <a
-                    href={`https://wa.me/${content.contact.whatsapp}`}
+                    href={`https://wa.me/${content.contact.whatsapp.replace(/\s/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-emerald-500 text-white font-black text-sm hover:bg-emerald-600 transition-colors"
@@ -287,13 +287,13 @@ export default async function ServiceDetailPage({ params }: Props) {
             </p>
             <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href={`tel:${content.contact.phone[0]}`}
+                href={`tel:${content.contact.phone[0].replace(/\s/g, "")}`}
                 className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white text-primary-ocean font-black text-sm hover:bg-slate-50 transition-colors"
               >
                 📞 {content.contact.phone[0]}
               </a>
               <a
-                href={`https://wa.me/${content.contact.whatsapp}`}
+                href={`https://wa.me/${content.contact.whatsapp.replace(/\s/g, "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white/10 text-white font-black text-sm hover:bg-white/20 transition-colors border border-white/20"

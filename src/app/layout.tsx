@@ -50,6 +50,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     verification: {
       google: "qky3rdxrhkalrguRVhZGQTg4p4B_v3e6n9yP_Q",
+      other: {
+        "msvalidate.01": ["01F8E54F6D4491EAC0CB6DE7F8C132FD"],
+      },
     },
     alternates: {
       canonical: BASE_URL,

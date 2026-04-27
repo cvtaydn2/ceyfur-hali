@@ -161,7 +161,7 @@ export default async function DistrictPage({ params }: Props) {
                 Hemen Randevu Al
               </Link>
               <a
-                href={`tel:${content.contact.phone[0]}`}
+                href={`tel:${content.contact.phone[0].replace(/\s/g, "")}`}
                 className="inline-flex items-center justify-center px-8 py-4 rounded-2xl bg-white border border-primary-ocean/20 text-primary-ocean font-black text-sm hover:bg-primary-ocean hover:text-white transition-all shadow-sm"
               >
                 📞 {content.contact.phone[0]}

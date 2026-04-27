@@ -5,8 +5,8 @@
     "logo": ""
   },
   "seo": {
-    "title": "Ceyfur Halı Yıkama | Ümraniye Profesyonel Halı, Koltuk ve Perde Yıkama",
-    "description": "Ümraniye ve İstanbul Anadolu Yakası'nda profesyonel halı yıkama, koltuk yıkama, perde yıkama hizmeti. Kapıdan kapıya ücretsiz servis, leke çıkarma garantisi. Hemen arayın!",
+    "title": "Ceyfur Halı Yıkama | Ümraniye Profesyonel Halı ve Koltuk Yıkama",
+    "description": "Ümraniye'de profesyonel halı, koltuk ve perde yıkama hizmeti. Ücretsiz servis ve hijyen garantisiyle halılarınız ilk günkü gibi tertemiz! Hemen arayın.",
     "keywords": [
       "halı yıkama",
       "koltuk yıkama",
@@ -36,7 +36,7 @@
   "about": {
     "title": "Hijyen ve Güvenle",
     "subtitle": "25 Yıllık Tecrübe ile Halılarınıza Uzman Bakışı",
-    "content": "Ceyfur Halı Yıkama olarak, 2001 yılından bu yana İstanbul'un dört bir yanındaki binlerce mutlu yuvaya hijyen taşıyoruz. Modern tesislerimizde, halılarınızın dokusuna zarar vermeyen özel şampuanlar ve tam otomatik makinelerle profesyonel temizlik hizmeti sunuyoruz. Sadece temizlik değil, sağlığınızı da önemsiyoruz.",
+    "content": "Ceyfur Halı Yıkama olarak, 2001 yılından bu yana İstanbul'un Ümraniye ilçesi merkezli olmak üzere Anadolu Yakası'nın tamamına hijyen ve güven taşıyoruz. 25 yılı aşkın tecrübemizle, halılarınızı sadece temizlemekle kalmıyor, onları derinlemesine dezenfekte ederek yaşam alanlarınızın havasını değiştiriyoruz. Tam otomatik makine parkurumuzda, her halının dokusuna ve iplik yapısına uygun özel yıkama teknikleri uyguluyoruz. 100% bitkisel bazlı, anti-alerjik şampuanlarımız sayesinde bebekleriniz ve evcil hayvanlarınız için tamamen güvenli bir ortam sağlıyoruz. Halılarınız toz alma, leke çıkarma, otomatik yıkama, durulama ve özel kurutma odalarımızda nemden arındırılma süreçlerinden geçerek son kontrolden sonra parfümlenip ambalajlanarak adresinize teslim edilir. Sadece bir temizlik firması değil, sağlığınızın da bir parçasıyız.",
     "features": [
       "100% Organik Şampuanlar",
       "Ücretsiz Kapıdan Kapıya Servis",
@@ -53,7 +53,7 @@
         "id": "1",
         "slug": "hali-yikama",
         "title": "Halı Yıkama",
-        "description": "Halılarınızın cinsine (yün, ipek, makine) göre özel şampuanlar ve tam otomatik makinelerle derinlemesine temizlik.",
+        "description": "Halılarınızın cinsine (yün, ipek, makine, shaggy, antika veya el dokuması) göre ayrıştırılarak, her birine özel pH değerine sahip şampuanlar kullanılır. Toz alma işleminden sonra tam otomatik makinelerimizde çift taraflı yıkama yapılır ve kapalı kurutma odalarımızda güneş ışığının soldurucu etkisinden uzak, ideal ısıda kurutulur.",
         "icon": "Brush",
         "features": [
           "Antibakteriyel Yıkama",
@@ -66,7 +66,7 @@
         "id": "2",
         "slug": "koltuk-yikama",
         "title": "Koltuk Yıkama",
-        "description": "Yerinde vakumlu yıkama teknolojisi ile koltuklarınızdaki kir ve lekelerden kurtulun, hijyenin keyfini sürün.",
+        "description": "Yerinde vakumlu yıkama teknolojisi ve profesyonel leke çıkarıcılarımızla koltuklarınızdaki ter, toz, mayt ve inatçı lekelerden kurtulun. Buharlı temizleme seçeneklerimizle kumaşın en derinlerine nüfuz ederek gerçek hijyen sağlıyoruz. Hızlı kuruma garantisiyle koltuklarınızı aynı gün içinde tekrar kullanmaya başlayabilirsiniz.",
         "icon": "Armchair",
         "features": [
           "Yerinde Servis",
@@ -79,7 +79,7 @@
         "id": "3",
         "slug": "perde-yikama",
         "title": "Perde Yıkama",
-        "description": "Stor, zebra ve fon perdeleriniz hassas dokularına zarar verilmeden profesyonelce temizlenir.",
+        "description": "Stor, zebra, fon ve tül perdeleriniz hassas dokularına zarar verilmeden, kumaş tipine uygun profesyonel yöntemlerle yıkanır. Uzman ekibimiz perdelerinizi yerinden titizlikle söker, özel tesislerimizde dezenfekte eder ve ilk günkü temizliğiyle tekrar yerlerine monte eder. Kırışıklık önleyici tekniklerimizle perdeleriniz pırıl pırıl olur.",
         "icon": "Waves",
         "features": [
           "Sökme-Takma Desteği",
@@ -92,7 +92,7 @@
         "id": "4",
         "slug": "yorgan-battaniye-yikama",
         "title": "Yorgan & Battaniye",
-        "description": "Endüstriyel makinelerde yüksek ısıda dezenfekte edilerek yıkanan yorganlarınız sağlıkla uyumanız için hazır.",
+        "description": "Endüstriyel, yüksek kapasiteli yıkama makinelerimizde, ev tipi makinelerin ulaşamadığı hijyeni sağlıyoruz. Yorgan ve battaniye leriniz yüksek ısıda dezenfekte edilerek bakteri ve akarlardan tamamen arındırılır. Özel yumuşatıcı bakımı ve antibakteriyel spreylerle ferah bir uyku için hazır hale getirilip paketlenerek teslim edilir.",
         "icon": "Bed",
         "features": [
           "Yüksek Isı Dezenfeksiyon",
