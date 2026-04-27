@@ -172,7 +172,8 @@ export default async function ServiceDetailPage({ params }: Props) {
                   {service.title}
                 </h1>
                 <p className="text-lg text-slate-500 mt-4 leading-relaxed">
-                  {service.description}
+                  {service.description} <strong>{service.title}</strong> ihtiyaçlarınızda İstanbul Anadolu Yakası genelinde 
+                  <strong> ücretsiz servis</strong> ve <strong>leke çıkarma garantisi</strong> ile yanınızdayız.
                 </p>
 
                 <ul className="mt-6 space-y-3">
@@ -213,6 +214,41 @@ export default async function ServiceDetailPage({ params }: Props) {
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Hizmet Süreci - SEO İçerik Bloğu */}
+        <section className="py-16 px-4 bg-white border-y border-slate-100">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-8">
+              Profesyonel {service.title} Sürecimiz
+            </h2>
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                <div className="text-3xl font-black text-primary-ocean/20 mb-4">01</div>
+                <h3 className="text-lg font-black text-slate-900 mb-3">Ücretsiz Servis ve Teslim Alım</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Ekiplerimiz belirtilen adresten halılarınızı makbuz karşılığı teslim alır. 
+                  Bu aşamada halılarınızın türü ve varsa lekeleri not edilir.
+                </p>
+              </div>
+              <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                <div className="text-3xl font-black text-primary-ocean/20 mb-4">02</div>
+                <h3 className="text-lg font-black text-slate-900 mb-3">Tam Otomatik Yıkama ve Durulama</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Tam otomatik makinelerimizde, halının cinsine uygun fırça baskısı ve 
+                  <strong> bitkisel şampuanlar</strong> kullanılarak derinlemesine yıkama işlemi gerçekleştirilir.
+                </p>
+              </div>
+              <div className="bg-slate-50 p-6 rounded-3xl border border-slate-100">
+                <div className="text-3xl font-black text-primary-ocean/20 mb-4">03</div>
+                <h3 className="text-lg font-black text-slate-900 mb-3">Kurutma ve Hijyenik Paketleme</h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Nem alma odalarımızda kurutulan halılarınız, son kontrolleri yapıldıktan sonra 
+                  parfümlenir ve poşetlenerek adresinize teslim edilir.
+                </p>
               </div>
             </div>
           </div>

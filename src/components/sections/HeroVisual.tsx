@@ -27,7 +27,7 @@ export const HeroVisual = ({ image }: HeroVisualProps) => {
         <div className="relative w-full aspect-square rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
           <Image
             src={image}
-            alt="Premium Halı Yıkama"
+            alt="Ceyfur Halı Yıkama - İstanbul Ümraniye Profesyonel Halı ve Koltuk Yıkama Hizmetleri"
             fill
             priority
             fetchPriority="high"

@@ -100,6 +100,29 @@ export const Footer = ({ content }: { content?: SiteContent }) => {
           </ul>
         </div>
 
+        {/* Regions - SEO için kritik */}
+        <div>
+          <h3 className="text-white font-bold mb-6">Hizmet Bölgeleri</h3>
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-3">
+            {(data.services.areas ?? []).slice(0, 10).map((area) => (
+              <li key={area.slug}>
+                <Link 
+                  href={`/bolgeler/${area.slug}`} 
+                  className="text-xs hover:text-primary-ocean transition-colors flex items-center gap-1.5"
+                >
+                  <span className="w-1 h-1 rounded-full bg-slate-700" />
+                  {area.name}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Link href="/bolgeler" className="text-xs text-primary-ocean font-bold hover:underline">
+                Tüm Bölgeler →
+              </Link>
+            </li>
+          </ul>
+        </div>
+
         {/* Contact Info */}
         <div>
           <h3 className="text-white font-bold mb-6">İletişim</h3>

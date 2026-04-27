@@ -29,13 +29,15 @@ export const About = ({ content }: { content?: SiteContent }) => {
               Hakkımızda
             </div>
             <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-              {aboutData.title}
+              İstanbul&apos;un En Güvenilir <span className="text-primary-ocean">Halı Yıkama</span> Servisi
             </h2>
             <p className="text-lg font-semibold text-primary-ocean mb-8">
-              {aboutData.subtitle}
+              Ümraniye, Üsküdar ve Çekmeköy Bölgelerinde 25 Yıllık Güven
             </p>
             <div className="prose prose-slate max-w-none text-slate-600 mb-10 leading-relaxed">
-              {aboutData.content}
+              Ceyfur Halı Yıkama olarak, İstanbul Anadolu Yakası&apos;nda 2001 yılından bu yana profesyonel <strong>halı yıkama</strong>, 
+              <strong>koltuk yıkama</strong> ve <strong>perde yıkama</strong> hizmetleri sunuyoruz. Modern tesislerimizde, 
+              halılarınızın dokusuna zarar vermeyen bitkisel şampuanlar ve tam otomatik makinelerle derinlemesine temizlik sağlıyoruz.
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6">
@@ -79,6 +81,7 @@ export const About = ({ content }: { content?: SiteContent }) => {
                 fill
                 sizes="(max-width: 1024px) 100vw, 500px"
                 className="object-cover"
+                priority
               />
               {/* Experience Badge */}
               <div className="absolute bottom-10 left-10 glass p-6 rounded-3xl shadow-xl">

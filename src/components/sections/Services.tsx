@@ -1,6 +1,7 @@
 "use client";
 
 import { OptimizedImage } from "@/components/ui";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Brush, Armchair, Waves, Bed, ArrowUpRight, CheckCircle2, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -136,16 +137,12 @@ export const Services = ({ content }: { content?: SiteContent }) => {
                   </div>
 
                   {/* Buton — mt-auto ile her zaman alta yapışır */}
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, "")}?text=${encodeURIComponent(
-                      service.title + " hakkında bilgi almak istiyorum."
-                    )}`}
+                  <Link
+                    href={`/hizmetler/${service.slug}`}
                     className="mt-auto w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-primary-ocean transition-all shadow-lg shadow-slate-900/10 hover:shadow-primary-ocean/20"
                   >
-                    Hemen Teklif Al
-                  </a>
+                    Detayları Gör
+                  </Link>
                 </div>
               </motion.div>
             );
@@ -177,18 +174,14 @@ export const Services = ({ content }: { content?: SiteContent }) => {
 
             <div className="flex-1 flex flex-wrap gap-3">
               {areas.map((area, i) => (
-                <a
+                <Link
                   key={area.slug}
-                  href={`https://wa.me/${data.contact.whatsapp.replace(/\s+/g, "")}?text=${encodeURIComponent(
-                    area.name + " bölgesinde halı yıkama hizmeti almak istiyorum."
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={`/bolgeler/${area.slug}`}
                   className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/10 border border-white/10 text-white font-bold text-sm hover:bg-primary-ocean hover:border-primary-ocean transition-colors"
                 >
                   <MapPin size={14} aria-hidden="true" />
-                  {area.name}
-                </a>
+                  {area.name} Halı Yıkama
+                </Link>
               ))}
             </div>
           </motion.div>

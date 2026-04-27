@@ -136,8 +136,7 @@ export default async function RootLayout({
           rel="preload"
           as="image"
           href="/images/hero-carpet.png"
-          // @ts-expect-error — fetchpriority henüz React types'a eklenmedi
-          fetchpriority="high"
+          fetchPriority="high"
           imageSrcSet="/_next/image?url=%2Fimages%2Fhero-carpet.png&w=640&q=75 640w, /_next/image?url=%2Fimages%2Fhero-carpet.png&w=828&q=75 828w, /_next/image?url=%2Fimages%2Fhero-carpet.png&w=1080&q=75 1080w"
           imageSizes="(max-width: 1024px) calc(100vw - 2rem), 600px"
         />

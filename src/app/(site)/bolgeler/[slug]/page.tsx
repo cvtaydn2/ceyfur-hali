@@ -148,8 +148,9 @@ export default async function DistrictPage({ params }: Props) {
               {area.name} Halı Yıkama
             </h1>
             <p className="text-lg text-slate-500 mt-4 max-w-2xl leading-relaxed">
-              {content.brand.name} olarak {area.name} bölgesinde kapıdan kapıya ücretsiz servis ile
-              profesyonel halı yıkama, koltuk yıkama ve perde yıkama hizmeti sunuyoruz.
+              {content.brand.name} olarak {area.name} bölgesinde <strong>kapıdan kapıya ücretsiz servis</strong> ile
+              profesyonel <strong>halı yıkama</strong>, <strong>koltuk yıkama</strong>, <strong>perde yıkama</strong> ve yorgan yıkama hizmetleri sunuyoruz.
+              Hijyenik ve tam otomatik makinelerimizle %100 temizlik garantisi sağlıyoruz.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -193,6 +194,59 @@ export default async function DistrictPage({ params }: Props) {
                   </div>
                 </Link>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Neden Biz? - SEO İçerik Bloğu */}
+        <section className="py-16 px-4 bg-white border-y border-slate-100">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight mb-8">
+              Neden {area.name} Profesyonel Halı Yıkama?
+            </h2>
+            <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-6">
+              <p>
+                <strong>{area.name} halı yıkama</strong> ihtiyaçlarınızda Ceyfur Halı Yıkama olarak bölgedeki en modern tesislere sahibiz. 
+                Halılarınızın dokusuna zarar vermeyen özel şampuanlar ve tam otomatik yıkama sistemlerimizle derinlemesine hijyen sağlıyoruz.
+              </p>
+              <div className="grid sm:grid-cols-2 gap-8 not-prose mt-8">
+                <div className="space-y-2">
+                  <h3 className="font-black text-slate-900 flex items-center gap-2">
+                    <span className="text-primary-ocean">★</span> Ücretsiz Servis Ağı
+                  </h3>
+                  <p className="text-sm">
+                    {area.name} bölgesinin her mahallesine haftanın 6 günü ücretsiz servis aracımızla hizmet veriyoruz. 
+                    Halılarınızı kapınızdan alıp, tertemiz şekilde kapınıza teslim ediyoruz.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-black text-slate-900 flex items-center gap-2">
+                    <span className="text-primary-ocean">★</span> Antibakteriyel Temizlik
+                  </h3>
+                  <p className="text-sm">
+                    Halılarınızda biriken toz, mite ve bakterilere karşı %100 etkili antibakteriyel şampuanlar kullanıyoruz. 
+                    Özellikle astım ve alerjisi olanlar için tam hijyen sağlıyoruz.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-black text-slate-900 flex items-center gap-2">
+                    <span className="text-primary-ocean">★</span> Leke Çıkarma Garantisi
+                  </h3>
+                  <p className="text-sm">
+                    Zorlu lekeler (kahve, çay, meyve suyu vb.) için kumaş yapısına uygun özel leke çıkarıcılar kullanarak 
+                    halınızın ilk günkü görünümüne kavuşmasını sağlıyoruz.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="font-black text-slate-900 flex items-center gap-2">
+                    <span className="text-primary-ocean">★</span> Modern Kurutma Odası
+                  </h3>
+                  <p className="text-sm">
+                    Halılarınızı dış ortamın tozundan uzak, nem alma makineli özel kurutma odalarımızda kurutuyoruz. 
+                    Böylece halılarda koku oluşumunu engelliyoruz.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </section>

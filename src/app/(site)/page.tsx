@@ -11,10 +11,21 @@ export const revalidate = 3600;
 
 export async function generateMetadata(): Promise<Metadata> {
   const content = await getSiteContent();
+  const title = `İstanbul Halı Yıkama | Profesyonel Ümraniye Halı ve Koltuk Yıkama`;
+  const description = `İstanbul Anadolu Yakası'nda profesyonel halı yıkama, koltuk yıkama ve perde yıkama. Ümraniye halı yıkama servisimizle kapıdan kapıya ücretsiz hizmet. Hemen arayın!`;
+  
   return {
-    // title template'i override et — ana sayfada sadece tam başlık
-    title: content.seo.title,
+    title,
+    description,
     alternates: { canonical: APP_CONFIG.url },
+    openGraph: {
+      title,
+      description,
+      url: APP_CONFIG.url,
+      siteName: content.brand.name,
+      locale: "tr_TR",
+      type: "website",
+    }
   };
 }
 
