@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Lock, ArrowRight, ShieldAlert } from "lucide-react";
 import { motion } from "framer-motion";
-import { setAuthToken } from "@/lib/auth-token";
+
 
 export default function LoginPage() {
   const [password, setPassword] = useState("");
@@ -27,9 +27,7 @@ export default function LoginPage() {
 
       if (response.ok && data.success) {
         // Token'ı localStorage'a kaydet
-        if (data.token) {
-          setAuthToken(data.token);
-        }
+
         // Hard redirect — cookie + token ikisi de hazır
         window.location.href = "/admin";
       } else {

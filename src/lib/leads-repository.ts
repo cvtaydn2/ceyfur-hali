@@ -5,10 +5,11 @@ import { Lead, LeadArchive, LeadInput, ArchiveStatusSchema } from "./leads-schem
 
 /**
  * Yeni müşteri talebi oluşturur.
- * Public Supabase client kullanır (RLS insert iznine sahip olmalı).
+ * Güvenlik için supabaseAdmin kullanır, RLS'yi bypass eder.
+ * Public RLS 'leads_public_insert' devreden çıkarılmalıdır.
  */
 export async function createLead(input: LeadInput): Promise<void> {
-  const { error } = await supabase.from("leads").insert({
+  const { error } = await supabaseAdmin.from("leads").insert({
     full_name: input.fullName,
     phone: input.phone,
     service_id: input.serviceId,
@@ -22,6 +23,7 @@ export async function createLead(input: LeadInput): Promise<void> {
     throw new Error(`Talep oluşturulamadı: ${error.message}`);
   }
 }
+
 
 /**
  * Tüm aktif lead'leri getirir (admin).

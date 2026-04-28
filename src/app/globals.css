@@ -6,9 +6,9 @@
   --color-surface-pure: #ffffff;
   --color-bg-slate: #f8fafc;
   
-  --color-border: var(--border);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #f8fafc;
+  --color-foreground: #0f172a;
+  --color-border: #e2e8f0;
   
   --font-inter: "Inter", sans-serif;
   
@@ -18,23 +18,18 @@
 }
 
 @layer base {
-  :root {
-    --background: #f8fafc;
-    --foreground: #0f172a;
-    --border: #e2e8f0;
-    --primary: #0077b6;
-    --secondary: #00b4d8;
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-inter);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-inter antialiased;
-  }
-}
 
 @layer utilities {
   .glass {

@@ -134,19 +134,9 @@ export function getSessionTokenFromCookie(cookieHeader: string | null): string |
  * Geçersiz oturum durumunda 401 response döner, aksi halde null.
  */
 export async function requireAuth(): Promise<NextResponse | null> {
-  // Önce cookie'den dene
+  // Sadece cookie kullanıyoruz (XSS koruması için localStorage devreden çıkarıldı)
   const cookieStore = await cookies();
-  let sessionToken = cookieStore.get(SESSION_CONFIG.cookieName)?.value;
-
-  // Cookie yoksa Authorization header'dan dene
-  if (!sessionToken) {
-    const { headers } = await import("next/headers");
-    const headerStore = await headers();
-    const authHeader = headerStore.get("authorization");
-    if (authHeader?.startsWith("Bearer ")) {
-      sessionToken = authHeader.slice(7);
-    }
-  }
+  const sessionToken = cookieStore.get(SESSION_CONFIG.cookieName)?.value;
 
 
   if (!sessionToken) {

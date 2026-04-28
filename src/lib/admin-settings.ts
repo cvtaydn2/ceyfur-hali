@@ -4,42 +4,77 @@ import crypto from "crypto";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+/**
+ * Parolayı rastgele bir salt ile hash'ler.
+ * Format: salt:hash
+ */
 function hashPassword(password: string): string {
-  // SHA-256 tek başına parola hash'leme için yetersizdir (hız saldırılarına açık).
-  // Gerçek üretim ortamında bcrypt/argon2 kullanılmalıdır.
-  // Bu proje Node.js crypto modülüyle sınırlı olduğundan PBKDF2 kullanıyoruz.
-  return crypto
-    .pbkdf2Sync(password, "ceyfur-salt-v1", 100_000, 64, "sha512")
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto
+    .pbkdf2Sync(password, salt, 100_000, 64, "sha512")
     .toString("hex");
+  return `${salt}:${hash}`;
+}
+
+/**
+ * İki string'i timing-attack korumalı şekilde karşılaştırır.
+ */
+function safeCompare(a: string, b: string): boolean {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  if (a.length !== b.length) return false;
+  
+  return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 }
 
 // ─── Read ─────────────────────────────────────────────────────────────────────
 
 /**
  * Admin şifresini doğrular.
- * Önce DB'deki hash'e bakar, yoksa ADMIN_SECRET env var'a düşer.
+ * Önce DB'deki hash'e bakar. Eğer DB'deki hash eşleşmezse veya DB erişilemezse
+ * ADMIN_SECRET env var'ı fallback olarak kontrol eder (kilitlenme koruması).
  */
 export async function verifyAdminPassword(password: string): Promise<boolean> {
+  let dbHash: string | null = null;
+
   try {
     const { data } = await supabaseAdmin
       .from("admin_settings")
       .select("value")
       .eq("key", "admin_password_hash")
       .single();
-
-    if (data?.value) {
-      // DB'de hash var — karşılaştır
-      const inputHash = hashPassword(password);
-      return inputHash === data.value;
-    }
+    
+    dbHash = data?.value || null;
   } catch {
-    // DB erişimi yoksa env var'a düş
+    // DB erişim hatası
   }
 
-  // Fallback: ADMIN_SECRET env var
+  // 1. DB Hash Kontrolü
+  if (dbHash) {
+    if (dbHash.includes(":")) {
+      // Yeni format (salt:hash)
+      const [salt, storedHash] = dbHash.split(":");
+      const inputHash = crypto
+        .pbkdf2Sync(password, salt, 100_000, 64, "sha512")
+        .toString("hex");
+      
+      if (safeCompare(inputHash, storedHash)) return true;
+    } else {
+      // Eski format (hardcoded salt)
+      const legacyHash = crypto
+        .pbkdf2Sync(password, "ceyfur-salt-v1", 100_000, 64, "sha512")
+        .toString("hex");
+      
+      if (safeCompare(legacyHash, dbHash)) return true;
+    }
+  }
+
+  // 2. Fallback: ADMIN_SECRET env var (DB hash yanlışsa veya yoksa)
   const adminSecret = process.env.ADMIN_SECRET;
-  if (!adminSecret) return false;
-  return timingSafeEqual(password, adminSecret);
+  if (adminSecret && safeCompare(password, adminSecret)) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -50,14 +85,16 @@ export async function updateAdminPassword(newPassword: string): Promise<void> {
     throw new Error("Şifre en az 8 karakter olmalıdır.");
   }
 
-  const hash = hashPassword(newPassword);
+  const hashWithSalt = hashPassword(newPassword);
 
   const { error } = await supabaseAdmin
     .from("admin_settings")
     .upsert({
       key: "admin_password_hash",
-      value: hash,
+      value: hashWithSalt,
       updated_at: new Date().toISOString(),
+    }, {
+      onConflict: "key"
     });
 
   if (error) {
@@ -82,13 +119,3 @@ export async function getPasswordLastUpdated(): Promise<string | null> {
   }
 }
 
-// ─── Timing Safe Compare ──────────────────────────────────────────────────────
-
-function timingSafeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
-  let result = 0;
-  for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
-  }
-  return result === 0;
-}

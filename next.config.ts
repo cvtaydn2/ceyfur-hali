@@ -28,8 +28,13 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           // Referrer politikası
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          // XSS koruması (modern tarayıcılarda CSP ile desteklenir)
-          { key: "X-XSS-Protection", value: "1; mode=block" },
+          // HSTS — Sadece HTTPS kullanmaya zorla (2 yıl)
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+          // Content Security Policy
+          {
+            key: "Content-Security-Policy",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-scripts.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self'; upgrade-insecure-requests;",
+          },
           // Permissions Policy — gereksiz tarayıcı API'lerini kapat
           {
             key: "Permissions-Policy",

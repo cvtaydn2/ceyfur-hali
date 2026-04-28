@@ -1,6 +1,6 @@
 import "server-only";
 import { cache } from "react";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, unstable_cache, revalidateTag } from "next/cache";
 import { supabase } from "./supabase";
 import { supabaseAdmin } from "./supabase-admin";
 import { SiteContent } from "@/types";
@@ -51,8 +51,14 @@ export type ContentReadResult =
  * Hata veya geçersiz veri durumunda fallback JSON'a döner.
  */
 export const getSiteContent = cache(async (): Promise<SiteContent> => {
-  const result = await getSiteContentWithMeta();
-  return result.data;
+  return unstable_cache(
+    async () => {
+      const result = await getSiteContentWithMeta();
+      return result.data;
+    },
+    ["site-content"],
+    { revalidate: 3600, tags: ["site-content"] }
+  )();
 });
 
 /**
@@ -141,6 +147,7 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
 
   // ISR cache'ini temizle
   revalidateAllPaths();
+  revalidateTag("site-content", "max");
 }
 
 /**
@@ -151,35 +158,19 @@ export async function updateSiteContentSection<K extends keyof SiteContent>(
   section: K,
   sectionData: SiteContent[K]
 ): Promise<void> {
-  // Mevcut içeriği çek
-  const current = await getSiteContentFresh().catch(async () => {
-    // DB'de kayıt yoksa fallback'ten başla
-    return fallbackContent as unknown as SiteContent;
+  // RPC üzerinden atomic partial update yap
+  const { error } = await supabaseAdmin.rpc("update_site_content_section", {
+    p_section: section,
+    p_data: sectionData,
   });
-
-  // Sadece ilgili bölümü güncelle
-  const updated: SiteContent = { ...current, [section]: sectionData };
-
-  // Full schema ile doğrula
-  const parsed = SiteContentSchema.safeParse(updated);
-  if (!parsed.success) {
-    const issues = parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join(", ");
-    throw new Error(`Güncelleme geçersiz: ${issues}`);
-  }
-
-  const { error } = await supabaseAdmin
-    .from("site_configs")
-    .upsert({ id: "main", content: parsed.data, updated_at: new Date().toISOString() });
 
   if (error) {
     throw new Error(`Bölüm güncellenemedi: ${error.message}`);
   }
 
-  // Save-verify
-  await getSiteContentFresh();
-
   // ISR cache'ini temizle
   revalidateAllPaths();
+  revalidateTag("site-content", "max");
 }
 
 // ─── Cache Invalidation ───────────────────────────────────────────────────────

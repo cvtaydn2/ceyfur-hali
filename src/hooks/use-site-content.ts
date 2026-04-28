@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { SiteContent } from "@/types";
 import { ContentSection } from "@/lib/constants";
-import { getAuthHeaders, clearAuthToken } from "@/lib/auth-token";
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -89,12 +89,10 @@ export function useSiteContent() {
     try {
       const res = await fetch("/api/content/get", {
         credentials: "include",
-        headers: getAuthHeaders(),
       });
 
       // 401 → token yok veya süresi dolmuş, login'e yönlendir
       if (res.status === 401) {
-        clearAuthToken();
         setError("Oturum süresi dolmuş. Yeniden giriş yapılıyor...");
         setIsLoading(false);
         if (typeof window !== "undefined") {
@@ -134,7 +132,7 @@ export function useSiteContent() {
     try {
       const res = await fetch("/api/content", {
         method: "POST",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(newContent),
       });
@@ -169,7 +167,7 @@ export function useSiteContent() {
     try {
       const res = await fetch(`/api/admin/content/${section}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(sectionData),
       });

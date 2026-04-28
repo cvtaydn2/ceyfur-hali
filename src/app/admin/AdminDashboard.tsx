@@ -25,7 +25,7 @@ import { SecuritySection } from "@/components/admin/sections/SecuritySection";
 import { Button } from "@/components/ui";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { getAuthHeaders, clearAuthToken } from "@/lib/auth-token";
+
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -111,8 +111,8 @@ export const AdminDashboard = ({
     setIsLoadingLeads(true);
     try {
       const [leadsRes, archiveRes] = await Promise.all([
-        fetch("/api/admin/leads", { credentials: "include", headers: getAuthHeaders() }).then((r) => r.json()),
-        fetch("/api/admin/leads?type=archive", { credentials: "include", headers: getAuthHeaders() }).then((r) => r.json()),
+        fetch("/api/admin/leads", { credentials: "include" }).then((r) => r.json()),
+        fetch("/api/admin/leads?type=archive", { credentials: "include" }).then((r) => r.json()),
       ]);
       if (leadsRes.success) setLeads(leadsRes.data);
       if (archiveRes.success) setArchive(archiveRes.data);
@@ -195,7 +195,7 @@ export const AdminDashboard = ({
     try {
       const res = await fetch(`/api/admin/leads/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ status }),
       });
@@ -214,8 +214,7 @@ export const AdminDashboard = ({
   // ─── Logout ──────────────────────────────────────────────────────────────────
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include", headers: getAuthHeaders() });
-    clearAuthToken();
+    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
     router.push("/auth/login");
   };
 

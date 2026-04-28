@@ -49,7 +49,7 @@ DO $$ BEGIN
   ) THEN
     CREATE POLICY "leads_public_insert"
       ON leads FOR INSERT
-      WITH CHECK (true);
+      WITH CHECK (false); -- API üzerinden kontrollü insert yapılacak
   END IF;
 END $$;
 
@@ -89,11 +89,16 @@ END $$;
 
 DROP FUNCTION IF EXISTS archive_lead(UUID, TEXT);
 
-CREATE FUNCTION archive_lead(
-  p_lead_id  UUID,
-  p_status   TEXT
+CREATE OR REPLACE FUNCTION archive_lead(
+  p_lead_id       UUID,
+  p_final_status  TEXT
 ) RETURNS void AS $$
 BEGIN
+  -- Yetki kontrolü (Sadece authenticated admin çağırabilir)
+  IF auth.role() <> 'authenticated' THEN
+    RAISE EXCEPTION 'Yetkisiz erişim.';
+  END IF;
+
   INSERT INTO leads_archive (
     original_lead_id,
     full_name,
@@ -113,7 +118,7 @@ BEGIN
     district,
     preferred_date,
     notes,
-    p_status,
+    p_final_status,
     created_at
   FROM leads
   WHERE id = p_lead_id;
@@ -125,3 +130,30 @@ BEGIN
   DELETE FROM leads WHERE id = p_lead_id;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ─── Partial Update RPC ───────────────────────────────────────
+
+CREATE OR REPLACE FUNCTION update_site_content_section(
+  p_section TEXT,
+  p_data    JSONB
+) RETURNS void AS $$
+BEGIN
+  -- Yetki kontrolü (Sadece authenticated admin)
+  IF auth.role() <> 'authenticated' THEN
+    RAISE EXCEPTION 'Yetkisiz erişim.';
+  END IF;
+
+  UPDATE site_configs
+  SET 
+    content = jsonb_set(content, ARRAY[p_section], p_data, true),
+    updated_at = NOW()
+  WHERE id = 'main';
+
+  IF NOT FOUND THEN
+    -- Eğer kayıt yoksa oluştur (fallback'ten beslenen ilk kayıt için)
+    INSERT INTO site_configs (id, content, updated_at)
+    VALUES ('main', jsonb_build_object(p_section, p_data), NOW());
+  END IF;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+

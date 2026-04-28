@@ -15,8 +15,9 @@ export function proxy(request: NextRequest) {
   }
 
   const sessionToken = request.cookies.get(COOKIE_NAME)?.value;
+  const isPossiblyValid = sessionToken && /^[a-f0-9]{64}$/.test(sessionToken);
 
-  if (!sessionToken) {
+  if (!isPossiblyValid) {
     if (isAdminPage) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }

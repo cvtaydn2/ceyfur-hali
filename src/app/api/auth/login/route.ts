@@ -88,7 +88,7 @@ export async function POST(request: Request) {
       maxAge: SESSION_CONFIG.maxAge,
     });
 
-    return NextResponse.json({ success: true, token: sessionToken });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error("[auth/login] Hata:", error);
     return NextResponse.json(
