@@ -376,6 +376,10 @@
       "href": "/#campaigns"
     },
     {
+      "label": "Süreç",
+      "href": "/#process"
+    },
+    {
       "label": "Hakkımızda",
       "href": "/#about"
     },
@@ -399,6 +403,37 @@
       {
         "label": "KVKK Aydınlatma Metni",
         "href": "/kvkk"
+      }
+    ]
+  },
+  "process": {
+    "title": "Yıkama Sürecimiz",
+    "subtitle": "Her aşamada profesyonel hijyen ve kalite kontrolü",
+    "steps": [
+      {
+        "title": "Toz Alma",
+        "description": "Ücretsiz servisimiz tarafından fabrikanıza gelen ürünleriniz yıkamaya girmeden önce kuru bir şekilde toz alma işlemi yapılır.",
+        "videoUrl": ""
+      },
+      {
+        "title": "Yıkama",
+        "description": "Toz alma işleminden geçen halılar toplamda 24 fırçalı alt üst yıkama işleminden geçmektedir.",
+        "videoUrl": ""
+      },
+      {
+        "title": "Durulama",
+        "description": "Yıkama makinesinden çıkan halılar son olarak sıkma makinesinde son durulama işlemi yapılmaktadır.",
+        "videoUrl": ""
+      },
+      {
+        "title": "Kurutma",
+        "description": "Son durulama işlemi yapılan halılarımız kurutma odamıza asılarak kurutulmaktadır.",
+        "videoUrl": ""
+      },
+      {
+        "title": "Kalite Kontrol",
+        "description": "Son olarak kurutma odasından çıkan halılarımız son kalite kontrol yapılarak son toz alma ve tarama makinesine geçirerek servis araçları ile müşterilerinize gönderilir.",
+        "videoUrl": ""
       }
     ]
   }

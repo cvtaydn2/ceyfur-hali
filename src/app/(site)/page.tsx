@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/Hero";
 import { Stats } from "@/components/sections/Stats";
 import { Services } from "@/components/sections/Services";
 import { LeadForm } from "@/components/sections/LeadForm";
+import { ProcessSection } from "@/components/sections/ProcessSection";
 import { getSiteContent } from "@/lib/content-repository";
 import { APP_CONFIG } from "@/lib/constants";
 
@@ -56,6 +57,7 @@ export default async function Home() {
         <Campaigns content={content} />
         <LeadForm content={content} />
         <About content={content} />
+        <ProcessSection content={content} />
         <Testimonials content={content} />
       </main>
     </>

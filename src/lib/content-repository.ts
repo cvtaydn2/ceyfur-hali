@@ -84,6 +84,17 @@ export async function getSiteContentWithMeta(): Promise<ContentReadResult> {
   }
 
   const normalized = normalizeContent(data.content);
+
+  // Navigation'da "Süreç" yoksa fallback'den al
+  const fallbackNav = (fallbackContent as any).navigation;
+  if (normalized && (normalized as any).navigation) {
+    const nav = (normalized as any).navigation;
+    const hasProcess = nav.some((item: any) => item.label === "Süreç");
+    if (!hasProcess && fallbackNav) {
+      (normalized as any).navigation = fallbackNav;
+    }
+  }
+
   const parsed = SiteContentSchema.safeParse(normalized);
   if (!parsed.success) {
     const issues = parsed.error.issues
@@ -96,6 +107,11 @@ export async function getSiteContentWithMeta(): Promise<ContentReadResult> {
       reason: `Validation hatası: ${issues}`,
       updatedAt: data?.updated_at,
     };
+  }
+
+  // Navigation hala "Süreç" içermiyorsa fallback'den al
+  if (!parsed.data.navigation.some((item: any) => item.label === "Süreç")) {
+    parsed.data.navigation = (fallbackContent as any).navigation;
   }
 
   return { data: parsed.data, isFromFallback: false, updatedAt: data?.updated_at };
@@ -153,16 +169,34 @@ export async function updateSiteContent(content: SiteContent): Promise<void> {
 /**
  * Belirli bir bölümü mevcut içerikle deep merge ederek günceller.
  * Partial update — sadece ilgili alan değişir, geri kalan dokunulmaz.
+ * Not: RPC fonksiyonu yerine doğrudan güncelleme yapılır.
  */
 export async function updateSiteContentSection<K extends keyof SiteContent>(
   section: K,
   sectionData: SiteContent[K]
 ): Promise<void> {
-  // RPC üzerinden atomic partial update yap
-  const { error } = await supabaseAdmin.rpc("update_site_content_section", {
-    p_section: section,
-    p_data: sectionData,
-  });
+  // Mevcut içeriği al
+  const { data: existing } = await supabaseAdmin
+    .from("site_configs")
+    .select("content")
+    .eq("id", "main")
+    .single();
+
+  // Yeni içerik oluştur (deep merge)
+  const currentContent = existing?.content || {};
+  const updatedContent = {
+    ...currentContent,
+    [section]: sectionData,
+  };
+
+  // Güncelle veya oluştur
+  const { error } = await supabaseAdmin
+    .from("site_configs")
+    .upsert({
+      id: "main",
+      content: updatedContent,
+      updated_at: new Date().toISOString(),
+    });
 
   if (error) {
     throw new Error(`Bölüm güncellenemedi: ${error.message}`);

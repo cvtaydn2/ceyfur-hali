@@ -74,6 +74,7 @@ export const CONTENT_SECTIONS = [
   "contact",
   "navigation",
   "footer",
+  "process",
 ] as const;
 
 export type ContentSection = (typeof CONTENT_SECTIONS)[number];

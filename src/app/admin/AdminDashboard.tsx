@@ -6,6 +6,7 @@ import {
   Settings, Search, Phone, User, Tag, LayoutGrid, Code,
   AlertTriangle, Inbox, Archive, LayoutDashboard, LogOut, ExternalLink,
   MapPin, Briefcase, Users, DollarSign, History, CheckCircle2, ShieldCheck,
+  Gauge,
 } from "lucide-react";
 import { SiteContent } from "@/types";
 import { Lead, LeadArchive } from "@/lib/leads-schema";
@@ -22,6 +23,7 @@ import { CampaignsSection } from "@/components/admin/sections/CampaignsSection";
 import { cn } from "@/lib/utils";
 import { AuditLogSection } from "@/components/admin/sections/AuditLogSection";
 import { SecuritySection } from "@/components/admin/sections/SecuritySection";
+import { ProcessSection } from "@/components/admin/sections/ProcessSection";
 import { Button } from "@/components/ui";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -44,7 +46,7 @@ interface AdminDashboardProps {
 type TabId =
   | "dashboard" | "leads" | "archive" | "general" | "seo" | "hero"
   | "contact" | "about" | "services" | "areas" | "pricing"
-  | "campaigns" | "advanced" | "logs" | "security";
+  | "campaigns" | "process" | "advanced" | "logs" | "security";
 
 // ─── Tab Config ───────────────────────────────────────────────────────────────
 
@@ -61,9 +63,10 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "areas",      label: "Hizmet Bölgeleri",  icon: MapPin },
   { id: "pricing",    label: "Fiyatlar",          icon: DollarSign },
   { id: "campaigns",  label: "Kampanyalar",       icon: Tag },
+  { id: "process",    label: "Süreç",             icon: Gauge },
   { id: "advanced",   label: "Gelişmiş",          icon: Code },
-  { id: "logs",       label: "Geçmiş",            icon: History },
-  { id: "security",   label: "Güvenlik",          icon: ShieldCheck },
+  { id: "logs",       label: "Geçmiş",           icon: History },
+  { id: "security",   label: "Güvenlik",         icon: ShieldCheck },
 ];
 
 /** Her tab hangi content section'ına karşılık gelir */
@@ -77,6 +80,7 @@ const TAB_SECTION_MAP: Partial<Record<TabId, ContentSection>> = {
   areas:     "services",
   pricing:   "pricing",
   campaigns: "campaigns",
+  process:   "process",
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -356,6 +360,9 @@ export const AdminDashboard = ({
               )}
               {activeTab === "campaigns" && (
                 <CampaignsSection data={content} onChange={handleContentChange} errors={validationErrors} />
+              )}
+              {activeTab === "process" && (
+                <ProcessSection data={content} onChange={handleContentChange} errors={validationErrors} />
               )}
               {activeTab === "advanced" && (
                 <AdvancedTab

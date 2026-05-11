@@ -135,6 +135,18 @@ export const FooterSchema = z.object({
   links: z.array(FooterLinkSchema),
 });
 
+export const WashingStepSchema = z.object({
+  title: requiredString,
+  description: requiredString,
+  videoUrl: z.string().optional().default(""),
+});
+
+export const ProcessSchema = z.object({
+  title: requiredString,
+  subtitle: requiredString,
+  steps: z.array(WashingStepSchema),
+});
+
 // Full SiteContent Schema
 export const SiteContentSchema = z.object({
   brand: BrandSchema,
@@ -154,4 +166,5 @@ export const SiteContentSchema = z.object({
     })
   ),
   footer: FooterSchema,
+  process: ProcessSchema.optional(),
 });

@@ -7,7 +7,9 @@ import {
   FooterLinkSchema,
   ServiceAreaSchema,
   PriceItemSchema,
-  SiteContentSchema
+  SiteContentSchema,
+  WashingStepSchema,
+  ProcessSchema
 } from "@/lib/content-schema";
 
 // Infer types from Zod schemas for "Single Source of Truth"
@@ -18,6 +20,8 @@ export type StatItem = z.infer<typeof StatItemSchema>;
 export type NavItem = z.infer<typeof FooterLinkSchema>;
 export type ServiceArea = z.infer<typeof ServiceAreaSchema>;
 export type PriceItem = z.infer<typeof PriceItemSchema>;
+export type WashingStep = z.infer<typeof WashingStepSchema>;
+export type Process = z.infer<typeof ProcessSchema>;
 
 export type ContactInfo = z.infer<typeof SiteContentSchema>["contact"];
 export type SiteContent = z.infer<typeof SiteContentSchema>;
