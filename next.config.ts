@@ -33,7 +33,7 @@ const nextConfig: NextConfig = {
           // Content Security Policy
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-scripts.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://drive.google.com https://www.youtube.com https://youtube.com; upgrade-insecure-requests;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-scripts.com https://*.google-analytics.com https://*.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://drive.google.com https://*.drive.google.com https://ogs.google.com https://www.youtube.com https://youtube.com https://*.youtube.com; child-src 'self' https://drive.google.com https://*.drive.google.com https://www.youtube.com https://youtube.com; upgrade-insecure-requests;",
           },
           // Permissions Policy — gereksiz tarayıcı API'lerini kapat
           {
