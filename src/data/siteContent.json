@@ -436,5 +436,35 @@
         "videoUrl": ""
       }
     ]
+  },
+  "faq": {
+    "title": "Merak Edilenler",
+    "subtitle": "Hizmetlerimiz hakkında sıkça sorulan sorular ve cevapları",
+    "items": [
+      {
+        "question": "Halı yıkama ücretleri ne kadar?",
+        "answer": "Fiyatlar halı cinsine göre değişir. Makine halı 120 TL/m², shaggy 130 TL/m², ipek halı 300 TL/m² üzerinden fiyatlandırılır. Tüm fiyatlar KDV dahildir. Ücretsiz kapıdan kapıya servisimiz mevcuttur."
+      },
+      {
+        "question": "Halılarım ne kadar sürede temizlenir?",
+        "answer": "Standart yıkama sürecimiz 1-2 gün içinde tamamlanır. Halılarınız toz alma, yıkama, durulama, kurutma ve kalite kontrol süreçlerinden geçer. Aynı gün teslimat için lütfen önceden iletişime geçin."
+      },
+      {
+        "question": "Kırışık halılar ütüleniyor mu?",
+        "answer": "Evet, kurutma sonrası gerekli durumlarda ütüleme ve germe işlemi yapılır. Halılarınızı teslim ederken pırıl pırıl ve düzgün şekilde teslim ediyoruz."
+      },
+      {
+        "question": "Leke çıkmazsa ne olur?",
+        "answer": "Leke çıkmama durumunda ücretsiz yeniden yıkama yapıyoruz. Bazı inatçı lekeler (kan, mor, yağlı kalıcı izler) tamamen çıkmayabilir, bu durumu önceden sizle paylaşıyoruz."
+      },
+      {
+        "question": "Hangi bölgelerde hizmet veriyoruz?",
+        "answer": "Ümraniye, Üsküdar, Çekmeköy, Maltepe, Sancaktepe ve Kadıköy başta olmak üzere İstanbul Anadolu Yakası'nın tamamında kapıdan kapıya servis hizmeti sunuyoruz."
+      },
+      {
+        "question": "Halılar zarar görür mü?",
+        "answer": "25 yıllık tecrübemizle her halı tipine özel yıkama tekniği uyguluyoruz. Yün, ipek, shaggy, antika ve el dokuması halılarınız özel olarak işlenir. Herhangi bir hasar durumunda tazminat garantisi veriyoruz."
+      }
+    ]
   }
 }

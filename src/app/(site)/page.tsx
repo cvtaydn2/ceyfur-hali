@@ -5,6 +5,7 @@ import { Stats } from "@/components/sections/Stats";
 import { Services } from "@/components/sections/Services";
 import { LeadForm } from "@/components/sections/LeadForm";
 import { ProcessSection } from "@/components/sections/ProcessSection";
+import { FAQ } from "@/components/sections/FAQ";
 import { getSiteContent } from "@/lib/content-repository";
 import { APP_CONFIG } from "@/lib/constants";
 
@@ -24,7 +25,6 @@ const Testimonials = dynamic(() => import("@/components/sections/Testimonials").
 export default async function Home() {
   const content = await getSiteContent();
 
-  // WebSite schema — sitelink searchbox için
   const websiteJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -43,12 +43,31 @@ export default async function Home() {
     },
   };
 
+  const faqJsonLd = content.faq?.items ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: content.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  } : null;
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <main id="main-content" className="flex min-h-screen flex-col">
         <Hero content={content} />
         <Stats content={content} />
@@ -58,6 +77,7 @@ export default async function Home() {
         <LeadForm content={content} />
         <About content={content} />
         <ProcessSection content={content} />
+        <FAQ content={content} />
         <Testimonials content={content} />
       </main>
     </>

@@ -128,6 +128,37 @@ export default async function RootLayout({
     serviceType: content.services.items.map((s) => s.title),
   };
 
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${BASE_URL}/#organization`,
+    name: content.brand.name,
+    url: BASE_URL,
+    logo: `${BASE_URL}/images/icon-512.png`,
+    description: content.seo.description,
+    email: content.contact.email,
+    telephone: content.contact.phone[0] ?? "",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: content.contact.address,
+      addressLocality: content.contact.district,
+      addressRegion: content.contact.city,
+      postalCode: "34771",
+      addressCountry: "TR",
+    },
+    areaServed: (content.services.areas ?? []).map((a) => ({
+      "@type": "City",
+      name: a.name,
+    })),
+    sameAs: [content.contact.instagram, content.contact.facebook].filter(Boolean),
+    foundingDate: "2001",
+    numberOfEmployees: {
+      "@type": "QuantitativeValue",
+      minValue: 10,
+      maxValue: 20,
+    },
+  };
+
   return (
     <html lang="tr" data-scroll-behavior="smooth" className="scroll-smooth">
       <head>
@@ -154,6 +185,10 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         {children}
         <Toaster position="bottom-right" />

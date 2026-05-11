@@ -147,6 +147,17 @@ export const ProcessSchema = z.object({
   steps: z.array(WashingStepSchema),
 });
 
+export const FaqItemSchema = z.object({
+  question: requiredString,
+  answer: requiredString,
+});
+
+export const FaqSchema = z.object({
+  title: requiredString,
+  subtitle: requiredString,
+  items: z.array(FaqItemSchema),
+});
+
 // Full SiteContent Schema
 export const SiteContentSchema = z.object({
   brand: BrandSchema,
@@ -167,4 +178,5 @@ export const SiteContentSchema = z.object({
   ),
   footer: FooterSchema,
   process: ProcessSchema.optional(),
+  faq: FaqSchema.optional(),
 });

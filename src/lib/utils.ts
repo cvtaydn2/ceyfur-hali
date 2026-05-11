@@ -35,20 +35,57 @@ export function slugify(text: string): string {
  */
 export function toGoogleDriveEmbedUrl(url: string): string {
   if (!url) return "";
-  
-  // file/d/VIDEO_ID/view veya file/d/VIDEO_ID/edit formatını kontrol et
+
   const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (match) {
-    // Preview formatını kullan
-    return `https://drive.google.com/file/d/${match[1]}/preview?usp=embed_header`;
+    return `https://drive.google.com/file/d/${match[1]}/preview`;
   }
-  
-  // Zaten preview formatında ise olduğu gibi döndür
+
   if (url.includes("drive.google.com/file/d/") && url.includes("/preview")) {
     return url;
   }
-  
+
   return "";
+}
+
+/**
+ * YouTube video URL'sini embed URL'ine dönüştürür.
+ * Input: https://www.youtube.com/watch?v=ABC123
+ * Output: https://www.youtube.com/embed/ABC123
+ * Also supports youtu.be short URLs
+ */
+export function toYouTubeEmbedUrl(url: string): string {
+  if (!url) return "";
+
+  let videoId = "";
+
+  if (url.includes("youtube.com/watch")) {
+    const match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
+    if (match) videoId = match[1];
+  } else if (url.includes("youtu.be/")) {
+    const match = url.match(/youtu\.be\/([a-zA-Z0-9_-]+)/);
+    if (match) videoId = match[1];
+  } else if (url.includes("youtube.com/embed/")) {
+    const match = url.match(/embed\/([a-zA-Z0-9_-]+)/);
+    if (match) videoId = match[1];
+  }
+
+  if (videoId) {
+    return `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
+  }
+
+  return "";
+}
+
+/**
+ * Video URL'inin türünü belirler.
+ * Returns: 'youtube' | 'google-drive' | 'unknown' | ''
+ */
+export function getVideoType(url: string): string {
+  if (!url) return "";
+  if (url.includes("youtube.com") || url.includes("youtu.be")) return "youtube";
+  if (url.includes("drive.google.com")) return "google-drive";
+  return "unknown";
 }
 
 /**
