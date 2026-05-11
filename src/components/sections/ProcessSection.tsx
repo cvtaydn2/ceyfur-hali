@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Play, CheckCircle2 } from "lucide-react";
 import { SiteContent } from "@/types";
 import { siteContent as fallbackContent } from "@/data/siteContent";
-import { toGoogleDriveEmbedUrl, toYouTubeEmbedUrl, getVideoType } from "@/lib/utils";
+import { toYouTubeEmbedUrl, getVideoType } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 export const ProcessSection = ({ content }: { content?: SiteContent }) => {
@@ -58,8 +58,11 @@ export const ProcessSection = ({ content }: { content?: SiteContent }) => {
         <div className="space-y-3 md:space-y-4">
           {process.steps.map((step, index) => {
             const isOpen = openIndex === index;
-            const embedUrl = toGoogleDriveEmbedUrl(step.videoUrl || "");
-            const hasVideo = !!embedUrl;
+            const videoUrl = step.videoUrl || "";
+            const videoType = getVideoType(videoUrl);
+            const isYouTube = videoType === "youtube";
+            const embedUrl = isYouTube ? toYouTubeEmbedUrl(videoUrl) : "";
+            const hasVideo = isYouTube && !!embedUrl;
 
             return (
               <motion.div
@@ -139,27 +142,17 @@ export const ProcessSection = ({ content }: { content?: SiteContent }) => {
                           </p>
                         </div>
 
-                        {/* Video */}
+                        {/* YouTube Video */}
                         {hasVideo && (
                           <div className="pl-14 md:pl-16">
                             <div className="rounded-2xl overflow-hidden border border-slate-100 bg-slate-50">
-                              {getVideoType(step.videoUrl || "") === "youtube" ? (
-                                <iframe
-                                  src={toYouTubeEmbedUrl(step.videoUrl || "")}
-                                  className="w-full aspect-video md:aspect-[16/9]"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                  title={`${step.title} videosu`}
-                                />
-                              ) : (
-                                <iframe
-                                  src={embedUrl}
-                                  className="w-full aspect-video md:aspect-[16/9]"
-                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                  allowFullScreen
-                                  title={`${step.title} videosu`}
-                                />
-                              )}
+                              <iframe
+                                src={embedUrl}
+                                className="w-full aspect-video md:aspect-[16/9]"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title={`${step.title} videosu`}
+                              />
                             </div>
                             <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
                               <Play size={10} />
