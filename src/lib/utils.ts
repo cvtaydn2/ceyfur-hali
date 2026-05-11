@@ -59,7 +59,10 @@ export function toYouTubeEmbedUrl(url: string): string {
 
   let videoId = "";
 
-  if (url.includes("youtube.com/watch")) {
+  if (url.includes("youtube.com/shorts/")) {
+    const match = url.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
+    if (match) videoId = match[1];
+  } else if (url.includes("youtube.com/watch")) {
     const match = url.match(/[?&]v=([a-zA-Z0-9_-]+)/);
     if (match) videoId = match[1];
   } else if (url.includes("youtu.be/")) {

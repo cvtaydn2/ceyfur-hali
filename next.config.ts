@@ -22,18 +22,16 @@ const nextConfig: NextConfig = {
       {
         source: "/(.*)",
         headers: [
-          // Clickjacking koruması
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
           // MIME sniffing koruması
           { key: "X-Content-Type-Options", value: "nosniff" },
           // Referrer politikası
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           // HSTS — Sadece HTTPS kullanmaya zorla (2 yıl)
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-          // Content Security Policy
+          // Content Security Policy - YouTube embed için frame-src izinli
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-scripts.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://www.youtube.com https://youtube.com; child-src 'self' https://www.youtube.com https://youtube.com; upgrade-insecure-requests;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.vercel-scripts.com https://*.google-analytics.com https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; frame-src 'self' https://www.youtube.com https://youtube.com https://*.youtube.com https://*.googlevideo.com; child-src 'self' blob: https://www.youtube.com https://youtube.com; upgrade-insecure-requests;",
           },
           // Permissions Policy — gereksiz tarayıcı API'lerini kapat
           {
